@@ -2,7 +2,7 @@ import { HomeIcon, ArrowLeftOnRectangleIcon, MegaphoneIcon } from '@heroicons/re
 
 const data = {
     header: {
-        title: 'NNCT 点呼',
+        title: 'NNCT点呼',
         shortcutMenu: [
             {
                 to: '/',
