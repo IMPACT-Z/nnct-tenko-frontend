@@ -6,7 +6,7 @@ const Header = (props) => {
                     { props.data.title }
                 </h1>
                 <nav className="col-start-2 col-end-3 flex gap-x-5 justify-end text-slate-600 text-sm content-center items-center">
-                    {props.data.shortcutMenu.map(item => <>
+                    {props.data.shortcutMenu.map(item => <div key={item.to}>
                         {item.type === 'link' && 
                             <a href={item.to} className="h-6 w-6 cursor-pointer hover:text-sky-400 text-lg">
                                 <item.Icon />
@@ -23,13 +23,13 @@ const Header = (props) => {
                                 </button>
                             </form>
                         }
-                    </>)}
+                    </div>)}
                 </nav>
             </div>
             <div className="row-span-2 h-8 bg-slate-100">
                 <nav className="function-menu-area h-full divide-x divide-slate-300 flex justify-center content-center items-center">
                     {props.data.mainMenus.map(menusItem =>
-                        <div className="justify-center h-full relative group">
+                        <div key={menusItem.title} className="justify-center h-full relative group">
                             <div className="h-full w-48 text-slate-500 flex justify-center items-center gap-x-2 text-sm">
                                 <menusItem.Icon className="h-5 w-5" />
                                 <div className="title tracking-widest">{ menusItem.title }</div>
@@ -39,6 +39,7 @@ const Header = (props) => {
                             >
                                 {menusItem.menu.map(menuItem =>
                                     <a
+                                        key={menuItem.to}
                                         className="w-48 h-8 bg-slate-100 text-slate-600 hover:text-sky-400 flex justify-center items-center text-sm"
                                         href={ menuItem.to }
                                     >
