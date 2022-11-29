@@ -1,3 +1,5 @@
+import { NavLink } from "react-router-dom";
+
 const Header = (props) => {
     return (
         <header className="fixed w-screen top-0 left-0 divide-y divide-slate-300 border-b border-slate-300">
@@ -8,9 +10,9 @@ const Header = (props) => {
                 <nav className="col-start-2 col-end-3 flex gap-x-5 justify-end text-slate-600 text-sm content-center items-center">
                     {props.data.shortcutMenu.map(item => <div key={item.to}>
                         {item.type === 'link' && 
-                            <a href={item.to} className="h-6 w-6 cursor-pointer hover:text-sky-400 text-lg">
-                                <item.Icon />
-                            </a>
+                            <NavLink to={item.to} className="cursor-pointer hover:text-sky-400 text-lg">
+                                <item.Icon className="h-6 w-6" />
+                            </NavLink>
                         }
                         {item.type === 'button' && 
                             <form 
@@ -38,13 +40,13 @@ const Header = (props) => {
                                 className="absolute invisible group-hover:visible ring-1 ring-slate-300 flex flex-col items-center"
                             >
                                 {menusItem.menu.map(menuItem =>
-                                    <a
+                                    <NavLink
                                         key={menuItem.to}
+                                        to={ menuItem.to }
                                         className="w-48 h-8 bg-slate-100 text-slate-600 hover:text-sky-400 flex justify-center items-center text-sm"
-                                        href={ menuItem.to }
                                     >
                                         { menuItem.label }
-                                    </a>
+                                    </NavLink>
                                 )}
                             </div>
                         </div>

@@ -1,13 +1,15 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Header from './components/Header'
-import Footer from './components/Footer'
+import Layout from './Layout';
+
+import Home from './page/Home';
 import Test from './page/Test';
 
 import { HomeIcon, ArrowLeftOnRectangleIcon, MegaphoneIcon } from '@heroicons/react/24/solid'
 
 const App = () => {
-    const [context] = useState({
+    const [data] = useState({
         header: {
             title: 'NNCT 点呼',
             shortcutMenu: [
@@ -17,7 +19,7 @@ const App = () => {
                     Icon: HomeIcon,
                 },
                 {
-                    to: '/',
+                    to: 'logout',
                     type: 'button',
                     Icon: ArrowLeftOnRectangleIcon,
                 }
@@ -45,9 +47,14 @@ const App = () => {
 
     return (
         <>
-            <Header data={context.header} />
-            <Test />
-            <Footer data={context.footer} />
+            <BrowserRouter>
+                <Routes>
+                    <Route path='/' element={<Layout data={data} />}>
+                        <Route index element={<Home />} />
+                        <Route path='test' element={<Test />} />
+                    </Route>
+                </Routes>
+            </BrowserRouter>
         </>
     );
 }
