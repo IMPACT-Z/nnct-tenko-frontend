@@ -21,4 +21,16 @@ const FormPage = ({context, defaultValues, onSuccess}) => {
     );
 }
 
-export default FormPage;
+const CreateFormPage = ({context, onSuccess}) => {
+    return (
+        <FormPage context={context} onSuccess={onSuccess} />
+    )
+}
+
+const EachFormPage = ({context, defaultValues, onSuccess}) => {
+    return (
+        <FormPage context={context} defaultValues={defaultValues} onSuccess={onSuccess} />
+    )
+}
+
+export {CreateFormPage, EachFormPage};

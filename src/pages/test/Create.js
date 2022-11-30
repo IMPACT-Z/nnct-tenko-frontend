@@ -1,4 +1,4 @@
-import FormPage from '../base/Form';
+import {CreateFormPage} from '../base/Form';
 
 
 const TestCreate = () => {
@@ -44,7 +44,7 @@ const TestCreate = () => {
     const onSuccess = (data) => {};
 
     return (
-        <FormPage context={context} defaultValues={{}} onSuccess={onSuccess} />
+        <CreateFormPage context={context} onSuccess={onSuccess} />
     );
 }
 
