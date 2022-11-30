@@ -2,10 +2,9 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Layout from './Layout';
-import Home from './pages/Home';
-import Test from './pages/Test';
+import Home from './pages/Home'
 
-import Login from './pages/user/Login';
+import TestCreate from './pages/test/Create';
 
 const App = () => {
     return (
@@ -14,9 +13,8 @@ const App = () => {
                 <Routes>
                     <Route path='' element={<Layout />}>
                         <Route index element={<Home />} />
-                        <Route path='test' element={<Test />} />
-                        <Route path='user'>
-                            <Route path='login' element={<Login />} />
+                        <Route path='test'>
+                            <Route path='create' element={<TestCreate />} />
                         </Route>
                     </Route>
                 </Routes>

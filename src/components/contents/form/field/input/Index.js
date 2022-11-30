@@ -12,11 +12,6 @@ const Input = ({context, width, register}) => {
                 <input type="text" {...commonAttrs} />
             );
         
-        case 'number':
-            return (
-                <input type="number" {...commonAttrs} />
-            );
-        
         default:
             return (
                 <></>
