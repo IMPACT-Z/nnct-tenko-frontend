@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import LinkContainer from '../Link';
 
@@ -9,9 +10,11 @@ const Form = ({context, defaultValues, onSuccess}) => {
         defaultValues: defaultValues,
     });
 
+    const [nextUri, setNextUri] = useState(null);
+
     const onSubmit = (data) => {
         onSuccess(data);
-        console.log(errors);
+        window.location.href = nextUri;
     };
 
     return (
@@ -38,9 +41,10 @@ const Form = ({context, defaultValues, onSuccess}) => {
                 
                 <div className="flex flex-col gap-y-4">
                     {context.submits.map(submit =>
-                        <div key={submit.label}>
+                        <div key={submit.nextUri}>
                             <button 
                                 type="submit"
+                                onClick={() => setNextUri(submit.nextUri)}
                                 className="ring-1 ring-slate-200 rounded-full px-6 py-1 bg-sky-400 text-white text-base font-bold hover:opacity-75"
                                 style={{width: '416px'}}
                             >

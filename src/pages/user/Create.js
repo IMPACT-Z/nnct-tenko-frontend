@@ -20,11 +20,11 @@ const CreateUser = () => {
             {type: 'link',uri: '/user/login',label: 'ログインする'},
         ],
         submits: [
-            {next_uri: '', label: '登録'},
+            {nextUri: '/', label: '登録'},
         ]
     }
 
-    const onSuccess = (data) => alert(data.email);
+    const onSuccess = (data) => {};
 
     return (
         <FormPage context={context} defaultValues={{}} onSuccess={onSuccess} />

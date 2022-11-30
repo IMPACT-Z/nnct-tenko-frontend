@@ -20,11 +20,11 @@ const Login = () => {
             {type: 'link',uri: '/user/create',label: 'ユーザー登録をする'},
         ],
         submits: [
-            {next_uri: '', label: 'ログイン'},
+            {nextUri: '/', label: 'ログイン'},
         ]
     }
 
-    const onSuccess = (data) => alert(data.email);
+    const onSuccess = (data) => {};
 
     return (
         <FormPage context={context} defaultValues={{}} onSuccess={onSuccess} />
