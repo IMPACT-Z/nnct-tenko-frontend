@@ -8,7 +8,7 @@ const Field = ({context, register, error}) => {
         <div className="flex flex-col gap-y-1">
             {/* ラベル */}
             <div className="px-2 flex items-center content-center gap-x-2">
-                <label htmlFor={context.name} className="text-slate-600">{context.label}</label>
+                <label htmlFor={context.name} className="text-lg text-slate-600">{context.label}</label>
                 {context.required && 
                     <div className="text-sm text-red-500">※必須</div>
                 }
@@ -19,8 +19,8 @@ const Field = ({context, register, error}) => {
             
             {/* 簡易的な説明 */}
             {context.helpText &&
-                <div className="px-6 text-slate-600 text-sm">
-                    <div className="flex gap-x-1">
+                <div className="px-7 text-sm text-slate-600">
+                    <div className="flex gap-x-3">
                         <div>※</div>
                         <div>{context.helpText}</div>
                     </div>
@@ -29,9 +29,9 @@ const Field = ({context, register, error}) => {
 
             {/* エラーメッセージ */}
             {error &&
-                <div className="px-6 text-red-500 text-xs flex gap-x-1">
+                <div className="px-6 text-sm text-red-500 flex gap-x-1">
                     <div>
-                        <XCircleIcon className="h-4 w-4" />
+                        <XCircleIcon className="h-5 w-5" />
                     </div>
                     <div>{error.message}</div>
                 </div>
