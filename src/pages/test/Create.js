@@ -34,7 +34,7 @@ const TestCreate = () => {
             },
         ],
         links: [
-            {type: 'link',uri: '/user/create',label: '一覧(テスト)'},
+            {type: 'link',uri: '/',label: 'トップページ'},
         ],
         submits: [
             {nextUri: '/', label: '登録'},
