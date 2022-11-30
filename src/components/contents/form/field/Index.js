@@ -15,7 +15,7 @@ const Field = ({context, register, error}) => {
             </div>
 
             {/* 入力欄 */}
-            <InputContainer context={context} register={register} error={error} />
+            <InputContainer context={context} register={register} isError={error ? true : false} />
             
             {/* 簡易的な説明 */}
             {context.helpText &&
