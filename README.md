@@ -1,1 +1,2 @@
-# NNCT 点呼
+# nnct-tenko-frontend
+A Frontend client for nnct-tenko
