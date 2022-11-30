@@ -1,9 +1,9 @@
 import React from 'react';
 import { useOutletContext } from 'react-router-dom'
 
-import Form from '../../components/contents/Form';
+import Form from '../../components/contents/form/Index';
 
-const FormPage = () => {
+const FormPage = ({data}) => {
     const { baseClassName } = useOutletContext();
 
     return (
@@ -14,7 +14,7 @@ const FormPage = () => {
                 <div
                     className="shadow-md shadow-slate-200 p-20 bg-white flex flex-col content-center"
                 >
-                    <Form />
+                    <Form data={data} />
                 </div>
             </div>
         </main>
