@@ -8,11 +8,19 @@ const Input = ({context, width, register}) => {
 
     switch (context.type) {
         case 'text':
-            return <input type="text" {...commonAttrs} />;
+            return (
+                <input type="text" {...commonAttrs} />
+            );
+        
         case 'number':
-            return <input type="number" {...commonAttrs} />;
+            return (
+                <input type="number" {...commonAttrs} />
+            );
+        
         default:
-            return <input type="text" {...commonAttrs} />;
+            return (
+                <></>
+            );
     }
 }
 

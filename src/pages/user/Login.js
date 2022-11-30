@@ -1,9 +1,9 @@
-import React from 'react';
 import FormPage from '../base/Form';
 
-const CreateUser = () => {
+
+const Login = () => {
     const context = {
-        title: 'ユーザー登録',
+        title: 'ログイン',
         fields: [
             {
                 name: 'email',
@@ -13,13 +13,14 @@ const CreateUser = () => {
                 required: true,
                 rules: {
                     required: '必須です',
-                    minLength: { value: 6, message: `6文字以上で入力してください。` },
                 },
             },
         ],
-        links: [],
+        links: [
+            {type: 'link',uri: '/user/create',label: 'ユーザー登録をする'},
+        ],
         submits: [
-            {next_uri: '', label: '登録'},
+            {next_uri: '', label: 'ログイン'},
         ]
     }
 
@@ -30,4 +31,4 @@ const CreateUser = () => {
     );
 }
 
-export default CreateUser;
+export default Login;

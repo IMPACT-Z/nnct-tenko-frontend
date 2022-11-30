@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form'
+import LinkContainer from '../Link';
 
 import Field from './field/Index';
 
@@ -14,9 +15,7 @@ const Form = ({context, defaultValues, onSuccess}) => {
     };
 
     return (
-        <div
-            style={{width: '416px'}}
-        >
+        <div>
             {context.title && 
                 <h3 className="px-8 text-start text-slate-600 text-3xl tracking-wider">
                     {context.title}
@@ -31,7 +30,9 @@ const Form = ({context, defaultValues, onSuccess}) => {
                 
                 {context.links &&
                     <div className="px-6 flex flex-col gap-y-2">
-                        {context.links.map(link => <div key={link.uri}>link</div>)}
+                        {context.links.map(link =>
+                            <LinkContainer key={link.uri} data={link} />
+                        )}
                     </div>
                 }
                 
@@ -41,6 +42,7 @@ const Form = ({context, defaultValues, onSuccess}) => {
                             <button 
                                 type="submit"
                                 className="ring-1 ring-slate-200 rounded-full px-6 py-1 bg-sky-400 text-white text-base font-bold hover:opacity-75"
+                                style={{width: '416px'}}
                             >
                                 {submit.label}
                             </button>

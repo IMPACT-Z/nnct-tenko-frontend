@@ -5,7 +5,8 @@ import Layout from './Layout';
 import Home from './pages/Home';
 import Test from './pages/Test';
 
-import CreateUser from './pages/user/create';
+import CreateUser from './pages/user/Create';
+import Login from './pages/user/Login';
 
 const App = () => {
     return (
@@ -17,6 +18,7 @@ const App = () => {
                         <Route path='test' element={<Test />} />
                         <Route path='user'>
                             <Route path='create' element={<CreateUser />} />
+                            <Route path='login' element={<Login />} />
                         </Route>
                     </Route>
                 </Routes>
