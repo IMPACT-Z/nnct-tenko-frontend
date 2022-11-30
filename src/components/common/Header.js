@@ -8,13 +8,18 @@ const Header = () => {
         title: 'NNCT点呼',
         shortcutMenu: [
             {
+                key: 'home',
                 to: '/',
                 type: 'link',
                 Icon: HomeIcon,
             },
             {
-                to: 'logout',
+                key: 'logout',
                 type: 'button',
+                onClick: () => {
+                    return true;
+                },
+                nextTo: '/',
                 Icon: ArrowLeftOnRectangleIcon,
             }
         ],
@@ -32,6 +37,14 @@ const Header = () => {
         ]
     }
 
+    const onClickProcessContainer = (e, link) => {
+        e.preventDefault();
+        const result = link.onClick();
+        if (result) {
+            window.location.href = link.nextTo;
+        }
+    }
+
     return (
         <header className="fixed w-screen top-0 left-0 divide-y divide-slate-300 border-b border-slate-300">
             <div className="row-span-1 h-16 px-14 grid grid-cols-2 bg-white">
@@ -39,7 +52,7 @@ const Header = () => {
                     { context.title }
                 </h1>
                 <nav className="col-start-2 col-end-3 flex gap-x-5 justify-end text-slate-600 text-sm content-center items-center">
-                    {context.shortcutMenu.map(item => <div key={item.to}>
+                    {context.shortcutMenu.map(item => <div key={item.key}>
                         {item.type === 'link' && 
                             <NavLink to={item.to} className="cursor-pointer hover:text-sky-400 text-lg">
                                 <item.Icon className="h-6 w-6" />
@@ -47,8 +60,8 @@ const Header = () => {
                         }
                         {item.type === 'button' && 
                             <form 
-                                action={item.to}
-                                method="POST" 
+                                onSubmit={(e) => onClickProcessContainer(e, item)}
+                                action={item.nextTo}
                                 className="h-6 w-6 cursor-pointer hover:text-sky-400 text-lg"
                             >
                                 <button type="submit" className="h-full w-full">

@@ -34,10 +34,10 @@ const TestCreate = () => {
             },
         ],
         links: [
-            {type: 'link',uri: '/',label: 'トップページ'},
+            {type: 'link',to: '/',label: 'トップページ'},
         ],
         submits: [
-            {nextUri: '/', label: '登録'},
+            {nextTo: '/', label: '登録'},
         ]
     }
 

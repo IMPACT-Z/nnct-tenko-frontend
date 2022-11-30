@@ -10,11 +10,11 @@ const Form = ({context, defaultValues, onSuccess}) => {
         defaultValues: defaultValues,
     });
 
-    const [nextUri, setNextUri] = useState(null);
+    const [nextTo, setNextUri] = useState(null);
 
     const onSubmit = (data) => {
         onSuccess(data);
-        window.location.href = nextUri;
+        window.location.href = nextTo;
     };
 
     return (
@@ -34,17 +34,17 @@ const Form = ({context, defaultValues, onSuccess}) => {
                 {context.links &&
                     <div className="px-6 flex flex-col gap-y-2">
                         {context.links.map(link =>
-                            <LinkContainer key={link.uri} data={link} />
+                            <LinkContainer key={link.to} data={link} />
                         )}
                     </div>
                 }
                 
                 <div className="flex flex-col gap-y-4">
                     {context.submits.map(submit =>
-                        <div key={submit.nextUri}>
+                        <div key={submit.nextTo}>
                             <button 
                                 type="submit"
-                                onClick={() => setNextUri(submit.nextUri)}
+                                onClick={() => setNextUri(submit.nextTo)}
                                 className="ring-1 ring-slate-200 rounded-full px-6 py-1 bg-sky-400 text-white text-base font-bold hover:opacity-75"
                                 style={{width: '416px'}}
                             >

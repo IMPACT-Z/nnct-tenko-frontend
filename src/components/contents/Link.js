@@ -6,7 +6,7 @@ const LinkContainer = ({data}) => {
         case 'link':
             return (
                 <div className="underline text-slate-600 hover:text-teal-400">
-                    <Link to={data.uri}>{data.label}</Link>
+                    <Link to={data.to}>{data.label}</Link>
                 </div>
             );
         
