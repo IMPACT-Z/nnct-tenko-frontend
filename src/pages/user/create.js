@@ -2,14 +2,19 @@ import React from 'react';
 import FormPage from '../base/Form';
 
 const CreateUser = () => {
-    const data = {
+    const context = {
         title: 'ユーザー登録',
         fields: [
             {
                 name: 'email',
                 label: 'メールアドレス',
-                input: {type: 'text'},
+                helpText: '254文字以内で入力して下さい。',
+                type: 'text',
                 required: true,
+                rules: {
+                    required: '必須です',
+                    minLength: { value: 6, message: `6文字以上で入力してください。` },
+                },
             },
         ],
         links: [],
@@ -18,8 +23,10 @@ const CreateUser = () => {
         ]
     }
 
+    const onSuccess = (data) => alert(data.email);
+
     return (
-        <FormPage data={data} />
+        <FormPage context={context} defaultValues={{}} onSuccess={onSuccess} />
     );
 }
 

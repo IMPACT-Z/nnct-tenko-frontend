@@ -3,7 +3,7 @@ import { useOutletContext } from 'react-router-dom'
 
 import Form from '../../components/contents/form/Index';
 
-const FormPage = ({data}) => {
+const FormPage = ({context, defaultValues, onSuccess}) => {
     const { baseClassName } = useOutletContext();
 
     return (
@@ -14,7 +14,7 @@ const FormPage = ({data}) => {
                 <div
                     className="shadow-md shadow-slate-200 p-20 bg-white flex flex-col content-center"
                 >
-                    <Form data={data} />
+                    <Form context={context} defaultValues={defaultValues} onSuccess={onSuccess} />
                 </div>
             </div>
         </main>
