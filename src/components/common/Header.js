@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
-
-import { HomeIcon, ArrowLeftOnRectangleIcon, MegaphoneIcon } from '@heroicons/react/24/solid'
+import { providers, login, isAuth } from "../../functions/auth";
+import { HomeIcon, ArrowRightOnRectangleIcon, MegaphoneIcon } from '@heroicons/react/24/solid'
 
 
 const Header = () => {
@@ -11,16 +11,18 @@ const Header = () => {
                 key: 'home',
                 to: '/',
                 type: 'link',
+                isDisplay: true,
                 Icon: HomeIcon,
             },
             {
-                key: 'logout',
+                key: 'login',
                 type: 'button',
+                // FIXME 動的にメニューのリンクを変化させる
+                isDisplay: !isAuth(),
                 onClick: () => {
-                    return true;
+                    login(providers.google);
                 },
-                nextTo: '/',
-                Icon: ArrowLeftOnRectangleIcon,
+                Icon: ArrowRightOnRectangleIcon,
             }
         ],
         mainMenus: [
@@ -39,10 +41,7 @@ const Header = () => {
 
     const onClickProcessContainer = (e, link) => {
         e.preventDefault();
-        const result = link.onClick();
-        if (result) {
-            window.location.href = link.nextTo;
-        }
+        link.onClick();
     }
 
     return (
@@ -53,22 +52,24 @@ const Header = () => {
                 </h1>
                 <nav className="col-start-2 col-end-3 flex gap-x-5 justify-end text-slate-600 text-sm content-center items-center">
                     {context.shortcutMenu.map(item => <div key={item.key}>
-                        {item.type === 'link' && 
-                            <NavLink to={item.to} className="cursor-pointer hover:text-sky-400 text-lg">
-                                <item.Icon className="h-6 w-6" />
-                            </NavLink>
-                        }
-                        {item.type === 'button' && 
-                            <form 
-                                onSubmit={(e) => onClickProcessContainer(e, item)}
-                                action={item.nextTo}
-                                className="h-6 w-6 cursor-pointer hover:text-sky-400 text-lg"
-                            >
-                                <button type="submit" className="h-full w-full">
-                                    <item.Icon />
-                                </button>
-                            </form>
-                        }
+                        {item.isDisplay && <>
+                            {item.type === 'link' && 
+                                <NavLink to={item.to} className="cursor-pointer hover:text-sky-400 text-lg">
+                                    <item.Icon className="h-6 w-6" />
+                                </NavLink>
+                            }
+                            {item.type === 'button' && 
+                                <form 
+                                    onSubmit={(e) => onClickProcessContainer(e, item)}
+                                    action={item.nextTo}
+                                    className="h-6 w-6 cursor-pointer hover:text-sky-400 text-lg"
+                                >
+                                    <button type="submit" className="h-full w-full">
+                                        <item.Icon />
+                                    </button>
+                                </form>
+                            }
+                        </>}
                     </div>)}
                 </nav>
             </div>
