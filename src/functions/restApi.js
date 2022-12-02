@@ -9,7 +9,7 @@ class RestApi extends Http {
     }
 
     async get(params={}) {
-        const uri = `${this.getFullPath(path)}?${new URLSearchParams(params).toString()}`;
+        const uri = `${this.fullPath}?${new URLSearchParams(params).toString()}`;
     
         return await new Promise((resolve, reject) => {
             axios.get(uri, this.headers)

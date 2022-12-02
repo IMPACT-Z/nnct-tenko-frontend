@@ -4,7 +4,7 @@ import Http from './http'
 class WebSocket extends Http {
     constructor(path) {
         super();
-        const webSocketPrefix = process.process.REACT_WS_API_PREFIX.replaceAll((/^https?/, 'ws'));
+        const webSocketPrefix = process.env.REACT_APP_API_PREFIX.replaceAll((/^https?/, 'ws'));
         this._socket = io(webSocketPrefix, {
             path: path,
             extraHeaders: this.headers,

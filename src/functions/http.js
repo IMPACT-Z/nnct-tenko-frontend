@@ -9,12 +9,12 @@ class Http {
     }
 
     async asyncProcessInConstructor() {
-        setAuthHeader();
+        this.setAuthHeader();
     }
 
     constructor() {
         this.headers = {};
-        asyncProcessInConstructor();
+        this.asyncProcessInConstructor();
     }
 }
 
