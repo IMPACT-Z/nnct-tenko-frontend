@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 const BottomNav = ({navMenu}) => {
     return (
         <nav
-            className={`fixed h-20 w-screen bottom-0 left-0 bg-gray-100 flex 2xl:hidden items-center justify-center gap-x-12`}
+            className={`fixed h-20 w-screen bottom-0 left-0 bg-gray-100 flex xl:hidden items-center justify-center gap-x-12`}
         >
             {navMenu.map(link => 
                 <NavLink 
