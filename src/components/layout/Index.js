@@ -9,7 +9,7 @@ import Base, { AUTH_TYPE } from '../Base'
 
 const Layout = () => {
     const centerBaseClassNameIfNotAuth = 'min-h-screen';
-    const centerBaseClassNameIfAuth = 'min-h-screen pt-24';
+    const centerBaseClassNameIfAuth = 'min-h-screen pt-20';
 
     const navMenu = [
         {

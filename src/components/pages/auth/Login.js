@@ -31,7 +31,7 @@ const Contents = () => {
     }
 
     return (<>
-        <div className="2xl:col-start-1 2xl:col-end-4 px-24 py-12 bg-gray-600 flex gap-y-12 items-center justify-center gap-x-4">
+        <div className="2xl:col-start-1 2xl:col-end-4 px-24 py-12 bg-sky-500 flex gap-y-12 items-center justify-center gap-x-4">
             <button onClick={() => decrementSlideCount()}>
                 <ArrowLeftCircleIcon className="w-12 h-12 text-gray-50 hover:text-gray-300 cursor-pointer" />
             </button>
