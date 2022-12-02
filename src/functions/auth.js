@@ -23,9 +23,7 @@ const getIdToken = async () => await auth.currentUser.getIdToken();
 
 const logout = async () => {
     signOut(auth).then(() => {
-        alert('ログアウトに成功しました');
     }).catch((error) => {
-        alert('ログアウトに失敗しました');
     });
 }
 

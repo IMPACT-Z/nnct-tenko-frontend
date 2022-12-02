@@ -8,7 +8,7 @@ const PageBase = ({authType, backgroundClassName, inner}) => {
             authType={authType}
             inner={
                 <div
-                    className={`${pageBaseClassName} bg-white`}
+                    className={`${pageBaseClassName} ${backgroundClassName}`}
                 >
                     {inner}
                 </div>

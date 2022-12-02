@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 const SideNav = ({navMenu, centerBaseClassName}) => {
     return (
         <nav
-            className={`fixed w-64 top-0 left-0 ${centerBaseClassName} bg-gray-600 px-12 pt-36 hidden xl:flex flex-col gap-y-8`}
+            className={`fixed w-64 top-0 left-0 ${centerBaseClassName} bg-gray-600 px-12 pt-36 hidden 2xl:flex flex-col gap-y-8`}
         >
             {navMenu.map(link => 
                 <NavLink 

@@ -21,7 +21,7 @@ const Header = () => {
         <header 
             className="fixed z-10 w-screen h-24 top-0 left-0 px-20 bg-white border-b border-gray-300 grid grid-cols-2"
         >
-            <h1 className="col-start-1 col-end-2 self-center text-gray-900 text-3xl tracking-wider">
+            <h1 className="col-start-1 col-end-2 self-center text-gray-900 text-4xl tracking-wider">
                 { title }
             </h1>
             <nav className="col-start-2 col-end-3 flex gap-x-8 justify-end text-gray-600 text-sm content-center items-center">
