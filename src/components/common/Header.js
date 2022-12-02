@@ -1,81 +1,58 @@
-import { NavLink } from "react-router-dom";
-import { providers, login, isAuth } from "../../functions/auth";
+import { NavLink, useNavigate } from "react-router-dom";
+import { isAuth, logout } from "../../functions/auth";
 import { HomeIcon, ArrowRightOnRectangleIcon, MegaphoneIcon } from '@heroicons/react/24/solid'
 
 
 const Header = () => {
-    const context = {
-        title: 'NNCT点呼',
-        shortcutMenu: [
-            {
-                key: 'home',
-                to: '/',
-                type: 'link',
-                isDisplay: true,
-                Icon: HomeIcon,
-            },
-            {
-                key: 'login',
-                type: 'button',
-                // FIXME 動的にメニューのリンクを変化させる
-                isDisplay: !isAuth(),
-                onClick: () => {
-                    login(providers.google);
-                },
-                Icon: ArrowRightOnRectangleIcon,
-            }
-        ],
-        mainMenus: [
-            {
-                title: '点呼',
-                Icon: MegaphoneIcon,
-                menu: [
-                    {
-                        to: '/',
-                        label: '点呼をする',
-                    }
-                ]
-            }
-        ]
-    }
+    const title = 'NNCT点呼';
+    const mainMenus = [
+        {
+            title: '点呼',
+            Icon: MegaphoneIcon,
+            menu: [
+                {
+                    to: '/',
+                    label: '点呼をする',
+                }
+            ]
+        }
+    ];
 
-    const onClickProcessContainer = (e, link) => {
-        e.preventDefault();
-        link.onClick();
-    }
+    const navigate = useNavigate();
 
     return (
         <header className="fixed w-screen top-0 left-0 divide-y divide-slate-300 border-b border-slate-300">
             <div className="row-span-1 h-16 px-14 grid grid-cols-2 bg-white">
                 <h1 className="col-start-1 col-end-2 self-center text-slate-900 text-3xl tracking-wider">
-                    { context.title }
+                    { title }
                 </h1>
                 <nav className="col-start-2 col-end-3 flex gap-x-5 justify-end text-slate-600 text-sm content-center items-center">
-                    {context.shortcutMenu.map(item => <div key={item.key}>
-                        {item.isDisplay && <>
-                            {item.type === 'link' && 
-                                <NavLink to={item.to} className="cursor-pointer hover:text-sky-400 text-lg">
-                                    <item.Icon className="h-6 w-6" />
-                                </NavLink>
-                            }
-                            {item.type === 'button' && 
-                                <form 
-                                    onSubmit={(e) => onClickProcessContainer(e, item)}
-                                    action={item.nextTo}
-                                    className="h-6 w-6 cursor-pointer hover:text-sky-400 text-lg"
-                                >
-                                    <button type="submit" className="h-full w-full">
-                                        <item.Icon />
-                                    </button>
-                                </form>
-                            }
-                        </>}
-                    </div>)}
+                    {isAuth() &&
+                        <>
+                            <NavLink 
+                                to=''
+                                className="cursor-pointer hover:text-sky-400 text-lg"
+                            >
+                                <HomeIcon className="h-6 w-6" />
+                            </NavLink>
+                            <button 
+                                onClick={
+                                    () => {
+                                        logout();
+                                        navigate('/auth/login');
+                                    }
+                                }
+                                className="h-full w-full"
+                            >
+                                <ArrowRightOnRectangleIcon className="h-6 w-6" />
+                            </button>
+                        </>
+                    }
                 </nav>
             </div>
             <div className="row-span-2 h-8 bg-slate-100">
                 <nav className="function-menu-area h-full divide-x divide-slate-300 flex justify-center content-center items-center">
-                    {context.mainMenus.map(menusItem =>
+                    {mainMenus.map(menusItem =>
                         <div key={menusItem.title} className="justify-center h-full relative group">
                             <div className="h-full w-48 text-slate-500 flex justify-center items-center gap-x-2 text-sm">
                                 <menusItem.Icon className="h-5 w-5" />

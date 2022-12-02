@@ -1,5 +1,5 @@
 import {} from "./firebase";
-import { GoogleAuthProvider, getAuth, signInWithPopup, onAuthStateChanged } from "firebase/auth";
+import { GoogleAuthProvider, getAuth, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
 
 
 const auth = getAuth();
@@ -25,8 +25,9 @@ const isAuth = async () => {
     let result;
 
     await getIdToken()
-    .then(() => {
-        result = true;
+    .then((idToken) => {
+        console.log(idToken);
+        result = idToken !== null;
     })
     .catch(() => {
         result = false;
@@ -35,15 +36,23 @@ const isAuth = async () => {
     return result;
 }
 
+const logout = async () => {
+    signOut(auth).then(() => {
+        alert('ログアウトに成功しました');
+    }).catch((error) => {
+        alert('ログアウトに失敗しました');
+    });
+}
+
 onAuthStateChanged(auth, (user) => {
     if (user) {
         // https://firebase.google.com/docs/reference/js/firebase.User
         // const uid = user.uid;
-        alert(JSON.stringify(user));
+        // alert(JSON.stringify(user));
     } else {
         // User is signed out
-        alert("ログアウト中");
+        // alert("ログアウト中");
     }
 });
 
-export { providers, login, getIdToken, isAuth };
+export { providers, login, getIdToken, isAuth, logout };

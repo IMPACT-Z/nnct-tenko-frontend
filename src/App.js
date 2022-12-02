@@ -2,9 +2,9 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Layout from './Layout';
-import Home from './pages/Home'
+import Login from './pages/auth/Login';
+import Home from './pages/Index'
 
-import TestCreate from './pages/test/Create';
 
 const App = () => {
     return (
@@ -13,8 +13,8 @@ const App = () => {
                 <Routes>
                     <Route path='' element={<Layout />}>
                         <Route index element={<Home />} />
-                        <Route path='test'>
-                            <Route path='create' element={<TestCreate />} />
+                        <Route path='auth'>
+                            <Route path='login' element={<Login />} />
                         </Route>
                     </Route>
                 </Routes>
