@@ -1,0 +1,32 @@
+import { NavLink } from "react-router-dom";
+
+
+const SideNav = ({navMenu, centerBaseClassName}) => {
+    return (
+        <nav
+            className={`fixed w-64 top-0 left-0 ${centerBaseClassName} bg-gray-600 px-12 pt-36 hidden xl:flex flex-col gap-y-8`}
+        >
+            {navMenu.map(link => 
+                <NavLink 
+                    key={link.to}
+                    to={link.to} 
+                    className={
+                        ({isActive}) => {
+                            const classList = [
+                                "cursor-pointer","text-xl","flex gap-x-2"
+                            ];
+                            if (isActive) classList.push('text-gray-100');
+                            else classList.push('text-gray-400')
+                            return classList.join(' ');
+                        }
+                    }
+                >
+                    <link.Icon className="h-6 w-6" />
+                    <div>{link.label}</div>
+                </NavLink>
+            )}
+        </nav>
+    );
+}
+
+export default SideNav;

@@ -36,7 +36,7 @@ const Base = ({authType, inner}) => {
                     if (!user) {
                         setIsDisplay(true);
                     } else {
-                        navigate('/roll-call');
+                        navigate('/roll-call/do');
                     }
                     break;
                 case authType === AUTH_TYPE.ANY:
