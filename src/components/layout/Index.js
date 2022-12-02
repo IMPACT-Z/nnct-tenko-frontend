@@ -7,9 +7,8 @@ import BottomNav from './BottomNav'
 import { MegaphoneIcon, ClipboardDocumentIcon } from '@heroicons/react/24/solid'
 import Base, { AUTH_TYPE } from '../Base'
 
-const Layout = () => {
-    const centerBaseClassNameIfNotAuth = 'min-h-screen';
-    const centerBaseClassNameIfAuth = 'min-h-screen pt-20';
+const Layout = ({authType}) => {
+    const centerBaseClassName = authType === AUTH_TYPE.NOT_AUTH ? 'min-h-screen' : 'min-h-screen pt-20';
 
     const navMenu = [
         {
@@ -26,27 +25,25 @@ const Layout = () => {
 
     return (
         <div className="min-h-screen font-serif">
-            <Base
-                authType={AUTH_TYPE.AUTH}
-                inner={<>
-                    <Header />
-                    <SideNav navMenu={navMenu} centerBaseClassName={centerBaseClassNameIfAuth} />
-                    <BottomNav navMenu={navMenu} />
-                    <Outlet context={{pageBaseClassName: `${centerBaseClassNameIfAuth} 2xl:ml-64`}} />
-                </>}
-            />
-            <Base
-                authType={AUTH_TYPE.NOT_AUTH}
-                inner={<>
-                    <Outlet context={{pageBaseClassName: `${centerBaseClassNameIfNotAuth}`}} />
-                </>}
-            />
-            <Base
-                authType={AUTH_TYPE.ANY}
-                inner={<>
-                    <Outlet context={{pageBaseClassName: `${centerBaseClassNameIfNotAuth}`}} />
-                </>}
-            />
+            {authType === AUTH_TYPE.AUTH &&
+                <Base
+                    authType={authType}
+                    inner={<>
+                        <Header />
+                        <SideNav navMenu={navMenu} centerBaseClassName={centerBaseClassName} />
+                        <BottomNav navMenu={navMenu} />
+                        <Outlet context={{pageBaseClassName: `${centerBaseClassName} 2xl:ml-64`}} />
+                    </>}
+                />
+            }
+            {authType !== AUTH_TYPE.AUTH &&
+                <Base
+                    authType={authType}
+                    inner={<>
+                        <Outlet context={{pageBaseClassName: `${centerBaseClassName}`}} />
+                    </>}
+                />
+            }
         </div>
     );
 }
