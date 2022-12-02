@@ -1,15 +1,18 @@
 import axios from 'axios'
+import Http from './http'
 
 
-class Api {
-    static get = async (path, auth=null, params={}) => {
-        const uri = `${path}?${new URLSearchParams(params).toString()}`;
-    
-        const headers = {}
-        if (auth !== null) headers['Authorization'] = `Bearer ${auth}`;
+class RestApi extends Http {
+    constructor(path) {
+        super();
+        this.fullPath = `${process.env.REACT_APP_API_PREFIX}/${path}`;
+    }
+
+    async get(params={}) {
+        const uri = `${this.fullPath}?${new URLSearchParams(params).toString()}`;
     
         return await new Promise((resolve, reject) => {
-            axios.get(uri, headers)
+            axios.get(uri, this.headers)
             .then(response => {
                 resolve(response);
             })
@@ -19,11 +22,8 @@ class Api {
         });
     };
     
-    static post = async (path, data, auth=null) => {
-        const uri = path
-    
-        const headers = {}
-        if (auth !== null) headers.Authorization = auth;
+    async post(data) {
+        const uri = this.fullPath;
     
         return await new Promise((resolve, reject) => {
             axios.post(uri, data)
@@ -38,4 +38,4 @@ class Api {
 }
 
 
-export default Api;
+export default RestApi;
