@@ -12,12 +12,12 @@ const Layout = ({authType}) => {
 
     const navMenu = [
         {
-            to: '/roll-call/do',
+            to: '/tenko/do',
             Icon: MegaphoneIcon,
             label: '点呼をする',
         },
         {
-            to: '/roll-call/history',
+            to: '/tenko/history',
             Icon: ClipboardDocumentIcon,
             label: '点呼履歴',
         },

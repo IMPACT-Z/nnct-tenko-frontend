@@ -5,8 +5,8 @@ import { AUTH_TYPE } from './components/Base'
 
 import Layout from './components/layout/Index';
 import Login from './components/pages/auth/Login';
-import RollCall from './components/pages/rollCall/Index'
-import RollCallHistory from './components/pages/rollCall/History'
+import RollCall from './components/pages/tenko/Index'
+import RollCallHistory from './components/pages/tenko/History'
 import NotFound from './components/pages/NotFound';
 
 
@@ -23,12 +23,12 @@ const App = () => {
                         <Route path='*' element={<NotFound to='/auth/login' />} />
                     </Route>
                     <Route path='' element={<Layout authType={AUTH_TYPE.AUTH} />}>
-                        <Route path='roll-call'>
+                        <Route path='tenko'>
                             <Route path='do' element={<RollCall />} />
                             <Route path='history' element={<RollCallHistory />} />
                         </Route>
-                        <Route path='' element={<NotFound to='/roll-call/do' />} />
-                        <Route path='*' element={<NotFound to='/roll-call/do' />} />
+                        <Route path='' element={<NotFound to='/tenko/do' />} />
+                        <Route path='*' element={<NotFound to='/tenko/do' />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
