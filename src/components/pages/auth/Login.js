@@ -69,12 +69,12 @@ const Contents = () => {
                             <button 
                                 key={socialService.name}
                                 onClick={() => login(socialService.provider)}
-                                className="2xl:w-96 px-3 2xl:px-4 py-3 ring-1 ring-gray-300 rounded-full flex justify-center items-center"
+                                className="2xl:w-96 px-3 2xl:px-4 py-3 ring-1 ring-gray-300 rounded-full flex justify-center items-center 2xl:hover:opacity-60"
                             >
                                 <img 
                                     src={`${process.env.PUBLIC_URL}/fig/socialServices/${socialService.name}.png`}
                                     alt={socialService.label}
-                                    className="w-6 h-6 col-start-1"
+                                    className="w-6 h-6 col-start-1 hover:opacity-60 2xl:hover:opacity-100"
                                 />
                                 <div className="hidden 2xl:block 2xl:w-full text-gray-700 text-lg tracking-wide">
                                     {socialService.label}でログイン
