@@ -32,7 +32,7 @@ const Layout = ({authType}) => {
                         <Header />
                         <SideNav navMenu={navMenu} centerBaseClassName={centerBaseClassName} />
                         <BottomNav navMenu={navMenu} />
-                        <Outlet context={{pageBaseClassName: `${centerBaseClassName} xl:ml-64`}} />
+                        <Outlet context={{pageBaseClassName: `${centerBaseClassName} xl:ml-72`}} />
                     </>}
                 />
             }

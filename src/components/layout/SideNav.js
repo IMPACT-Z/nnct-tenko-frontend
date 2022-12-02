@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 const SideNav = ({navMenu, centerBaseClassName}) => {
     return (
         <nav
-            className={`fixed w-64 top-0 left-0 ${centerBaseClassName} bg-gray-100 px-12 pt-28 hidden xl:flex flex-col gap-y-8`}
+            className={`fixed w-72 top-0 left-0 ${centerBaseClassName} bg-gray-100 px-12 pt-28 hidden xl:flex flex-col gap-y-8`}
         >
             {navMenu.map(link => 
                 <NavLink 
@@ -13,7 +13,7 @@ const SideNav = ({navMenu, centerBaseClassName}) => {
                     className={
                         ({isActive}) => {
                             const classList = [
-                                "cursor-pointer","flex gap-x-2"
+                                "cursor-pointer","flex gap-x-2 tracking-widest"
                             ];
                             if (isActive) classList.push('text-sky-500 text-xl');
                             else classList.push('text-gray-400 text-lg opacity-90 hover:opacity-60')

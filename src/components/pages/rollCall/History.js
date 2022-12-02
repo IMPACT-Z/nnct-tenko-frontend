@@ -14,9 +14,9 @@ const DateCell = ({date, data, startTime}) => {
     let okColor;
     let ngColor;
 
-    valueClassList.push(date.isToday ? 'bg-sky-100' : 'bg-white');
+    valueClassList.push(date.isToday ? 'bg-sky-200' : 'bg-white');
     if (date.isThisMonth) {
-        valueClassList.push('text-gray-500');
+        valueClassList.push('text-gray-600');
         okColor = 'text-sky-500';
         ngColor = 'text-gray-600';
     } else {
@@ -143,19 +143,19 @@ const RollCallHistory = () => {
                             <button
                                 onClick={() => setPrev()}
                             >
-                                <ArrowLeftIcon className="w-6 h-6 text-gray-500 hover:text-sky-400" />
+                                <ArrowLeftIcon className="w-6 h-6 text-gray-700 hover:text-sky-400" />
                             </button>
-                            <div className="w-36 text-center text-gray-500 text-2xl">
+                            <div className="w-36 text-center text-gray-700 text-2xl">
                                 {displayedYear} 年 {displayedMonth} 月
                             </div>
                             <button
                                 onClick={() => setNext()}
                             >
-                                <ArrowRightIcon className="w-6 h-6 text-gray-500 hover:text-sky-400" />
+                                <ArrowRightIcon className="w-6 h-6 text-gray-700 hover:text-sky-400" />
                             </button>
                         </div>
                         <button
-                            className="text-gray-500 text-lg border-b border-gray-400 hover:border-sky-300 hover:text-sky-300 tracking-widest"
+                            className="text-gray-500 text-lg border-b border-gray-600 hover:border-sky-300 hover:text-sky-300 tracking-widest"
                             onClick={() => setNow()}
                         >
                             今日
@@ -167,7 +167,7 @@ const RollCallHistory = () => {
                                 {Calender.weekDays.map(weekDay => 
                                     <th 
                                         key={weekDay} 
-                                        className="w-24 h-12 bg-sky-300 ring-1 ring-gray-300 flex flex-col justify-center items-center"
+                                        className="w-24 h-12 bg-sky-500 ring-1 ring-gray-300 flex flex-col justify-center items-center"
                                     >
                                         <div className=" text-white">{weekDay}</div>
                                     </th>
