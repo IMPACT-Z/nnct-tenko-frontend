@@ -20,14 +20,12 @@ const Contents = () => {
         'test2.png'
     ]
     const slideNum = slideImageNames.length;
-    let [slideCount, setSlideCount] = useState(0);
+    const [slideCount, setSlideCount] = useState(0);
     const incrementSlideCount = () => {
-        slideCount = (slideCount + 1) % slideNum;
-        setSlideCount(slideCount);
+        setSlideCount((slideCount + 1) % slideNum);
     }
     const decrementSlideCount = () => {
-        slideCount = (slideCount + (slideNum - 1)) % slideNum;
-        setSlideCount(slideCount);
+        setSlideCount((slideCount + (slideNum - 1)) % slideNum);
     }
 
     return (<>

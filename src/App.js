@@ -6,7 +6,7 @@ import { AUTH_TYPE } from './components/Base'
 import Layout from './components/layout/Index';
 import Login from './components/pages/auth/Login';
 import RollCall from './components/pages/rollCall/Index'
-import RollCallHistory from './components/pages/rollCall/HIstory'
+import RollCallHistory from './components/pages/rollCall/History'
 import NotFound from './components/pages/NotFound';
 
 
