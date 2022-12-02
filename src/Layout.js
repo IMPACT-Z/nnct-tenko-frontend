@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom'
 
-import Header from './components/common/Header'
+import Header from './components/common/header/Index'
 import Footer from './components/common/Footer'
 
 const Layout = () => {

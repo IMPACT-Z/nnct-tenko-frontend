@@ -1,13 +1,14 @@
-import Base, { AUTH_TYPE } from "../base/Base";
-import { providers, login } from "../../functions/auth";
+import { AUTH_TYPE } from "../../Base";
+import PageBase from "../Base";
+import { providers, login } from "../../../functions/auth";
 
 
 const Login = () => {
     return (
-        <Base 
+        <PageBase
             authType={AUTH_TYPE.NOT_AUTH}
             backgroundClassName="bg-gradient-to-bl from-cyan-100 via-sky-100 to-blue-100"
-            contents={
+            inner={
                 <button 
                     onClick={() => login(providers.google)}
                 >

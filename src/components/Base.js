@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const AUTH_TYPE = {
@@ -17,7 +17,7 @@ const AUTH_TYPE = {
     }
 }
 
-const Base = ({authType, backgroundClassName, contents}) => {
+const Base = ({authType, inner}) => {
     const navigate = useNavigate();
     const [isDisplay, setIsDisplay] = useState(false);
 
@@ -47,13 +47,7 @@ const Base = ({authType, backgroundClassName, contents}) => {
     }, []);
 
     if (isDisplay)
-        return (
-            <div
-                className={`min-h-screen pt-24 pb-8 ${backgroundClassName}`}
-            >
-                {contents}
-            </div>
-        )
+        return inner;
     
 }
 
