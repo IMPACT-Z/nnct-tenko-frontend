@@ -5,7 +5,7 @@ const NotFound = ({to}) => {
     const navigate = useNavigate();
     useEffect(() => {
         navigate(to);
-    }, []);
+    });
 }
 
 export default NotFound;
