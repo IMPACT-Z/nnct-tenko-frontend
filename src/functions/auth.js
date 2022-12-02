@@ -21,21 +21,6 @@ const login = async (provider) => {
 
 const getIdToken = async () => await auth.currentUser.getIdToken();
 
-const isAuth = async () => {
-    let result;
-
-    await getIdToken()
-    .then((idToken) => {
-        console.log(idToken);
-        result = idToken !== null;
-    })
-    .catch(() => {
-        result = false;
-    });
-
-    return result;
-}
-
 const logout = async () => {
     signOut(auth).then(() => {
         alert('ログアウトに成功しました');
@@ -44,15 +29,14 @@ const logout = async () => {
     });
 }
 
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        // https://firebase.google.com/docs/reference/js/firebase.User
-        // const uid = user.uid;
-        // alert(JSON.stringify(user));
-    } else {
-        // User is signed out
-        // alert("ログアウト中");
-    }
-});
+const onAuthStateChangedByCallback = (callback) => {
+    onAuthStateChanged(auth, callback);
+}
 
-export { providers, login, getIdToken, isAuth, logout };
+export { 
+    providers, 
+    login, 
+    getIdToken, 
+    onAuthStateChangedByCallback, 
+    logout,
+};

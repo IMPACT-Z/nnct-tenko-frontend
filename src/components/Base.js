@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChangedByCallback } from '../functions/auth'
+
 
 const AUTH_TYPE = {
     AUTH: {
@@ -22,17 +23,17 @@ const Base = ({authType, inner}) => {
     const [isDisplay, setIsDisplay] = useState(false);
 
     useEffect(() => {
-        onAuthStateChanged(getAuth(), (currentUser) => {
+        onAuthStateChangedByCallback(user => {
             switch(authType) {
                 case AUTH_TYPE.AUTH:
-                    if (currentUser) {
+                    if (user) {
                         setIsDisplay(true);
                     } else {
                         navigate('/auth/login');
                     }
                     break;
                 case AUTH_TYPE.NOT_AUTH:
-                    if (!currentUser) {
+                    if (!user) {
                         setIsDisplay(true);
                     } else {
                         navigate('/');
@@ -48,7 +49,6 @@ const Base = ({authType, inner}) => {
 
     if (isDisplay)
         return inner;
-    
 }
 
 export default Base;
