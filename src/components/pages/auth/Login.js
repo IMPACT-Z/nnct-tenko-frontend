@@ -33,30 +33,30 @@ const Contents = () => {
     return (<>
         <div className="2xl:col-start-1 2xl:col-end-4 px-24 py-12 bg-sky-500 flex gap-y-12 items-center justify-center gap-x-4">
             <button onClick={() => decrementSlideCount()}>
-                <ArrowLeftCircleIcon className="w-12 h-12 text-gray-50 hover:text-gray-300 cursor-pointer" />
+                <ArrowLeftCircleIcon className="w-12 h-12 text-white hover:opacity-80 cursor-pointer" />
             </button>
             <>
                 <img 
                     src={`${process.env.PUBLIC_URL}/fig/slide/${slideImageNames[slideCount]}`}
                     alt="アプリケーションに関する説明"
-                    className="block md:hidden shadow-xl shadow-gray-800"
+                    className="block md:hidden shadow-xl shadow-gray-700"
                     style={{width: '480px', height: '270px'}}
                 />
                 <img 
                     src={`${process.env.PUBLIC_URL}/fig/slide/${slideImageNames[slideCount]}`}
                     alt="アプリケーションに関する説明"
-                    className="hidden md:block lg:hidden shadow-xl shadow-gray-800"
+                    className="hidden md:block lg:hidden shadow-xl shadow-gray-700"
                     style={{width: '640px', height: '360px'}}
                 />
                 <img 
                     src={`${process.env.PUBLIC_URL}/fig/slide/${slideImageNames[slideCount]}`}
                     alt="アプリケーションに関する説明"
-                    className="hidden lg:block 3xl:hidden shadow-xl shadow-gray-800"
+                    className="hidden lg:block 3xl:hidden shadow-xl shadow-gray-700"
                     style={{width: '720px', height: '405px'}}
                 />
             </>
             <button onClick={() => incrementSlideCount()}>
-                <ArrowRightCircleIcon className="w-12 h-12 text-gray-50 hover:text-gray-300 cursor-pointer" />
+                <ArrowRightCircleIcon className="w-12 h-12 text-white hover:opacity-80 cursor-pointer" />
             </button>
         </div>
         <div className="2xl:col-start-4 2xl:col-end-6 py-16 2xl:py-24 bg-white flex flex-col items-center">

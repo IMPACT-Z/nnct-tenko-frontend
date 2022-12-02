@@ -13,7 +13,7 @@ const App = () => {
         <>
             <BrowserRouter>
                 <Routes>
-                    <Route path='' element={<Layout />}>
+                    <Route path='' element={<Layout isAuth={true} />}>
                         <Route path='roll-call'>
                             <Route path='do' element={<RollCall />} />
                             <Route path='history' element={<RollCallHistory />} />
@@ -21,7 +21,6 @@ const App = () => {
                         <Route path='auth'>
                             <Route path='login' element={<Login />} />
                         </Route>
-                        
                         <Route path='' element={<NotFound to='/roll-call/do' />} />
                         <Route path='*' element={<NotFound to='/roll-call/do' />} />
                     </Route>
