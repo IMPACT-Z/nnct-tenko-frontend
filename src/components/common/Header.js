@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
-import { logout } from "../../../functions/auth";
+import { logout } from "../../functions/auth";
 
-import Base, { AUTH_TYPE } from "../../Base";
+import Base, { AUTH_TYPE } from "../Base";
 
 import { HomeIcon, ArrowRightOnRectangleIcon, MegaphoneIcon } from '@heroicons/react/24/solid'
 
