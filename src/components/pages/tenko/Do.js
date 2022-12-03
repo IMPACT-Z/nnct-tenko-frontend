@@ -1,43 +1,95 @@
-// import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
+import Webcam from "react-webcam";
 
-// import RestApi from '../../../functions/restApi';
-// import WebSocket from '../../../functions/webSocket';
-// import useInterval from '../../../functions/useInterval';
+import RestApi from '../../../functions/restApi';
+import WebSocket from '../../../functions/webSocket';
+import useInterval from '../../../functions/useInterval';
 
 import { AUTH_TYPE } from "../../Base";
 import PageBase from "../Base";
 
 
+const cameraSetting = {
+    width: 480,
+    height: 270,
+    format: 'png',
+    interval: 2000,
+}
+const videoConstraints = {
+    width: cameraSetting.width,
+    height: cameraSetting.height,
+    facingMode: 'user',
+}
+
 const RollCall = () => {
     // 点呼ステータスの処理
-    // const [status, setStatus] = useState();
-    // const [reflectStatusFlag, setReflectStatusFlag] = useState(true);
-    // const statusMessages = {
-    //     'PENDING': '点呼の実施を待機しています',
-    //     'DONE': '点呼が完了しました',
-    //     'UNAVAILABLE': '点呼実施時刻ではありません',
-    // }
-    // useEffect(() => {
-    //     // new RestApi('/api/v1/tenko').get()
-    //     // .then((response) => {
-    //     //     setStatus(response.data);
-    //     // });
-    //     setStatus('PENDING');
-    // }, [reflectStatusFlag]);
-    // const reflectStatus = () => setReflectStatusFlag(!reflectStatusFlag);
+    const [status, setStatus] = useState();
 
-    // // const socket = new WebSocket('/api/v1/tenko/session')
+    const statusMessages = {
+        'PENDING': '点呼を実施してください',
+        'DONE': '点呼が完了しました',
+        'UNAVAILABLE': `点呼実施時刻ではありません`,
+    };
 
-    // // 顔の画像を送信
-    // const [faceImageCount, setFaceImageCount] = useState(0);
-    // useInterval(() => {
-    //     if (status === 'PENDING') {
-    //         setFaceImageCount(faceImageCount + 1);
-    //     }
-    // }, 2000);
-    // useEffect(() => {
-    //     // socket.send('faceImage', faceImage);
-    // }, [faceImageCount]);
+    let reflectStatusClk = false;
+    // const reflectStatus = () => reflectStatusClk = !reflectStatusClk;
+
+    useEffect(() => {
+        new RestApi('/api/v1/tenko').get()
+        .then((response) => {
+            setStatus(response.data.status);
+        });
+    }, [reflectStatusClk]);
+
+    const checkCanDo = () => status === 'PENDING';
+
+
+    const [durationMessage, setDurationMessage] = useState();
+    useEffect(() => {
+        new RestApi('/api/v1/tenko/duration').get()
+        .then((response) => {
+            const startTime = response.data?.start;
+            const endTime = response.data?.end;
+            const src = {
+                start: {
+                    hour: String(startTime?.hour)?.padStart(2, '0') ?? '',
+                    minute: String(startTime?.minute)?.padStart(2, '0') ?? '',
+                },
+                end: {
+                    hour: String(endTime?.hour)?.padStart(2, '0') ?? '',
+                    minute: String(endTime?.minute)?.padStart(2, '0') ?? '',
+                }
+            }
+            setDurationMessage(`${src.start.hour}:${src.start.minute}〜${src.end.hour}:${src.end.minute}`);
+        });
+    }, []);
+
+
+    const webcamRef = useRef(null);
+    const capture = useCallback(
+        () => webcamRef.current?.getScreenshot() ?? null, 
+        [webcamRef]
+    );
+
+
+    const socket = new WebSocket('/api/v1/tenko/session')
+
+    // 顔の画像を送信
+    useInterval(() => {
+        if (status !== 'PENDING') return;
+
+        // 撮影した画像を取得
+        const image = capture();
+        // データ形式の変換
+        const blob = atob(image.replace(/^.*,/, ''));
+        let buffer = new Uint8Array(blob.length);
+        for (let i = 0; i < blob.length; i++) {
+            buffer[i] = blob.charCodeAt(i);
+        }
+        // 送信
+        socket.send('faceImage', buffer);
+    }, cameraSetting.interval);
+
 
     // const [phase, setPhase] = useState();
     // const phaseLabels = {
@@ -84,7 +136,7 @@ const RollCall = () => {
     //             // エラーメッセージ
     //             break;
     //         case 'INVALID_SESSION':
-    //             // エラーメッセージ
+    //             // エラーメッセージString(
     //             break;
     //         default:
     //             // エラーメッセージ
@@ -92,19 +144,31 @@ const RollCall = () => {
     //     }
     // });
 
-
     return (
         <PageBase
             authType={AUTH_TYPE.AUTH}
             backgroundClassName='bg-white'
             inner={
-                <div>
-                    {/* {statusMessages[status]}
-                    {phaseLabels[phase]}
-                    {instructionMessages[instruction]}
-                    {phase === '3CHALLENGES' &&
-                        <div>{`${currentStep}/${totalStep}`}</div>
-                    } */}
+                <div className="py-16 flex flex-col items-center">
+                    <div>
+                        {statusMessages[status]}
+                        （{durationMessage}）
+                        {/* {phaseLabels[phase]} */}
+                        {/* {instructionMessages[instruction]} */}
+                        {/* {phase === '3CHALLENGES' &&
+                            <div>{`${currentStep}/${totalStep}`}</div>
+                        } */}
+                    </div>
+                    {checkCanDo() && 
+                            <Webcam
+                                audio={false}
+                                width={cameraSetting.width}
+                                height={cameraSetting.height}
+                                ref={webcamRef}
+                                screenshotFormat={`image/${cameraSetting.format}`}
+                                videoConstraints={videoConstraints}
+                            ></Webcam>
+                    }
                 </div>
             }
         />

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
+import RestApi from '../../../functions/restApi';
 import Calender from "../../../functions/calender";
 
 import { AUTH_TYPE } from "../../Base";
@@ -9,7 +10,7 @@ import PageBase from "../Base";
 import { ArrowLeftIcon, ArrowRightIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 
 
-const DateCell = ({date, data, startTime}) => {
+const DateCell = ({date, isOks, startTime}) => {
     const valueClassList = [];
     let okColor;
     let ngColor;
@@ -25,24 +26,33 @@ const DateCell = ({date, data, startTime}) => {
         ngColor = 'text-gray-400';
     }
 
-    let isOk = undefined;
-    const now = new Date();
-    const nowDate = new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
-    const thisDate = new Date(date.year, date.month-1, date.value).getTime();
-    if (thisDate <= nowDate) {
-        if (thisDate !== nowDate || now >= new Date(now.getFullYear(),now.getMonth(),now.getDate(),startTime.hour,startTime.minute)) {
-            isOk = data.find(item =>
-                (item.year === date.year && item.month === date.month) && item.date === date.value
-            )?.value ?? false;
+
+    const getIsOK = () => {
+        if (!date.isThisMonth) return null;
+        const now = new Date();
+        const nowDate = new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
+        const thisDate = new Date(date.year, date.month-1, date.value).getTime();
+        if (thisDate > nowDate)  return null;
+        if (thisDate === nowDate) {
+            if (startTime === null)
+                return null;
+            if (now < new Date(now.getFullYear(),now.getMonth(),now.getDate(),startTime.hour,startTime.minute)) 
+                return null;
         }
+
+        return isOks?.find(item =>
+            (item.year === date.year && item.month === date.month) && item.date === date.value
+        )?.value ?? false;
     }
+    const isOk = getIsOK();
+
 
     return (
         <td 
             className={`w-24 h-24 ring-1 ring-gray-300 text-2xl ${valueClassList.join(' ')} flex flex-col justify-center items-center gap-y-1`}
         >
             <div>{date.value}</div>
-            {isOk !== undefined ?
+            {isOk !== null ?
                 <div>
                     {isOk ? 
                         <CheckCircleIcon className={`w-7 h-7 ${okColor}`} />
@@ -58,33 +68,18 @@ const DateCell = ({date, data, startTime}) => {
 }
 
 const RollCallHistory = () => {
-    const [data, setData] = useState([]);
-    const [startTime, setStartTime] = useState();
-
+    const [startTime, setStartTime] = useState(null);
     useEffect(() => {
-        setData([
-            {
-                year: 2022,
-                month: 11,
-                date: 30,
-                value: true,
-            },
-            {
-                year: 2022,
-                month: 12,
-                date: 2,
-                value: true,
-            },
-        ]);
-        setStartTime({
-            hour: 20,
-            minute: 30,
+        new RestApi('/api/v1/tenko/duration').get()
+        .then((response) => {
+            setStartTime(response.data.start);
         })
     }, []);
 
-    // 表示する年, 月の設定
+
     const params = new URLSearchParams(useLocation().search);
 
+    // 表示する年, 月の設定
     const yearStr = params.get('year');
     let initYear = null;
     if (!Number.isInteger(yearStr)) 
@@ -103,34 +98,43 @@ const RollCallHistory = () => {
         initMonth = now.getMonth() + 1;
     }
 
-    const [displayedYear, setDisplayedYear] = useState(initYear);
-    const [displayedMonth, setDisplayedMonth] = useState(initMonth);
-
     const [calender, setCalender] = useState(
-        new Calender(displayedYear, displayedMonth).get()
-    );
+        new Calender(initYear, initMonth)
+    )
 
+
+    const [isOks, setIsOks] = useState(null);
+    useEffect(() => {
+        setIsOks([
+            {
+                year: 2022,
+                month: 12,
+                date: 2,
+                value: true,
+            },
+            {
+                year: 2022,
+                month: 12,
+                date: 3,
+                value: true,
+            },
+        ]);
+    }, [calender]);
+
+    
     const setPrev = () => {
-        const prev = new Calender(displayedYear, displayedMonth).getPrev();
-        setDisplayedYear(prev.year);
-        setDisplayedMonth(prev.month);
-        setCalender(prev.get());
+        setCalender(calender.getPrev());
     }
 
     const setNow = () => {
         const today = new Date();
-        const now = new Calender(today.getFullYear(), today.getMonth() + 1);
-        setDisplayedYear(now.year);
-        setDisplayedMonth(now.month);
-        setCalender(now.get());
+        setCalender(new Calender(today.getFullYear(), today.getMonth() + 1));
     }
 
     const setNext = () => {
-        const next = new Calender(displayedYear, displayedMonth).getNext();
-        setDisplayedYear(next.year);
-        setDisplayedMonth(next.month);
-        setCalender(next.get());
+        setCalender(calender.getNext());
     }
+
 
     return (
         <PageBase
@@ -146,7 +150,7 @@ const RollCallHistory = () => {
                                 <ArrowLeftIcon className="w-6 h-6 text-gray-700 hover:text-sky-400" />
                             </button>
                             <div className="w-36 text-center text-gray-700 text-2xl">
-                                {displayedYear} 年 {displayedMonth} 月
+                                {calender.year} 年 {calender.month} 月
                             </div>
                             <button
                                 onClick={() => setNext()}
@@ -175,7 +179,7 @@ const RollCallHistory = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {calender.map(week => 
+                            {calender.get().map(week => 
                                 <tr
                                     key={week.index}
                                     className="flex ring-1 ring-gray-300 justify-center items-center"
@@ -184,7 +188,7 @@ const RollCallHistory = () => {
                                         <DateCell 
                                             key={`${date.year}-${date.month}-${date.value}`} 
                                             date={date}
-                                            data={data}
+                                            isOks={isOks}
                                             startTime={startTime}
                                         />
                                     )}
