@@ -32,7 +32,7 @@ const RollCall = () => {
     };
 
     let reflectStatusClk = false;
-    const reflectStatus = () => reflectStatusClk = !reflectStatusClk;
+    // const reflectStatus = () => reflectStatusClk = !reflectStatusClk;
 
     useEffect(() => {
         new RestApi('/api/v1/tenko').get()
