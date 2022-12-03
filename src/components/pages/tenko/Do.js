@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import Webcam from "react-webcam";
 
-// import RestApi from '../../../functions/restApi';
+import RestApi from '../../../functions/restApi';
 import WebSocket from '../../../functions/webSocket';
 import useInterval from '../../../functions/useInterval';
 
@@ -24,24 +24,45 @@ const videoConstraints = {
 const RollCall = () => {
     // 点呼ステータスの処理
     const [status, setStatus] = useState();
+
     const statusMessages = {
-        'PENDING': '点呼の実施を待機しています',
+        'PENDING': '点呼を実施してください',
         'DONE': '点呼が完了しました',
-        'UNAVAILABLE': '点呼実施時刻ではありません',
-    }
+        'UNAVAILABLE': `点呼実施時刻ではありません`,
+    };
 
     let reflectStatusClk = false;
     const reflectStatus = () => reflectStatusClk = !reflectStatusClk;
 
     useEffect(() => {
-        // new RestApi('/api/v1/tenko').get()
-        // .then((response) => {
-        //     setStatus(response.data);
-        // });
-        setStatus('PENDING');
+        new RestApi('/api/v1/tenko').get()
+        .then((response) => {
+            setStatus(response.data.status);
+        });
     }, [reflectStatusClk]);
 
     const checkCanDo = () => status === 'PENDING';
+
+
+    const [durationMessage, setDurationMessage] = useState();
+    useEffect(() => {
+        new RestApi('/api/v1/tenko/duration').get()
+        .then((response) => {
+            const startTime = response.data?.start;
+            const endTime = response.data?.end;
+            const src = {
+                start: {
+                    hour: String(startTime?.hour)?.padStart(2, '0') ?? '',
+                    minute: String(startTime?.minute)?.padStart(2, '0') ?? '',
+                },
+                end: {
+                    hour: String(endTime?.hour)?.padStart(2, '0') ?? '',
+                    minute: String(endTime?.minute)?.padStart(2, '0') ?? '',
+                }
+            }
+            setDurationMessage(`${src.start.hour}:${src.start.minute}〜${src.end.hour}:${src.end.minute}`);
+        });
+    }, []);
 
 
     const webcamRef = useRef(null);
@@ -51,8 +72,7 @@ const RollCall = () => {
     );
 
 
-    // const socket = new WebSocket('/api/v1/tenko/session')
-    const socket = new WebSocket('');
+    const socket = new WebSocket('/api/v1/tenko/session')
 
     // 顔の画像を送信
     useInterval(() => {
@@ -66,11 +86,6 @@ const RollCall = () => {
         for (let i = 0; i < blob.length; i++) {
             buffer[i] = blob.charCodeAt(i);
         }
-        // const file = new File(
-        //     [buffer.buffer],
-        //     `faceImage.${cameraSetting.format}`,
-        //     { type: `image/${cameraSetting.format}` },
-        // );
         // 送信
         socket.send('faceImage', buffer);
     }, cameraSetting.interval);
@@ -121,7 +136,7 @@ const RollCall = () => {
     //             // エラーメッセージ
     //             break;
     //         case 'INVALID_SESSION':
-    //             // エラーメッセージ
+    //             // エラーメッセージString(
     //             break;
     //         default:
     //             // エラーメッセージ
@@ -137,6 +152,7 @@ const RollCall = () => {
                 <div className="py-16 flex flex-col items-center">
                     <div>
                         {statusMessages[status]}
+                        （{durationMessage}）
                         {/* {phaseLabels[phase]} */}
                         {/* {instructionMessages[instruction]} */}
                         {/* {phase === '3CHALLENGES' &&

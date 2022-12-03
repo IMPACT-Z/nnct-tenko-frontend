@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
+import RestApi from '../../../functions/restApi';
 import Calender from "../../../functions/calender";
 
 import { AUTH_TYPE } from "../../Base";
@@ -32,11 +33,14 @@ const DateCell = ({date, isOks, startTime}) => {
         const nowDate = new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
         const thisDate = new Date(date.year, date.month-1, date.value).getTime();
         if (thisDate > nowDate)  return null;
-        if (thisDate === nowDate)
+        if (thisDate === nowDate) {
+            if (startTime === null)
+                return null;
             if (now < new Date(now.getFullYear(),now.getMonth(),now.getDate(),startTime.hour,startTime.minute)) 
                 return null;
+        }
 
-        return isOks.find(item =>
+        return isOks?.find(item =>
             (item.year === date.year && item.month === date.month) && item.date === date.value
         )?.value ?? false;
     }
@@ -66,10 +70,10 @@ const DateCell = ({date, isOks, startTime}) => {
 const RollCallHistory = () => {
     const [startTime, setStartTime] = useState(null);
     useEffect(() => {
-        setStartTime({
-            hour: 20,
-            minute: 30,
-        });
+        new RestApi('/api/v1/tenko/duration').get()
+        .then((response) => {
+            setStartTime(response.data.start);
+        })
     }, []);
 
 

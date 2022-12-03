@@ -2,19 +2,14 @@ import {getIdToken} from './auth'
 
 class Http {
     async setAuthHeader() {
-        getIdToken()
+        return await getIdToken()
         .then(idToken => {
             this.headers['Authorization'] = `Bearer ${idToken}`;
         });
     }
 
-    async asyncProcessInConstructor() {
-        this.setAuthHeader();
-    }
-
     constructor() {
         this.headers = {};
-        this.asyncProcessInConstructor();
     }
 }
 

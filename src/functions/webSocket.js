@@ -4,32 +4,30 @@ import Http from './http'
 class WebSocket extends Http {
     constructor(path) {
         super();
-        const webSocketPrefix = process.env.REACT_APP_API_PREFIX.replaceAll((/^https?/, 'ws'));
-        this._socket = io(webSocketPrefix, {
-            path: path,
-            // withCredentials: true,
-            extraHeaders: this.headers,
+        this._webSocketPrefix = process.env.REACT_APP_API_PREFIX.replaceAll((/^https?/, 'ws'));
+        this._path = path;
+    }
+
+    async initByAsync() {
+        return super.setAuthHeader()
+        .then(() => {
+            this._socket = io(this._webSocketPrefix, {
+                path: this._path,
+                // withCredentials: true,
+                extraHeaders: this.headers,
+            });
+        })
+    }
+
+    async send (eventId, data) {
+        return this.initByAsync()
+        .then(() => {
+            this._socket.emit(eventId, data);
         });
     }
-
-    send (eventId, data) {
-        this._socket.emit(eventId, data);
-    }
-
-    // sendImage(eventId, ) {
-    //     let imageFilePath = this.path.join(__dirname, 'public/img/sample1.jpg');
-
-    //     fs.readFile(imageFilePath, 'base64', (err, data) => {
-    //         if (err) {
-    //             console.log(err);
-    //             return;
-    //         }
-    //         const imgSrc = 'data:image/jpg;base64,' + data;
-    //         socket.emit(eventId, { imgSrc });
-    //     });
-    // }
     
-    receive (eventId, callback) {
+    async receive (eventId, callback) {
+        await this.setAuthHeader();
         this._socket.on(eventId, callback);
     }
 }

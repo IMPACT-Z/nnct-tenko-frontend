@@ -34,7 +34,7 @@ const login = async (provider) => {
 }
 
 const getIdToken = async () => {
-    auth.currentUser.getIdToken()
+    return auth.currentUser.getIdToken()
     .catch(error => {
         alert(error.message);
     });
@@ -56,7 +56,7 @@ const onAuthStateChangedByCallback = (callback) => {
 export { 
     providers, 
     login, 
-    getIdToken, 
+    getIdToken,
     getUserInfo,
     logout,
     onAuthStateChangedByCallback, 
