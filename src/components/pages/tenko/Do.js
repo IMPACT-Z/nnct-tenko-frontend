@@ -10,8 +10,8 @@ import PageBase from "../Base";
 
 
 const cameraSetting = {
-    width: 480,
-    height: 270,
+    width: 800,
+    height: 450,
     format: 'png',
     interval: 2000,
 }
@@ -32,7 +32,7 @@ const RollCall = () => {
     };
 
     let reflectStatusClk = false;
-    // const reflectStatus = () => reflectStatusClk = !reflectStatusClk;
+    const reflectStatus = () => reflectStatusClk = !reflectStatusClk;
 
     useEffect(() => {
         new RestApi('/api/v1/tenko').get()
@@ -91,83 +91,106 @@ const RollCall = () => {
     }, cameraSetting.interval);
 
 
-    // const [phase, setPhase] = useState();
-    // const phaseLabels = {
-    //     'FACE_RECOGNITION': '顔認証',
-    //     '3CHALLENGES': '3チャレンジ',
-    // }
-    // const [instruction, setInstruction] = useState();
-    // const instructionMessages = {
-    //     'FACE_DIRECTION_UP': '上を向いてください',
-    //     'FACE_DIRECTION_DOWN': '上を向いてください',
-    //     'FACE_DIRECTION_LEFT': '上を向いてください',
-    //     'FACE_DIRECTION_RIGHT': '上を向いてください',
-    //     'FACE_DIRECTION_FRONT': '上を向いてください',
-    //     'FACE_NOT_DETECTED': '顔を認識できません',
-    // }
-    // const [currentStep, setCurrentStep] = useState(null);
-    // const [totalStep, setTotalStep] = useState(null);
-    // socket.receive('instructions', jsonData => {
-    //     const data = JSON.parse(jsonData);
+    const [phase, setPhase] = useState('3CHALLENGES');
+    const phaseLabels = {
+        'FACE_RECOGNITION': '顔認証',
+        '3CHALLENGES': '3チャレンジ',
+    }
+    const [instruction, setInstruction] = useState('FACE_DIRECTION_UP');
+    const instructionMessages = {
+        'FACE_DIRECTION_UP': '上を向いてください',
+        'FACE_DIRECTION_DOWN': '上を向いてください',
+        'FACE_DIRECTION_LEFT': '上を向いてください',
+        'FACE_DIRECTION_RIGHT': '上を向いてください',
+        'FACE_DIRECTION_FRONT': '上を向いてください',
+        'FACE_NOT_DETECTED': '顔を認識できません',
+    }
+    const [currentStep, setCurrentStep] = useState(0);
+    const [totalStep, setTotalStep] = useState(3);
+    socket.receive('instructions', jsonData => {
+        console.log('receive');
+        const data = JSON.parse(jsonData);
 
-    //     switch(data.phase) {
-    //         case 'FACE_RECOGNITION':
-    //             setCurrentStep(null);
-    //             setTotalStep(null);
-    //             break;
-    //         case '3CHALLENGES':
-    //             setCurrentStep(data.steps.current);
-    //             setTotalStep(data.steps.total);
-    //             break;
-    //         default:
-    //             // エラーメッセージ
-    //             break;
-    //     }
-    // });
+        setPhase(data.phase);
 
-    // socket.receive('disconnectReason', data => {
-    //     switch(data) {
-    //         case 'DONE':
-    //         case 'UNAVAILABLE':
-    //         case 'SUCCESS':
-    //             reflectStatus();
-    //             break;
-    //         case 'INVALID_TOKEN':
-    //             // エラーメッセージ
-    //             break;
-    //         case 'INVALID_SESSION':
-    //             // エラーメッセージString(
-    //             break;
-    //         default:
-    //             // エラーメッセージ
-    //             break;
-    //     }
-    // });
+        switch(data.phase) {
+            case 'FACE_RECOGNITION':
+                setInstruction(null);
+                setCurrentStep(null);
+                setTotalStep(null);
+                break;
+            case '3CHALLENGES':
+                setInstruction(data.instruction);
+                setCurrentStep(data.steps.current);
+                setTotalStep(data.steps.total);
+                break;
+            default:
+                // エラーメッセージ
+                break;
+        }
+    });
+
+    socket.receive('disconnectReason', data => {
+        switch(data) {
+            case 'DONE':
+            case 'UNAVAILABLE':
+            case 'SUCCESS':
+                reflectStatus();
+                break;
+            case 'INVALID_TOKEN':
+                // エラーメッセージ
+                break;
+            case 'INVALID_SESSION':
+                // エラーメッセージ
+                break;
+            default:
+                // エラーメッセージ
+                break;
+        }
+    });
 
     return (
         <PageBase
             authType={AUTH_TYPE.AUTH}
             backgroundClassName='bg-white'
             inner={
-                <div className="py-16 flex flex-col items-center">
-                    <div>
-                        {statusMessages[status]}
-                        （{durationMessage}）
-                        {/* {phaseLabels[phase]} */}
-                        {/* {instructionMessages[instruction]} */}
-                        {/* {phase === '3CHALLENGES' &&
-                            <div>{`${currentStep}/${totalStep}`}</div>
-                        } */}
+                <div className="py-16 px-16 flex flex-col items-center gap-y-12">
+                    <div className="flex flex-col items-center gap-y-5">
+                        <div className="flex gap-x-6 items-center">
+                            <div className="text-3xl text-gray-800 tracking-wider">{statusMessages[status]}</div>
+                            <div className="text-3xl text-gray-400">{`(${durationMessage})`}</div>
+                        </div>
+                        <div className="text-xl flex">
+                            {Object.keys(phaseLabels).map((key, index) => {
+                                const textColorClassName = (key === phase) ? 'text-white' : 'text-gray-400';
+                                const bgColorClassName = (key === phase) ? 'bg-sky-400' : 'bg-gray-100';
+                                return (
+                                    <div key={key} className={`w-48 ${bgColorClassName} ${textColorClassName} ring-1 ring-gray-300 tracking-wider px-4 py-2 flex gap-x-2`}>
+                                        <div>{`(${index+1})`}</div>
+                                        <div>{phaseLabels[key]}</div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                        <div className="flex gap-x-4 text-2xl text-gray-600 tracking-wider">
+                            <div>
+                                {instructionMessages[instruction]}
+                            </div>
+                            {phase === '3CHALLENGES' &&
+                                <div>{`(${currentStep + 1}/${totalStep})`}</div>
+                            }
+                        </div>
                     </div>
                     {checkCanDo() && 
-                            <Webcam
-                                audio={false}
-                                width={cameraSetting.width}
-                                height={cameraSetting.height}
-                                ref={webcamRef}
-                                screenshotFormat={`image/${cameraSetting.format}`}
-                                videoConstraints={videoConstraints}
-                            ></Webcam>
+                        <Webcam
+                            audio={false}
+                            width={cameraSetting.width}
+                            height={cameraSetting.height}
+                            ref={webcamRef}
+                            screenshotFormat={`image/${cameraSetting.format}`}
+                            videoConstraints={videoConstraints}
+                            className="ring-8 ring-gray-200 shadow-xl shadow-gray-600"
+                        ></Webcam>
                     }
                 </div>
             }

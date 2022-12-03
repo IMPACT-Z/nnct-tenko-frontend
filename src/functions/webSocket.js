@@ -10,25 +10,26 @@ class WebSocket extends Http {
 
     async initByAsync() {
         return super.setAuthHeader()
-        .then(() => {
-            this._socket = io(this._webSocketPrefix, {
+        .then(() => 
+            io.connect(this._webSocketPrefix, {
                 path: this._path,
-                // withCredentials: true,
                 extraHeaders: this.headers,
-            });
-        })
+            }
+        ));
     }
 
     async send (eventId, data) {
         return this.initByAsync()
-        .then(() => {
-            this._socket.emit(eventId, data);
+        .then(socketIo => {
+            socketIo.emit(eventId, data);
         });
     }
     
     async receive (eventId, callback) {
-        await this.setAuthHeader();
-        this._socket.on(eventId, callback);
+        return this.initByAsync()
+        .then(socketIo => {
+            socketIo.on(eventId, callback);
+        });
     }
 }
 
