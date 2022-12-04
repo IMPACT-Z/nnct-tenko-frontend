@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Swal from 'sweetalert2';
 import Http from './http'
 
 
@@ -8,7 +9,7 @@ class RestApi extends Http {
         this.fullPath = `${process.env.REACT_APP_API_PREFIX}${path}`;
     }
 
-    async get(params=null) {
+    async get(textIfError, params=null) {
         await super.setAuthHeader();
 
         const uri = (params === null) ?
@@ -22,22 +23,11 @@ class RestApi extends Http {
                 resolve(response);
             })
             .catch(error => {
-                reject(error.response);
-            });
-        });
-    };
-    
-    async post(data) {
-        await super.setAuthHeader();
-        
-        const uri = this.fullPath;
-    
-        return await new Promise((resolve, reject) => {
-            axios.post(uri, data)
-            .then(response => {
-                resolve(response);
-            })
-            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'サーバーエラー',
+                    text: textIfError,
+                });
                 reject(error.response);
             });
         });

@@ -1,5 +1,6 @@
 import {} from "./firebase";
 import { GoogleAuthProvider, getAuth, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
+import Swal from "sweetalert2";
 
 
 const auth = getAuth();
@@ -11,7 +12,11 @@ const providers = {
 const logout = async () => {
     signOut(auth)
     .catch(error => {
-        alert(error.message);
+        Swal({
+            icon: 'error',
+            title: 'ログアウト失敗',
+            text: error.message,
+        });
     });
 }
 
@@ -24,19 +29,31 @@ const login = async (provider) => {
             if (emailDomain !== 'g.nagano-nct.ac.jp') 
                 throw new Error('許可されたドメインのメールアドレスではありません');
         } catch(error) {
-            alert(error.message);
             logout();
+            Swal.fire({
+                icon: 'error',
+                title: 'ログイン失敗',
+                text: error.message,
+            });
         }
     })
     .catch(error => {
-        alert(error.message);
+        Swal({
+            icon: 'error',
+            title: 'ログイン失敗',
+            text: error.message,
+        });
     });
 }
 
 const getIdToken = async () => {
     return auth.currentUser.getIdToken()
     .catch(error => {
-        alert(error.message);
+        Swal({
+            icon: 'error',
+            title: '認証エラー',
+            text: error.message,
+        })
     });
 }
 

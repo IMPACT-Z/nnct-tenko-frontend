@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import Webcam from "react-webcam";
+import Swal from 'sweetalert2/src/sweetalert2.js';
 
 import RestApi from '../../../functions/restApi';
 import WebSocket from '../../../functions/webSocket';
@@ -35,10 +36,13 @@ const RollCall = () => {
     const reflectStatus = () => reflectStatusClk = !reflectStatusClk;
 
     useEffect(() => {
-        new RestApi('/api/v1/tenko').get()
+        new RestApi('/api/v1/tenko')
+        .get('点呼の実施状況が取得できませんでした')
         .then((response) => {
             setStatus(response.data.status);
-        });
+        }).catch(
+
+        );
     }, [reflectStatusClk]);
 
     const checkCanDo = () => status === 'PENDING';
@@ -49,7 +53,8 @@ const RollCall = () => {
 
     const [durationMessage, setDurationMessage] = useState();
     useEffect(() => {
-        new RestApi('/api/v1/tenko/duration').get()
+        new RestApi('/api/v1/tenko/duration')
+        .get('点呼の実施時間が取得できませんでした')
         .then((response) => {
             const startTime = response.data?.start;
             const endTime = response.data?.end;
@@ -128,7 +133,11 @@ const RollCall = () => {
                 setTotalStep(data.steps.total);
                 break;
             default:
-                // エラーメッセージ
+                Swal.fire({
+                    icon: 'error',
+                    title: 'サーバーエラー',
+                    text: '取得した現在の段階が正しくありませんサーバー管理者に問い合わせて下さい'
+                });
                 break;
         }
     });
@@ -136,18 +145,48 @@ const RollCall = () => {
     socket.receive('disconnectReason', data => {
         switch(data) {
             case 'DONE':
+                Swal.fire({
+                    icon: 'warning',
+                    title: '点呼はできません',
+                    text: '点呼はすでに完了しています',
+                });
+                break;
             case 'UNAVAILABLE':
+                Swal.fire({
+                    icon: 'warning',
+                    title: '点呼はできません',
+                    text: '現在は点呼が実施されていません',
+                });
+                reflectStatus();
+                break;
             case 'SUCCESS':
+                Swal.fire({
+                    icon: 'success',
+                    title: '点呼完了！',
+                    text: '点呼が完了しました',
+                });
                 reflectStatus();
                 break;
             case 'INVALID_TOKEN':
-                // エラーメッセージ
+                Swal.fire({
+                    icon: 'error',
+                    title: 'サーバーエラー',
+                    text: `正しい認証方法で認証してください`
+                });
                 break;
             case 'INVALID_SESSION':
-                // エラーメッセージ
+                Swal.fire({
+                    icon: 'error',
+                    title: '点呼の失敗',
+                    text: `${phaseLabels[phase]}が失敗しました`
+                });
                 break;
             default:
-                // エラーメッセージ
+                Swal.fire({
+                    icon: 'error',
+                    title: 'サーバーエラー',
+                    text: `取得した接続の遮断理由が正しくありません`
+                });
                 break;
         }
     });
@@ -160,7 +199,9 @@ const RollCall = () => {
                 <div className="py-16 px-16 flex flex-col items-center gap-y-12">
                     <div className="flex flex-col items-center gap-y-5">
                         <div className="text-3xl text-gray-800 tracking-wider">{statusMessages[status]}</div>
-                        <div className="text-2xl text-gray-400">{`(実施時間：${durationMessage})`}</div>
+                        {durationMessage &&
+                            <div className="text-2xl text-gray-400">{`(実施時間：${durationMessage})`}</div>
+                        }
                         {(checkCanDo() && isClickedStartButton) && <>
                             <div className="text-xl flex">
                                 {Object.keys(phaseLabels).map((key, index) => {

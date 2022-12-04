@@ -70,7 +70,8 @@ const DateCell = ({date, isOks, startTime}) => {
 const RollCallHistory = () => {
     const [startTime, setStartTime] = useState(null);
     useEffect(() => {
-        new RestApi('/api/v1/tenko/duration').get()
+        new RestApi('/api/v1/tenko/duration')
+        .get('点呼の実施時間が取得できませんでした')
         .then((response) => {
             setStartTime(response.data.start);
         })

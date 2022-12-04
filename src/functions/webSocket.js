@@ -1,5 +1,8 @@
 import {io} from "socket.io-client";
+import Swal from 'sweetalert2';
+
 import Http from './http'
+
 
 class WebSocket extends Http {
     constructor(path) {
@@ -9,26 +12,32 @@ class WebSocket extends Http {
     }
 
     async initByAsync() {
-        return super.setAuthHeader()
-        .then(() => {
-            this._socket = io(this._webSocketPrefix, {
-                path: this._path,
-                // withCredentials: true,
-                extraHeaders: this.headers,
+        return await new Promise((resolve, reject) => {
+            super.setAuthHeader()
+            .then(() => {
+                resolve(io(this._webSocketPrefix, {
+                    path: this._path,
+                    extraHeaders: this.headers,
+                }));
+            })
+            .catch(error => {
+                reject(error);
             });
-        })
+        });
     }
 
     async send (eventId, data) {
         return this.initByAsync()
-        .then(() => {
-            this._socket.emit(eventId, data);
+        .then(ioSocket => {
+            ioSocket.emit(eventId, data);
         });
     }
     
     async receive (eventId, callback) {
-        await this.setAuthHeader();
-        this._socket.on(eventId, callback);
+        return this.initByAsync()
+        .then(ioSocket => {
+            ioSocket.on(eventId, callback);
+        });
     }
 }
 
