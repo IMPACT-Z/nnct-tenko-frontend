@@ -241,6 +241,7 @@ const RollCall = () => {
                                     ref={webcamRef}
                                     screenshotFormat={`image/${cameraSetting.format}`}
                                     videoConstraints={videoConstraints}
+                                    mirrored={true}
                                     className="ring-8 ring-gray-200 shadow-xl shadow-gray-600"
                                 ></Webcam>
                                 :
