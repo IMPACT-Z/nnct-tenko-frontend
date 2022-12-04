@@ -1,5 +1,4 @@
 import {io} from "socket.io-client";
-import Swal from 'sweetalert2';
 
 import Http from './http'
 
