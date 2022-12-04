@@ -24,7 +24,7 @@ const videoConstraints = {
 
 const RollCall = () => {
     // 点呼ステータスの処理
-    const [status, setStatus] = useState();
+    const [status, setStatus] = useState(null);
 
     const statusMessages = {
         'PENDING': '点呼を実施してください',
@@ -51,7 +51,7 @@ const RollCall = () => {
     const [isClickedStartButton, setIsClickedStartButton] = useState(false);
 
 
-    const [durationMessage, setDurationMessage] = useState();
+    const [durationMessage, setDurationMessage] = useState(null);
     useEffect(() => {
         new RestApi('/api/v1/tenko/duration')
         .get('点呼の実施時間が取得できませんでした')
@@ -84,7 +84,8 @@ const RollCall = () => {
 
     // 顔の画像を送信
     useInterval(() => {
-        if (status !== 'PENDING') return;
+        if (!checkCanDo()) return;
+        if (!isClickedStartButton) return;
 
         // 撮影した画像を取得
         const image = capture();
@@ -94,6 +95,7 @@ const RollCall = () => {
         for (let i = 0; i < blob.length; i++) {
             buffer[i] = blob.charCodeAt(i);
         }
+        console.log('顔画像の送信');
         // 送信
         socket.send('faceImage', buffer);
     }, cameraSetting.interval);
@@ -107,10 +109,10 @@ const RollCall = () => {
     const [instruction, setInstruction] = useState('FACE_DIRECTION_UP');
     const instructionMessages = {
         'FACE_DIRECTION_UP': '上を向いてください',
-        'FACE_DIRECTION_DOWN': '上を向いてください',
-        'FACE_DIRECTION_LEFT': '上を向いてください',
-        'FACE_DIRECTION_RIGHT': '上を向いてください',
-        'FACE_DIRECTION_FRONT': '上を向いてください',
+        'FACE_DIRECTION_DOWN': '下を向いてください',
+        'FACE_DIRECTION_LEFT': '左を向いてください',
+        'FACE_DIRECTION_RIGHT': '右を向いてください',
+        'FACE_DIRECTION_FRONT': '正面を向いてください',
         'FACE_NOT_DETECTED': '顔を認識できません',
     }
     const [currentStep, setCurrentStep] = useState(0);
@@ -120,15 +122,16 @@ const RollCall = () => {
         const data = JSON.parse(jsonData);
 
         setPhase(data.phase);
+        setInstruction(data.instruction);
+        new Audio(`${process.env.PUBLIC_URL}/audio/instruction/${data.instruction}.mp3`)
+        .play();
 
         switch(data.phase) {
             case 'FACE_RECOGNITION':
-                setInstruction(null);
                 setCurrentStep(null);
                 setTotalStep(null);
                 break;
             case '3CHALLENGES':
-                setInstruction(data.instruction);
                 setCurrentStep(data.steps.current);
                 setTotalStep(data.steps.total);
                 break;
@@ -141,6 +144,7 @@ const RollCall = () => {
                 break;
         }
     });
+    // new Audio(`${process.env.PUBLIC_URL}/audio/instruction/${instruction}.mp3`).play();
 
     socket.receive('disconnectReason', data => {
         switch(data) {
@@ -198,8 +202,10 @@ const RollCall = () => {
             inner={
                 <div className="py-16 px-16 flex flex-col items-center gap-y-12">
                     <div className="flex flex-col items-center gap-y-5">
-                        <div className="text-3xl text-gray-800 tracking-wider">{statusMessages[status]}</div>
-                        {durationMessage &&
+                        {status !== null &&
+                            <div className="text-3xl text-gray-800 tracking-wider">{statusMessages[status]}</div>
+                        }
+                        {durationMessage !== null &&
                             <div className="text-2xl text-gray-400">{`(実施時間：${durationMessage})`}</div>
                         }
                         {(checkCanDo() && isClickedStartButton) && <>
