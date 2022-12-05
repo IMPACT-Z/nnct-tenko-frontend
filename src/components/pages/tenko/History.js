@@ -106,20 +106,14 @@ const RollCallHistory = () => {
 
     const [isOks, setIsOks] = useState(null);
     useEffect(() => {
-        setIsOks([
-            {
-                year: 2022,
-                month: 12,
-                date: 2,
-                value: true,
-            },
-            {
-                year: 2022,
-                month: 12,
-                date: 3,
-                value: true,
-            },
-        ]);
+        new RestApi('/api/v1/tenko/duration')
+        .get(
+            '点呼の実施時間が取得できませんでした', 
+            {year: calender.year, month: calender.month},
+        )
+        .then((response) => {
+            setIsOks(response.data);
+        })
     }, [calender]);
 
     

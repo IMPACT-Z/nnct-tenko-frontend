@@ -1,6 +1,7 @@
 import axios from 'axios'
 import Swal from 'sweetalert2';
 import Http from './http'
+import { logout } from './auth'
 
 
 class RestApi extends Http {
@@ -23,11 +24,29 @@ class RestApi extends Http {
                 resolve(response);
             })
             .catch(error => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'サーバーエラー',
-                    text: textIfError,
-                });
+                const statusCode = error.response.data.status;
+                if (statusCode === 400) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'バリデーション失敗',
+                        text: error.response.data.msg,
+                    });
+                }
+                else if (statusCode === 403) {
+                    logout();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ログイン失敗',
+                        text: error.response.data.msg,
+                    });
+                }
+                else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ログイン失敗',
+                        text: textIfError,
+                    });
+                }
                 reject(error.response);
             });
         });

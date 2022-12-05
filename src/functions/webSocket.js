@@ -14,10 +14,10 @@ class WebSocket extends Http {
         return await new Promise((resolve, reject) => {
             super.setAuthHeader()
             .then(() => {
-                resolve(io(this._webSocketPrefix, {
+                this._ioSocket = io(this._webSocketPrefix, {
                     path: this._path,
                     extraHeaders: this.headers,
-                }));
+                });
             })
             .catch(error => {
                 reject(error);
@@ -27,15 +27,15 @@ class WebSocket extends Http {
 
     async send (eventId, data) {
         return this.initByAsync()
-        .then(ioSocket => {
-            ioSocket.emit(eventId, data);
+        .then(() => {
+            this.ioSocket.emit(eventId, data);
         });
     }
     
     async receive (eventId, callback) {
         return this.initByAsync()
-        .then(ioSocket => {
-            ioSocket.on(eventId, callback);
+        .then(() => {
+            this._ioSocket.on(eventId, callback);
         });
     }
 }
