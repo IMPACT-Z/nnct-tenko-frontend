@@ -32,8 +32,7 @@ const RollCall = () => {
         'UNAVAILABLE': `点呼実施時刻ではありません`,
     };
 
-    let reflectStatusClk = false;
-    const reflectStatus = () => reflectStatusClk = !reflectStatusClk;
+    const [reflectStatusClk, setReflectStatusClk] = useState(false);
 
     useEffect(() => {
         new RestApi('/api/v1/tenko')
@@ -101,7 +100,7 @@ const RollCall = () => {
         const image = capture();
         // データ形式の変換
         const blob = atob(image.replace(/^.*,/, ''));
-        let buffer = new Uint8Array(blob.length);
+        const buffer = new Uint8Array(blob.length);
         for (let i = 0; i < blob.length; i++) {
             buffer[i] = blob.charCodeAt(i);
         }
@@ -177,7 +176,7 @@ const RollCall = () => {
                         title: '点呼はできません',
                         text: '現在は点呼が実施されていません',
                     });
-                    reflectStatus();
+                    setReflectStatusClk(!reflectStatusClk);
                     break;
                 case 'SUCCESS':
                     Swal.fire({
@@ -185,7 +184,7 @@ const RollCall = () => {
                         title: '点呼完了！',
                         text: '点呼が完了しました',
                     });
-                    reflectStatus();
+                    setReflectStatusClk(!reflectStatusClk);
                     break;
                 case 'INVALID_TOKEN':
                     Swal.fire({
