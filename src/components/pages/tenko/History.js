@@ -39,13 +39,13 @@ const DateCell = ({date, isOks, startTime}) => {
             if (now < new Date(now.getFullYear(),now.getMonth(),now.getDate(),startTime.hour,startTime.minute)) 
                 return null;
         }
-
-        return isOks?.find(item =>
+        
+        return isOks?.find(item => 
             (item.year === date.year && item.month === date.month) && item.date === date.value
-        )?.value ?? false;
+        ) ?? false;
     }
-    const isOk = getIsOK();
 
+    const isOk = getIsOK();
 
     return (
         <td 
@@ -74,7 +74,7 @@ const RollCallHistory = () => {
         .get('点呼の実施時間が取得できませんでした')
         .then((response) => {
             setStartTime(response.data.start);
-        })
+        });
     }, []);
 
 
@@ -106,13 +106,23 @@ const RollCallHistory = () => {
 
     const [isOks, setIsOks] = useState(null);
     useEffect(() => {
-        new RestApi('/api/v1/tenko/duration')
+        new RestApi('/api/v1/tenko/history')
         .get(
-            '点呼の実施時間が取得できませんでした', 
-            {year: calender.year, month: calender.month},
+            '点呼の実施履歴が取得できませんでした', 
+            {
+                start: `${calender.year}-${calender.month}-${1}`,
+                end: `${calender.year}-${calender.month}-${calender.getLastDate()}`,
+            },
         )
         .then((response) => {
-            setIsOks(response.data);
+            setIsOks(response.data.map(item => {
+                const issuedAt = new Date(Date.parse(item.issuedAt));
+                return {
+                    year: issuedAt.getFullYear(),
+                    month: issuedAt.getMonth() + 1,
+                    date: issuedAt.getDate(),
+                }
+            }));
         })
     }, [calender]);
 
@@ -130,6 +140,8 @@ const RollCallHistory = () => {
         setCalender(calender.getNext());
     }
 
+    if (startTime === null) return;
+    if (isOks === null) return;
 
     return (
         <PageBase

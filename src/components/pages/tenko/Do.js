@@ -219,12 +219,14 @@ const RollCall = () => {
             inner={
                 <div className="py-16 px-16 flex flex-col items-center gap-y-12">
                     <div className="flex flex-col items-center gap-y-5">
-                        {status !== null &&
-                            <div className="text-3xl text-gray-800 tracking-wider">{statusMessages[status]}</div>
-                        }
-                        {durationMessage !== null &&
-                            <div className="text-2xl text-gray-400">{`(実施時間：${durationMessage})`}</div>
-                        }
+                        <div className="flex gap-x-8">
+                            {status !== null &&
+                                <div className="text-3xl text-gray-800 tracking-wider">{statusMessages[status]}</div>
+                            }
+                            {durationMessage !== null &&
+                                <div className="text-2xl text-gray-400">{`(実施時間：${durationMessage})`}</div>
+                            }
+                        </div>
                         {(checkCanDo() && isClickedStartButton) && <>
                             <div className="text-xl flex">
                                 {Object.keys(phaseLabels).map((key, index) => {

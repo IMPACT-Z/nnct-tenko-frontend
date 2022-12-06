@@ -24,30 +24,31 @@ class RestApi extends Http {
                 resolve(response);
             })
             .catch(error => {
-                const statusCode = error.response.data.status;
-                if (statusCode === 400) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'バリデーション失敗',
-                        text: error.response.data.msg,
-                    });
+                // TODO エラーメッセージの表示
+                switch(error.request.status) {
+                    case 400:
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'バリデーション失敗',
+                            text: error.msg,
+                        });
+                        break;
+                    case 403:
+                        logout();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ログイン失敗',
+                            text: error.msg,
+                        });
+                        break;
+                    default:
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'サーバーエラー',
+                            text: textIfError,
+                        });
                 }
-                else if (statusCode === 403) {
-                    logout();
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'ログイン失敗',
-                        text: error.response.data.msg,
-                    });
-                }
-                else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'ログイン失敗',
-                        text: textIfError,
-                    });
-                }
-                reject(error.response);
+                reject(error);
             });
         });
     };

@@ -14,7 +14,7 @@ class Calender {
         return true;
     }
 
-    getDateNumInMonth = () => {
+    getLastDate = () => {
         switch(this.month) {
             case 1:
             case 3:
@@ -60,15 +60,15 @@ class Calender {
 
     get = () => {
         const firstDate = new Date(this.year, this.month - 1, 1);
-        const dateNumInMonth = this.getDateNumInMonth();
+        const lastDate = this.getLastDate();
         const prev = this.getPrev();
         const next = this.getNext();
-        const dateNumInPrevMonth = prev.getDateNumInMonth();
+        const prevLastDate = prev.getLastDate();
 
         const result = [];
         let date = 1;
         let week = 0;
-        while (date <= dateNumInMonth) {
+        while (date <= lastDate) {
             result.push({
                 index: week,
                 dates: [],
@@ -78,16 +78,16 @@ class Calender {
                     result[result.length - 1].dates.push({
                         year: prev.year,
                         month: prev.month,
-                        value: dateNumInPrevMonth - (firstDate.getDay() - indexInWeek) + 1,
+                        value: prevLastDate - (firstDate.getDay() - indexInWeek) + 1,
                         isToday: this.isToday(prev.year, prev.month, date),
                         isThisMonth: false,
                     });
                 }
-                else if (date > dateNumInMonth) {
+                else if (date > lastDate) {
                     result[result.length - 1].dates.push({
                         year: next.year,
                         month: next.month,
-                        value: date - dateNumInMonth,
+                        value: date - lastDate,
                         isToday: this.isToday(next.year, next.month, date),
                         isThisMonth: false,
                     }
