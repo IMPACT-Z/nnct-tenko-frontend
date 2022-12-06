@@ -23,7 +23,7 @@ const Base = ({authType, inner}) => {
     const [isDisplay, setIsDisplay] = useState(false);
 
     useEffect(() => {
-        onAuthStateChangedByCallback(user => {
+        const unsubscribe = onAuthStateChangedByCallback(user => {
             switch(authType) {
                 case AUTH_TYPE.AUTH:
                     if (user) {
@@ -45,6 +45,9 @@ const Base = ({authType, inner}) => {
                 default:
             }
         });
+        return () => {
+            unsubscribe();
+        }
     }, []);
 
     if (isDisplay)
