@@ -45,7 +45,7 @@ const Base = ({authType, inner}) => {
                 default:
             }
         });
-    });
+    }, []);
 
     if (isDisplay)
         return inner;
