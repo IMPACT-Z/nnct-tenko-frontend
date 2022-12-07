@@ -1,7 +1,9 @@
-import Base from "../Base"; 
+import React from 'react';
 import { useOutletContext } from "react-router-dom";
 
-const PageBase = ({authType, backgroundClassName, inner}) => {
+import Base from "../Base"; 
+
+const PageBase = React.memo(({authType, backgroundClassName, inner}) => {
     const { pageBaseClassName } = useOutletContext();
     return (
         <Base 
@@ -13,9 +15,8 @@ const PageBase = ({authType, backgroundClassName, inner}) => {
                     {inner}
                 </div>
             }
-            
         />
     )    
-}
+});
 
 export default PageBase;

@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
+
 import { onAuthStateChangedByCallback } from '../functions/auth'
 
 
@@ -18,7 +19,7 @@ const AUTH_TYPE = {
     }
 }
 
-const Base = ({authType, inner}) => {
+const Base = React.memo(({authType, inner}) => {
     const navigate = useNavigate();
     const [isDisplay, setIsDisplay] = useState(false);
 
@@ -52,7 +53,7 @@ const Base = ({authType, inner}) => {
 
     if (isDisplay)
         return inner;
-}
+});
 
 export default Base;
 export {AUTH_TYPE};

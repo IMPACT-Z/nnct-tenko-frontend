@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import RestApi from '../../../functions/restApi';
@@ -10,7 +10,7 @@ import PageBase from "../Base";
 import { ArrowLeftIcon, ArrowRightIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 
 
-const DateCell = ({date, isOks, startTime}) => {
+const DateCell = React.memo(({date, isOks, startTime}) => {
     const valueClassList = [];
     let okColor;
     let ngColor;
@@ -65,9 +65,9 @@ const DateCell = ({date, isOks, startTime}) => {
             }
         </td>
     )
-}
+});
 
-const RollCallHistory = () => {
+const RollCallHistory = React.memo(() => {
     const [startTime, setStartTime] = useState(null);
     useEffect(() => {
         new RestApi('/api/v1/tenko/duration')
@@ -207,6 +207,6 @@ const RollCallHistory = () => {
             }
         />
     );
-}
+});
 
 export default RollCallHistory;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 import { AUTH_TYPE } from "../../Base";
 import PageBase from "../Base";
@@ -6,7 +6,7 @@ import { providers, login } from "../../../functions/auth";
 
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/solid'
 
-const Contents = () => {
+const Contents = React.memo(() => {
     const socialServices = [
         {
             name: 'google',
@@ -85,9 +85,9 @@ const Contents = () => {
             </div>
         </div>
     </>)
-}
+});
 
-const Login = () => {
+const Login = React.memo(() => {
     return (
         <PageBase
             authType={AUTH_TYPE.NOT_AUTH}
@@ -109,6 +109,6 @@ const Login = () => {
             }
         />
     );
-}
+});
 
 export default Login;

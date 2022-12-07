@@ -1,10 +1,9 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import Webcam from "react-webcam";
 import Swal from 'sweetalert2/src/sweetalert2.js';
 
 import RestApi from '../../../functions/restApi';
 import WebSocket from '../../../functions/webSocket';
-import useInterval from '../../../functions/useInterval';
 
 import { AUTH_TYPE } from "../../Base";
 import PageBase from "../Base";
@@ -22,7 +21,8 @@ const videoConstraints = {
     facingMode: 'user',
 }
 
-const RollCall = () => {
+
+const RollCall = React.memo(() => {
     // 点呼ステータスの処理
     const [status, setStatus] = useState(null);
 
@@ -44,7 +44,10 @@ const RollCall = () => {
         );
     }, [reflectStatusClk]);
 
-    const checkCanDo = () => status === 'PENDING';
+    const checkCanDo = useCallback(
+        () => status === 'PENDING'
+        , [status]
+    );
 
 
     const [isClickedStartButton, setIsClickedStartButton] = useState(false);
@@ -79,37 +82,42 @@ const RollCall = () => {
     );
 
     
-    let socket = null;
-    const setSocket = async () => {
-        return new Promise((resolve, reject) => {
-            if (socket !== null) resolve(socket);
-            else {
-                socket = new WebSocket('/api/v1/tenko/session');
-                socket.initByAsync()
-                .then(() => resolve(socket));
-            }
-        });
-    }
+    const [socket, setSocket] = useState(null);
+    useEffect(() => {
+        const job = async () => {
+            const socketTmp = new WebSocket('/api/v1/tenko/session');
+            socketTmp.initByAsync()
+            setSocket(socketTmp);
+        }
+        job();
+    }, []);
 
     // 顔の画像を送信
-    useInterval(() => {
-        if (!checkCanDo()) return;
-        if (!isClickedStartButton) return;
-
-        // 撮影した画像を取得
-        const image = capture();
-        // データ形式の変換
-        const blob = atob(image.replace(/^.*,/, ''));
-        const buffer = new Uint8Array(blob.length);
-        for (let i = 0; i < blob.length; i++) {
-            buffer[i] = blob.charCodeAt(i);
+    useEffect(() => {
+        if (socket !== null); {
+            // console.log(socket);
+            const interval = setInterval(() => {
+                if (!checkCanDo()) return;
+                if (!isClickedStartButton) return;
+    
+                // 撮影した画像を取得
+                const image = capture();
+                // データ形式の変換
+                const blob = atob(image.replace(/^.*,/, ''));
+                const buffer = new Uint8Array(blob.length);
+                for (let i = 0; i < blob.length; i++) {
+                    buffer[i] = blob.charCodeAt(i);
+                }
+                console.log('顔画像の送信');
+                // 送信
+                socket.send('faceImage', buffer);
+            }
+            , cameraSetting.interval);
+            return () => clearInterval(interval);
         }
-        console.log('顔画像の送信');
-        // 送信
-        setSocket().then(soc => {
-            socket.send('faceImage', buffer);
-        });
-    }, cameraSetting.interval);
+    }, [socket, capture, checkCanDo, isClickedStartButton]);
+    // useInterval(() => {
+    // }, cameraSetting.interval);
 
 
     const [phase, setPhase] = useState('3CHALLENGES');
@@ -129,87 +137,93 @@ const RollCall = () => {
     }
     const [currentStep, setCurrentStep] = useState(0);
     const [totalStep, setTotalStep] = useState(3);
-    setSocket().then(soc => {
-        soc.receive('instructions', jsonData => {
-            console.log('receive');
-            const data = JSON.parse(jsonData);
-    
-            setPhase(data.phase);
-            setInstruction(data.instruction);
-            new Audio(`${process.env.PUBLIC_URL}/audio/instruction/${data.instruction}.mp3`)
-            .play();
-    
-            switch(data.phase) {
-                case 'FACE_RECOGNITION':
-                    setCurrentStep(null);
-                    setTotalStep(null);
-                    break;
-                case '3CHALLENGES':
-                    setCurrentStep(data.steps.current);
-                    setTotalStep(data.steps.total);
-                    break;
-                default:
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'サーバーエラー',
-                        text: '取得した現在の段階が正しくありませんサーバー管理者に問い合わせて下さい'
-                    });
-                    break;
-            }
-        });
-    })
+    useEffect(() => {
+        if (socket !== null) {
+
+            socket.receive('instructions', jsonData => {
+                console.log('receive');
+                const data = JSON.parse(jsonData);
+        
+                setPhase(data.phase);
+                setInstruction(data.instruction);
+                new Audio(`${process.env.PUBLIC_URL}/audio/instruction/${data.instruction}.mp3`)
+                .play();
+        
+                switch(data.phase) {
+                    case 'FACE_RECOGNITION':
+                        setCurrentStep(null);
+                        setTotalStep(null);
+                        break;
+                    case '3CHALLENGES':
+                        setCurrentStep(data.steps.current);
+                        setTotalStep(data.steps.total);
+                        break;
+                    default:
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'サーバーエラー',
+                            text: '取得した現在の段階が正しくありませんサーバー管理者に問い合わせて下さい'
+                        });
+                        break;
+                }
+            });
+        }
+    }, [socket]);
     // new Audio(`${process.env.PUBLIC_URL}/audio/instruction/${instruction}.mp3`).play();
 
-    setSocket().then(soc => {
-        soc.receive('disconnectReason', data => {
-            switch(data) {
-                case 'DONE':
-                    Swal.fire({
-                        icon: 'warning',
-                        title: '点呼はできません',
-                        text: '点呼はすでに完了しています',
-                    });
-                    break;
-                case 'UNAVAILABLE':
-                    Swal.fire({
-                        icon: 'warning',
-                        title: '点呼はできません',
-                        text: '現在は点呼が実施されていません',
-                    });
-                    setReflectStatusClk(!reflectStatusClk);
-                    break;
-                case 'SUCCESS':
-                    Swal.fire({
-                        icon: 'success',
-                        title: '点呼完了！',
-                        text: '点呼が完了しました',
-                    });
-                    setReflectStatusClk(!reflectStatusClk);
-                    break;
-                case 'INVALID_TOKEN':
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'サーバーエラー',
-                        text: `正しい認証方法で認証してください`
-                    });
-                    break;
-                case 'INVALID_SESSION':
-                    Swal.fire({
-                        icon: 'error',
-                        title: '点呼の失敗',
-                        text: `${phaseLabels[phase]}が失敗しました`
-                    });
-                    break;
-                default:
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'サーバーエラー',
-                        text: `取得した接続の遮断理由が正しくありません`
-                    });
-                    break;
-            }
-        });
-    });
+    useEffect(() => {
+        if (socket !== null) {
+
+            socket.receive('disconnectReason', data => {
+                switch(data) {
+                    case 'DONE':
+                        Swal.fire({
+                            icon: 'warning',
+                            title: '点呼はできません',
+                            text: '点呼はすでに完了しています',
+                        });
+                        break;
+                    case 'UNAVAILABLE':
+                        Swal.fire({
+                            icon: 'warning',
+                            title: '点呼はできません',
+                            text: '現在は点呼が実施されていません',
+                        });
+                        setReflectStatusClk(!reflectStatusClk);
+                        break;
+                    case 'SUCCESS':
+                        Swal.fire({
+                            icon: 'success',
+                            title: '点呼完了！',
+                            text: '点呼が完了しました',
+                        });
+                        setReflectStatusClk(!reflectStatusClk);
+                        break;
+                    case 'INVALID_TOKEN':
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'サーバーエラー',
+                            text: `正しい認証方法で認証してください`
+                        });
+                        break;
+                    case 'INVALID_SESSION':
+                        Swal.fire({
+                            icon: 'error',
+                            title: '点呼の失敗',
+                            text: `${phaseLabels[phase]}が失敗しました`
+                        });
+                        break;
+                    default:
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'サーバーエラー',
+                            text: `取得した接続の遮断理由が正しくありません`
+                        });
+                        break;
+                }
+            });
+        }
+    })
 
     return (
         <PageBase
@@ -276,7 +290,7 @@ const RollCall = () => {
             }
         />
     );
-}
+});
 
 
 export default RollCall;
