@@ -67,7 +67,7 @@ const getUserInfo = () => {
 }
 
 const onAuthStateChangedByCallback = (callback) => {
-    onAuthStateChanged(auth, callback);
+    return onAuthStateChanged(auth, callback);
 }
 
 export { 

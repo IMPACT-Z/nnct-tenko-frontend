@@ -26,13 +26,6 @@ class RestApi extends Http {
             .catch(error => {
                 // TODO エラーメッセージの表示
                 switch(error.request.status) {
-                    case 400:
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'バリデーション失敗',
-                            text: error.msg,
-                        });
-                        break;
                     case 403:
                         logout();
                         Swal.fire({

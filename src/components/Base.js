@@ -47,7 +47,7 @@ const Base = ({authType, inner}) => {
         });
         return () => {
             unsubscribe();
-        }
+        };
     }, []);
 
     if (isDisplay)
