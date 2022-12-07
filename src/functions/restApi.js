@@ -24,7 +24,6 @@ class RestApi extends Http {
                 resolve(response);
             })
             .catch(error => {
-                // TODO エラーメッセージの表示
                 switch(error.request.status) {
                     case 403:
                         logout();
