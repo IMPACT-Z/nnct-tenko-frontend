@@ -12,7 +12,7 @@ const providers = {
 const logout = async () => {
     signOut(auth)
     .catch(error => {
-        Swal({
+        Swal.fire({
             icon: 'error',
             title: 'ログアウト失敗',
             text: error.message,
@@ -22,7 +22,7 @@ const logout = async () => {
 
 const login = async (provider) => {
     try {
-        const result = signInWithPopup(auth, provider)
+        const result = await signInWithPopup(auth, provider)
         
         try {
             const emailDomain = result.user.email.split('@')[1];
@@ -36,7 +36,7 @@ const login = async (provider) => {
         }
     }
     catch(error) {
-        Swal({
+        Swal.fire({
             icon: 'error',
             title: 'ログイン失敗',
             text: error.message,
@@ -49,7 +49,7 @@ const getIdTokenExcludingAuth = async () => {
         return auth.currentUser.getIdToken()
     }
     catch(error) {
-        Swal({
+        Swal.fire({
             icon: 'error',
             title: '認証エラー',
             text: error.message,
