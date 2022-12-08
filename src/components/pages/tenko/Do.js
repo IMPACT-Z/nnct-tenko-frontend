@@ -15,8 +15,8 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
         return {
             width: 800,
             height: 450,
-            format: 'png',
-            interval: 2000,
+            format: 'jpeg',
+            interval: 1000,
         }
     }, []);
     const getVideoConstraints = useCallback(() => {
@@ -180,11 +180,12 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                 });
             });
             socket.on("disconnect", () => {
-                killSession({
-                    icon: 'error',
-                    title: '点呼のセッションが遮断されました',
-                    text: '予期しないエラー',
-                });
+                console.log('Kill websocket...');
+                // killSession({
+                //     icon: 'error',
+                //     title: '点呼のセッションが遮断されました',
+                //     text: '予期しないエラー',
+                // });
             });
             socket.on('disconnectReason', data => {
                 const job = async () => {
