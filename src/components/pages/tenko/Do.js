@@ -123,7 +123,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
             Swal.fire({
                 icon: 'error',
                 title: 'サーバーエラー',
-                text: '予期しない命令が返ってきました'
+                text: '予期しない指示が返ってきました'
             });
             return state;
         }
