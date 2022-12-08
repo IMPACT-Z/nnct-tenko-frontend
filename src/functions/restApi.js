@@ -1,48 +1,58 @@
 import axios from 'axios'
 import Swal from 'sweetalert2';
-import Http from './http'
-import { logout } from './auth'
+import { getIdTokenExcludingAuth, logout } from './auth'
 
 
-class RestApi extends Http {
-    constructor(path) {
-        super();
-        this.fullPath = `${process.env.REACT_APP_API_PREFIX}${path}`;
+class RestApi {
+    static async init(path) {
+        const headers = {};
+        try {
+            headers['Authorization'] = `Bearer ${await getIdTokenExcludingAuth()}`;
+        }
+        catch(error) {
+            await logout();
+            Swal.fire({
+                icon: 'error',
+                title: 'ログイン失敗',
+                text: error.msg,
+            });
+            throw error;
+        }
+
+        return {
+            headers: headers,
+            fullPath: `${process.env.REACT_APP_API_PREFIX}${path}`,
+        };
     }
 
-    async get(textIfError, params=null) {
-        await super.setAuthHeader();
-
-        const uri = (params === null) ?
-            this.fullPath :
-            `${this.fullPath}?${new URLSearchParams(params).toString()}`;
-
-    
-        return await new Promise((resolve, reject) => {
-            axios.get(uri, this.headers)
-            .then(response => {
-                resolve(response);
-            })
-            .catch(error => {
-                switch(error.request.status) {
-                    case 403:
-                        logout();
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'ログイン失敗',
-                            text: error.msg,
-                        });
-                        break;
-                    default:
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'サーバーエラー',
-                            text: textIfError,
-                        });
-                }
-                reject(error);
-            });
-        });
+    static async get(path, errorMessage, params={}) {
+        const {headers, fullPath} = await RestApi.init(path);
+        const uri = (params === {}) ?fullPath : `${fullPath}?${new URLSearchParams(params).toString()}`;
+        
+        try {
+            return axios.get(uri, headers);
+        }
+        catch(error) {
+            switch(error.request.status) {
+                case 403:
+                    await logout();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ログイン失敗',
+                        text: error.msg,
+                    });
+                    break;
+                
+                default:
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'サーバーエラー',
+                        text: errorMessage,
+                    });
+                    break;
+            }
+            throw error;
+        }
     };
 }
 

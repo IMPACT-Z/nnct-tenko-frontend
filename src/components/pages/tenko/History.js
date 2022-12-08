@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import RestApi from '../../../functions/restApi';
@@ -67,78 +67,93 @@ const DateCell = React.memo(({date, isOks, startTime}) => {
     )
 });
 
-const RollCallHistory = React.memo(() => {
+const TenkoHistory = React.memo(() => {
+    const location = useLocation();
+
     const [startTime, setStartTime] = useState(null);
     useEffect(() => {
-        new RestApi('/api/v1/tenko/duration')
-        .get('点呼の実施時間が取得できませんでした')
-        .then((response) => {
-            setStartTime(response.data.start);
-        });
+        const job = async () => {
+            try {
+                const response = await RestApi.get(
+                    '/api/v1/tenko/duration',
+                    '点呼の実施時間が取得できませんでした',
+                )
+                setStartTime(response.data.start);
+            }
+            catch(error) {}
+        }
+        job();
     }, []);
 
+    const [calender, dispatchCalender] = useReducer((state, action) => {
+        switch(action) {
+            case 'init':
+                const params = new URLSearchParams(location.search);
+                const yearStr = params.get('year');
+                let initYear = null;
+                if (!Number.isInteger(yearStr)) 
+                    initYear = Number(yearStr)
+                
+                const monthStr = params.get('month');
+                let initMonth = null;
+                if (!Number.isInteger(monthStr)) {
+                    const tmp = Number(monthStr);
+                    if (tmp >= 1 && tmp <= 12) initMonth = tmp;
+                }
 
-    const params = new URLSearchParams(useLocation().search);
+                if (initYear === null || initMonth === null) {
+                    const now = new Date();
+                    initYear = now.getFullYear();
+                    initMonth = now.getMonth() + 1;
+                }
+            
+                return new Calender(initYear, initMonth);
+            
+                case 'prev':
+                    return calender.getPrev();
+                case 'next':
+                    return calender.getNext();
+                case 'now':
+                    const today = new Date();
+                    return new Calender(today.getFullYear(), today.getMonth() + 1);
 
-    // 表示する年, 月の設定
-    const yearStr = params.get('year');
-    let initYear = null;
-    if (!Number.isInteger(yearStr)) 
-        initYear = Number(yearStr)
-    
-    const monthStr = params.get('month');
-    let initMonth = null;
-    if (!Number.isInteger(monthStr)) {
-        const tmp = Number(monthStr);
-        if (tmp >= 1 && tmp <= 12) initMonth = tmp;
-    }
+                default:
+                    return state;
+        }
 
-    if (initYear === null || initMonth === null) {
-        const now = new Date();
-        initYear = now.getFullYear();
-        initMonth = now.getMonth() + 1;
-    }
-
-    const [calender, setCalender] = useState(
-        new Calender(initYear, initMonth)
-    )
+    }, null);
+    useEffect(() => {
+        dispatchCalender('init');
+    }, []);
 
 
     const [isOks, setIsOks] = useState(null);
     useEffect(() => {
-        new RestApi('/api/v1/tenko/history')
-        .get(
-            '点呼の実施履歴が取得できませんでした', 
-            {
-                start: `${calender.year}-${calender.month}-${1}`,
-                end: `${calender.year}-${calender.month}-${calender.getLastDate()}`,
-            },
-        )
-        .then((response) => {
-            setIsOks(response.data.map(item => {
-                const issuedAt = new Date(Date.parse(item.issuedAt));
-                return {
-                    year: issuedAt.getFullYear(),
-                    month: issuedAt.getMonth() + 1,
-                    date: issuedAt.getDate(),
-                }
-            }));
-        })
+        const job = async () => {
+            try {
+                const response = await RestApi.get(
+                    '/api/v1/tenko/history',
+                    '点呼の実施履歴が取得できませんでした', 
+                    {
+                        start: `${calender.year}-${calender.month}-${1}`,
+                        end: `${calender.year}-${calender.month}-${calender.getLastDate()}`,
+                    },
+                );
+
+                setIsOks(response.data.map(item => {
+                    const issuedAt = new Date(Date.parse(item.issuedAt));
+                    return {
+                        year: issuedAt.getFullYear(),
+                        month: issuedAt.getMonth() + 1,
+                        date: issuedAt.getDate(),
+                    }
+                }));
+            }
+            catch(error) {}
+        }
+        job();
     }, [calender]);
 
-    
-    const setPrev = () => {
-        setCalender(calender.getPrev());
-    }
-
-    const setNow = () => {
-        const today = new Date();
-        setCalender(new Calender(today.getFullYear(), today.getMonth() + 1));
-    }
-
-    const setNext = () => {
-        setCalender(calender.getNext());
-    }
 
     if (startTime === null) return;
     if (isOks === null) return;
@@ -147,12 +162,12 @@ const RollCallHistory = React.memo(() => {
         <PageBase
             authType={AUTH_TYPE.AUTH}
             backgroundClassName='bg-white'
-            inner={
+            innerHTML={
                 <div className="py-20 flex flex-col items-center gap-y-8">
                     <div className="flex flex-col items-center gap-y-4">
                         <div className="flex items-center gap-x-6">
                             <button
-                                onClick={() => setPrev()}
+                                onClick={() => dispatchCalender('prev')}
                             >
                                 <ArrowLeftIcon className="w-6 h-6 text-gray-700 hover:text-sky-400" />
                             </button>
@@ -160,14 +175,14 @@ const RollCallHistory = React.memo(() => {
                                 {calender.year} 年 {calender.month} 月
                             </div>
                             <button
-                                onClick={() => setNext()}
+                                onClick={() => dispatchCalender('next')}
                             >
                                 <ArrowRightIcon className="w-6 h-6 text-gray-700 hover:text-sky-400" />
                             </button>
                         </div>
                         <button
                             className="text-gray-500 text-lg border-b border-gray-600 hover:border-sky-300 hover:text-sky-300 tracking-widest"
-                            onClick={() => setNow()}
+                            onClick={() => dispatchCalender('now')}
                         >
                             今日
                         </button>
@@ -209,4 +224,4 @@ const RollCallHistory = React.memo(() => {
     );
 });
 
-export default RollCallHistory;
+export default TenkoHistory;

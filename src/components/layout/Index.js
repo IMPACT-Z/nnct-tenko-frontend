@@ -28,7 +28,7 @@ const Layout = ({authType}) => {
             {authType === AUTH_TYPE.AUTH &&
                 <Base
                     authType={authType}
-                    inner={<>
+                    innerHTML={<>
                         <Header />
                         <SideNav navMenu={navMenu} centerBaseClassName={centerBaseClassName} />
                         <BottomNav navMenu={navMenu} />
@@ -39,7 +39,7 @@ const Layout = ({authType}) => {
             {authType !== AUTH_TYPE.AUTH &&
                 <Base
                     authType={authType}
-                    inner={<>
+                    innerHTML={<>
                         <Outlet context={{pageBaseClassName: `${centerBaseClassName}`}} />
                     </>}
                 />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 
-import { onAuthStateChangedByCallback } from '../functions/auth'
+import { onAuthStateChangedExcludingAuth } from '../functions/auth'
 
 
 const AUTH_TYPE = {
@@ -19,12 +19,12 @@ const AUTH_TYPE = {
     }
 }
 
-const Base = React.memo(({authType, inner}) => {
+const Base = React.memo(({authType, innerHTML}) => {
     const navigate = useNavigate();
     const [isDisplay, setIsDisplay] = useState(false);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChangedByCallback(user => {
+        const unsubscribe = onAuthStateChangedExcludingAuth(user => {
             switch(authType) {
                 case AUTH_TYPE.AUTH:
                     if (user) {
@@ -52,7 +52,7 @@ const Base = React.memo(({authType, inner}) => {
     }, []);
 
     if (isDisplay)
-        return inner;
+        return innerHTML;
 });
 
 export default Base;
