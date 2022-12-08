@@ -12,18 +12,11 @@ import { ArrowLeftIcon, ArrowRightIcon, CheckCircleIcon, XCircleIcon } from '@he
 
 const DateCell = React.memo(({date, isOks, startTime}) => {
     const valueClassList = [];
-    let okColor;
-    let ngColor;
-
-    valueClassList.push(date.isToday ? 'bg-sky-200' : 'bg-white');
+    valueClassList.push(date.isToday ? 'bg-gray-200' : 'bg-white');
     if (date.isThisMonth) {
         valueClassList.push('text-gray-600');
-        okColor = 'text-sky-500';
-        ngColor = 'text-gray-600';
     } else {
         valueClassList.push('text-gray-300');
-        okColor = 'text-sky-300';
-        ngColor = 'text-gray-400';
     }
 
 
@@ -47,6 +40,7 @@ const DateCell = React.memo(({date, isOks, startTime}) => {
 
     const isOk = getIsOK();
 
+
     return (
         <td 
             className={`w-24 h-24 ring-1 ring-gray-300 text-2xl ${valueClassList.join(' ')} flex flex-col justify-center items-center gap-y-1`}
@@ -55,9 +49,9 @@ const DateCell = React.memo(({date, isOks, startTime}) => {
             {isOk !== null ?
                 <div>
                     {isOk ? 
-                        <CheckCircleIcon className={`w-7 h-7 ${okColor}`} />
+                        <CheckCircleIcon className={`w-7 h-7 text-green-400`} />
                         :
-                        <XCircleIcon className={`w-7 h-7 ${ngColor}`} />
+                        <XCircleIcon className={`w-7 h-7 text-red-400`} />
                     }
                 </div>
                 :
@@ -169,7 +163,7 @@ const TenkoHistory = React.memo(() => {
                             <button
                                 onClick={() => dispatchCalender('prev')}
                             >
-                                <ArrowLeftIcon className="w-6 h-6 text-gray-700 hover:text-sky-400" />
+                                <ArrowLeftIcon className="w-6 h-6 text-gray-700 hover:text-gray-400" />
                             </button>
                             <div className="w-36 text-center text-gray-700 text-2xl">
                                 {calender.year} 年 {calender.month} 月
@@ -177,11 +171,11 @@ const TenkoHistory = React.memo(() => {
                             <button
                                 onClick={() => dispatchCalender('next')}
                             >
-                                <ArrowRightIcon className="w-6 h-6 text-gray-700 hover:text-sky-400" />
+                                <ArrowRightIcon className="w-6 h-6 text-gray-700 hover:text-gray-400" />
                             </button>
                         </div>
                         <button
-                            className="text-gray-500 text-lg border-b border-gray-600 hover:border-sky-300 hover:text-sky-300 tracking-widest"
+                            className="text-gray-700 text-lg border-b border-gray-700 hover:border-gray-400 hover:text-gray-400 tracking-widest"
                             onClick={() => dispatchCalender('now')}
                         >
                             今日
@@ -193,7 +187,7 @@ const TenkoHistory = React.memo(() => {
                                 {Calender.weekDays.map(weekDay => 
                                     <th 
                                         key={weekDay} 
-                                        className="w-24 h-12 bg-sky-500 ring-1 ring-gray-300 flex flex-col justify-center items-center"
+                                        className="w-24 h-12 bg-gray-600 ring-1 ring-gray-300 flex flex-col justify-center items-center"
                                     >
                                         <div className=" text-white">{weekDay}</div>
                                     </th>

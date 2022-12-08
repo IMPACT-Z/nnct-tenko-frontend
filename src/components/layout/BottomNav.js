@@ -15,7 +15,7 @@ const BottomNav = ({navMenu}) => {
                             const classList = [
                                 "cursor-pointer","flex flex-col items-center gap-y-2"
                             ];
-                            if (isActive) classList.push('text-sky-500');
+                            if (isActive) classList.push('text-gray-700');
                             else classList.push('text-gray-400 opacity-90 hover:opacity-60')
                             return classList.join(' ');
                         }

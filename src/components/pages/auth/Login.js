@@ -29,9 +29,9 @@ const Slide = React.memo(() => {
     }, [count, getSlideImageNames]);
 
     return (
-        <div className="2xl:col-start-1 2xl:col-end-4 px-24 py-12 bg-sky-500 flex gap-y-12 items-center justify-center gap-x-4">
+        <div className="2xl:col-start-1 2xl:col-end-4 px-24 py-12 bg-gray-300 flex gap-y-12 items-center justify-center gap-x-4">
             <button onClick={() => dispatch('decrement')}>
-                <ArrowLeftCircleIcon className="w-12 h-12 text-white hover:opacity-80 cursor-pointer" />
+                <ArrowLeftCircleIcon className="w-12 h-12 text-gray-600 hover:opacity-80 cursor-pointer" />
             </button>
             <>
                 <img 
@@ -54,7 +54,7 @@ const Slide = React.memo(() => {
                 />
             </>
             <button onClick={() => dispatch('increment')}>
-                <ArrowRightCircleIcon className="w-12 h-12 text-white hover:opacity-80 cursor-pointer" />
+                <ArrowRightCircleIcon className="w-12 h-12 text-gray-600 hover:opacity-80 cursor-pointer" />
             </button>
         </div>
     );
@@ -74,7 +74,14 @@ const Contents = React.memo(() => {
         <Slide />
         <div className="2xl:col-start-4 2xl:col-end-6 py-16 2xl:py-24 bg-white flex flex-col items-center">
             <div className="w-96 bg-white flex flex-col gap-y-12">
-                <div className="block text-gray-700 text-4xl text-center tracking-widest">NNCT点呼</div>
+                {/* <div className="block text-gray-700 text-4xl text-center tracking-widest">NNCT点呼</div> */}
+                <div className="flex justify-center items-center">
+                    <img
+                        className=" w-28 h-28"
+                        src={`${process.env.PUBLIC_URL}/logo.png`}
+                        alt="ロゴ"
+                    />
+                </div>
                 <div className="flex flex-col gap-y-4">
                     <div className="px-4 text-gray-700 text-lg">外部アカウントでログイン</div>
                     <div className="flex 2xl:flex-col items-center gap-x-2 2xl:gap-x-0 gap-y-0 2xl:gap-y-4">
@@ -82,9 +89,9 @@ const Contents = React.memo(() => {
                             <button 
                                 key={socialService.name}
                                 onClick={() => login(socialService.provider)}
-                                className="2xl:w-96 px-3 2xl:px-4 py-3 ring-1 ring-gray-300 rounded-full flex justify-center items-center 2xl:hover:opacity-60"
+                                className="w-96 px-4 py-3 ring-1 ring-gray-300 rounded-full flex justify-center items-center 2xl:hover:opacity-60"
                             >
-                                <div className="hidden 2xl:block 2xl:w-full text-gray-700 text-lg tracking-wide">
+                                <div className="block w-full text-gray-700 text-lg tracking-wide">
                                     {socialService.label}でログイン
                                 </div>
                             </button>

@@ -5,26 +5,27 @@ import { useState } from "react";
 
 
 const Header = () => {
-    const title = 'NNCT点呼';
     const userInfo = getUserInfo();
 
     const [isDisplayUserPopup, setIsDisplayUserPopup] = useState(false);
 
     return (
         <header 
-            className="fixed z-10 w-screen h-20 top-0 left-0 px-16 bg-white shadow-lg shadow-gray-200 grid grid-cols-2"
+            className="fixed z-10 w-screen h-28 top-0 left-0 px-20 bg-white shadow-lg shadow-gray-200 grid grid-cols-2"
         >
-            <h1 className="col-start-1 col-end-2 self-center text-gray-900 text-3xl tracking-widest">
-                { title }
-            </h1>
-            <nav className="col-start-2 col-end-3 flex gap-x-6 justify-end text-gray-600 text-sm content-center items-center">
+            <img
+                className="col-start-1 col-end-2 w-28 h-28"
+                src={`${process.env.PUBLIC_URL}/logo.png`}
+                alt="ロゴ"
+            />
+            <nav className="col-start-2 col-end-3 flex gap-x-7 justify-end text-gray-600 text-sm content-center items-center">
                 <div className="relative">
                     <button
-                        className="rounded-full bg-sky-400 text-lg cursor-pointer hover:opacity-70"
+                        className="rounded-full bg-gray-600 text-lg cursor-pointer hover:opacity-70"
                         onClick={() => setIsDisplayUserPopup(!isDisplayUserPopup)}
                     >
                         <UserCircleIcon
-                            className="h-9 w-9 text-white rounded-full"
+                            className="h-10 w-10 text-white rounded-full"
                         />
                     </button>
                     {isDisplayUserPopup &&
@@ -52,9 +53,9 @@ const Header = () => {
 
                 <button
                     onClick={() => logout()}
-                    className="p-1 rounded-full bg-sky-400 text-lg cursor-pointer hover:opacity-70"
+                    className="p-1 rounded-full bg-gray-600 text-lg cursor-pointer hover:opacity-70"
                 >
-                    <ArrowLeftOnRectangleIcon className="h-7 w-7 text-gray-100" />
+                    <ArrowLeftOnRectangleIcon className="h-8 w-8 text-gray-100" />
                 </button>
             </nav>
         </header>

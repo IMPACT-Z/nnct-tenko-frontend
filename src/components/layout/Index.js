@@ -8,7 +8,7 @@ import { MegaphoneIcon, ClipboardDocumentIcon } from '@heroicons/react/24/solid'
 import Base, { AUTH_TYPE } from '../Base'
 
 const Layout = ({authType}) => {
-    const centerBaseClassName = authType === AUTH_TYPE.NOT_AUTH ? 'min-h-screen' : 'min-h-screen pt-20';
+    const centerBaseClassName = authType === AUTH_TYPE.NOT_AUTH ? 'min-h-screen' : 'min-h-screen pt-28';
 
     const navMenu = [
         {
