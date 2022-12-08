@@ -39,7 +39,7 @@ const Header = () => {
                                     {name: 'studentId', label: '学籍番号'},
                                     {name: 'name', label: '名前'},
                                 ].map(item => 
-                                    <div className="text-lg grid grid-cols-5 gap-x-6">
+                                    <div key={item.name} className="text-lg grid grid-cols-5 gap-x-6">
                                         <div className="text-gray-500 col-start-1 col-end-3">{item.label}</div>
                                         <div className="text-gray-800 col-start-3 col-end-6">{userInfo[item.name]}</div>
                                     </div>
