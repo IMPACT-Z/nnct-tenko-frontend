@@ -99,7 +99,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
             });
             return state;
         }
-    }, '3CHALLENGES');
+    }, null);
     const getPhaseLabel = useCallback(() => {
         return getPhaseLabels()[phase];
     }, [phase, getPhaseLabels])
@@ -127,13 +127,13 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
             });
             return state;
         }
-    }, 'FACE_DIRECTION_UP');
+    }, null);
     const getInstructionMessage = useCallback(() => {
         return getInstructionMessages()[instruction];
     }, [instruction, getInstructionMessages]);
 
-    const [currentStep, setCurrentStep] = useState(0);
-    const [totalStep, setTotalStep] = useState(3);
+    const [currentStep, setCurrentStep] = useState(null);
+    const [totalStep, setTotalStep] = useState(null);
     useEffect(() => {
         if (socket !== null) {
             socket.on('instructions', jsonData => {
