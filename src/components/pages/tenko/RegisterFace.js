@@ -11,7 +11,7 @@ import PageBase from "../Base";
 
 const RegisterFace = React.memo(() => {
     const getCloudStoragePath = useCallback(() => {
-        return `images/${encodeURI(getUserInfo().email)}/model.jpeg`;
+        return `images/${encodeURIComponent(getUserInfo().email)}/model.jpeg`;
     }, []);
 
     const [isCompleted, setIsCompleted] = useState(false);
@@ -82,7 +82,7 @@ const RegisterFace = React.memo(() => {
                 <div className="pt-8 xl:pt-20 flex flex-col items-center gap-y-8 xl:gap-y-16">
                     <div className="text-3xl text-gray-600">
                         {isCompleted ? '顔画像の登録はすでに完了しています' : '顔画像を登録して下さい'}</div>
-                    {!isCompleted && 
+                    {!isCompleted &&
                         <div className="flex flex-col xl:flex-row items-center justify-center gap-y-8 xl:gap-x-8">
                             <div className="flex xl:flex-col gap-x-10 xl:gap-y-10 items-center">
                                 <Webcam
@@ -95,7 +95,7 @@ const RegisterFace = React.memo(() => {
                                     mirrored={true}
                                     className="ring-2 ring-gray-500 shadow-lg shadow-gray-400"
                                 ></Webcam>
-                                <button 
+                                <button
                                     onClick={() => setImage(capture())}
                                     className="w-32 text-xl px-4 py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
                                 >
