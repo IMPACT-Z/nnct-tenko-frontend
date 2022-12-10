@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 const BottomNav = ({navMenu}) => {
     return (
         <nav
-            className={`fixed h-20 w-screen bottom-0 left-0 bg-gray-100 flex xl:hidden items-center justify-center gap-x-12`}
+            className={`fixed h-20 w-screen bottom-0 left-0 bg-gray-50 flex xl:hidden items-center justify-center gap-x-12`}
         >
             {navMenu.map(link => 
                 <NavLink 
@@ -15,7 +15,7 @@ const BottomNav = ({navMenu}) => {
                             const classList = [
                                 "cursor-pointer","flex flex-col items-center gap-y-2"
                             ];
-                            if (isActive) classList.push('text-gray-700');
+                            if (isActive) classList.push('text-gray-500');
                             else classList.push('text-gray-400 opacity-90 hover:opacity-60')
                             return classList.join(' ');
                         }

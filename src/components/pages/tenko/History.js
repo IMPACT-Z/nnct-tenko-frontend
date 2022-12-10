@@ -14,7 +14,7 @@ const DateCell = React.memo(({date, isOks, startTime}) => {
     const valueClassList = [];
     valueClassList.push(date.isToday ? 'bg-gray-200' : 'bg-white');
     if (date.isThisMonth) {
-        valueClassList.push('text-gray-600');
+        valueClassList.push('text-gray-500');
     } else {
         valueClassList.push('text-gray-300');
     }
@@ -43,15 +43,15 @@ const DateCell = React.memo(({date, isOks, startTime}) => {
 
     return (
         <td 
-            className={`w-24 h-24 ring-1 ring-gray-300 text-2xl ${valueClassList.join(' ')} flex flex-col justify-center items-center gap-y-1`}
+            className={`w-20 h-20 ring-1 ring-gray-300 text-2xl ${valueClassList.join(' ')} flex flex-col justify-center items-center gap-y-1`}
         >
             <div>{date.value}</div>
             {isOk !== null ?
                 <div>
                     {isOk ? 
-                        <CheckCircleIcon className={`w-7 h-7 text-green-400`} />
+                        <CheckCircleIcon className={`w-7 h-7 text-lime-300`} />
                         :
-                        <XCircleIcon className={`w-7 h-7 text-red-400`} />
+                        <XCircleIcon className={`w-7 h-7 text-rose-300`} />
                     }
                 </div>
                 :
@@ -104,9 +104,9 @@ const TenkoHistory = React.memo(() => {
                 return new Calender(initYear, initMonth);
             
                 case 'prev':
-                    return calender.getPrev();
+                    return state.getPrev();
                 case 'next':
-                    return calender.getNext();
+                    return state.getNext();
                 case 'now':
                     const today = new Date();
                     return new Calender(today.getFullYear(), today.getMonth() + 1);
@@ -163,19 +163,19 @@ const TenkoHistory = React.memo(() => {
                             <button
                                 onClick={() => dispatchCalender('prev')}
                             >
-                                <ArrowLeftIcon className="w-6 h-6 text-gray-700 hover:text-gray-400" />
+                                <ArrowLeftIcon className="w-6 h-6 text-gray-500 hover:text-gray-400" />
                             </button>
-                            <div className="w-36 text-center text-gray-700 text-2xl">
+                            <div className="w-36 text-center text-gray-500 text-2xl">
                                 {calender.year} 年 {calender.month} 月
                             </div>
                             <button
                                 onClick={() => dispatchCalender('next')}
                             >
-                                <ArrowRightIcon className="w-6 h-6 text-gray-700 hover:text-gray-400" />
+                                <ArrowRightIcon className="w-6 h-6 text-gray-500 hover:text-gray-400" />
                             </button>
                         </div>
                         <button
-                            className="text-gray-700 text-lg border-b border-gray-700 hover:border-gray-400 hover:text-gray-400 tracking-widest"
+                            className="text-gray-500 text-lg border-b border-gray-500 hover:border-gray-400 hover:text-gray-400 tracking-widest"
                             onClick={() => dispatchCalender('now')}
                         >
                             今日
@@ -187,7 +187,7 @@ const TenkoHistory = React.memo(() => {
                                 {Calender.weekDays.map(weekDay => 
                                     <th 
                                         key={weekDay} 
-                                        className="w-24 h-12 bg-gray-600 ring-1 ring-gray-300 flex flex-col justify-center items-center"
+                                        className="w-20 h-10 bg-gray-500 ring-1 ring-gray-300 flex flex-col justify-center items-center"
                                     >
                                         <div className=" text-white">{weekDay}</div>
                                     </th>

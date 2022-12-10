@@ -254,7 +254,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                 <div className="text-xl flex">
                     {Object.keys(getPhaseLabels()).map((key, index) => {
                         const textColorClassName = (key === phase) ? 'text-white' : 'text-gray-400';
-                        const bgColorClassName = (key === phase) ? 'bg-gray-600' : 'bg-gray-100';
+                        const bgColorClassName = (key === phase) ? 'bg-gray-500' : 'bg-gray-100';
                         return (
                             <div key={key} className={`w-48 ${bgColorClassName} ${textColorClassName} ring-1 ring-gray-300 tracking-wider px-4 py-2 flex gap-x-2`}>
                                 <div>{`(${index+1})`}</div>
@@ -280,7 +280,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                 screenshotFormat={`image/${getCameraSetting().format}`}
                 videoConstraints={getVideoConstraints()}
                 mirrored={true}
-                className="ring-8 ring-gray-200 shadow-xl shadow-gray-600"
+                className="ring-2 ring-gray-500 shadow-lg shadow-gray-400"
             ></Webcam>
         </div>
     );
@@ -382,10 +382,10 @@ const Tenko = React.memo(() => {
         return (
             <div className="flex gap-x-8">
                 {status !== null &&
-                    <div className="text-3xl text-gray-800 tracking-wider">{getStatusMessage()}</div>
+                    <div className="text-3xl text-gray-600 tracking-wider">{getStatusMessage()}</div>
                 }
                 {durationMessage !== null &&
-                    <div className="text-2xl text-gray-500">{`(実施時間：${durationMessage})`}</div>
+                    <div className="text-2xl text-gray-400">{`(実施時間：${durationMessage})`}</div>
                 }
             </div>
         );
@@ -409,7 +409,7 @@ const Tenko = React.memo(() => {
                     {checkCanDo() &&
                         <button
                             onClick={() => dispatchSession('start')}
-                            className="text-xl px-4 py-2 rounded-full bg-gray-600 text-white tracking-wider hover:opacity-70"
+                            className="text-xl px-4 py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
                         >
                             点呼を実施する
                         </button>

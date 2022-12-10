@@ -87,12 +87,12 @@ const RegisterFace = React.memo(() => {
             authType={AUTH_TYPE.AUTH}
             backgroundClassName='bg-white'
             innerHTML={
-                <div className="pt-8 xl:pt-20 flex flex-col items-center gap-y-12">
-                    <div className="text-4xl text-gray-600">
+                <div className="pt-8 xl:pt-20 flex flex-col items-center gap-y-8 xl:gap-y-16">
+                    <div className="text-3xl text-gray-600">
                         {isCompleted ? '顔画像の登録はすでに完了しています' : '顔画像を登録して下さい'}</div>
                     {!isCompleted && 
-                        <div className="flex flex-col xl:flex-row items-center justify-center gap-y-12 xl:gap-x-8">
-                            <div className="flex xl:flex-col gap-x-10 xl:gap-y-12 items-center">
+                        <div className="flex flex-col xl:flex-row items-center justify-center gap-y-8 xl:gap-x-8">
+                            <div className="flex xl:flex-col gap-x-10 xl:gap-y-10 items-center">
                                 <Webcam
                                     audio={false}
                                     width={getCameraSetting().width}
@@ -101,42 +101,42 @@ const RegisterFace = React.memo(() => {
                                     screenshotFormat={`image/${getCameraSetting().format}`}
                                     videoConstraints={getVideoConstraints()}
                                     mirrored={true}
-                                    className="ring-8 ring-gray-200 shadow-xl shadow-gray-600"
+                                    className="ring-2 ring-gray-500 shadow-lg shadow-gray-400"
                                 ></Webcam>
                                 <button 
                                     onClick={() => setImage(capture())}
-                                    className="w-32 text-xl px-4 py-2 rounded-full bg-gray-600 text-white tracking-wider hover:opacity-70"
+                                    className="w-32 text-xl px-4 py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
                                 >
                                     撮影
                                 </button>
                             </div>
-                            <div className="flex xl:flex-col gap-x-10 xl:gap-y-12 items-center">
+                            <div className="flex xl:flex-col gap-x-10 xl:gap-y-10 items-center">
                                 {image !== null ?
                                     <img
                                         src={image}
                                         alt="確認用"
                                         width={getCameraSetting().width}
                                         height={getCameraSetting().height}
-                                        className="ring-8 ring-gray-200 shadow-xl shadow-gray-600"
+                                        className="ring-2 ring-gray-500 shadow-lg shadow-gray-400"
                                     />
                                     :
                                     <div
                                         style={{width: getCameraSetting().width, height: getCameraSetting().height}}
-                                        className="ring-8 ring-gray-200 shadow-xl shadow-gray-600"
+                                        className="ring-2 ring-gray-500 shadow-lg shadow-gray-400"
                                     >
                                     </div>
                                 }
                                 {image !== null ?
                                     <button
                                         onClick={() => sendImage()}
-                                        className="w-32 text-xl px-4 py-2 rounded-full bg-gray-600 text-white tracking-wider hover:opacity-70"
+                                        className="w-32 text-xl px-4 py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
                                     >
                                         送信
                                     </button>
                                     :
                                     <button
                                         disabled
-                                        className="w-32 text-xl px-4 py-2 rounded-full bg-gray-300 text-white tracking-wider"
+                                        className="w-32 text-xl px-4 py-2 rounded-full bg-gray-200 text-white tracking-wider"
                                     >
                                         送信
                                     </button>
