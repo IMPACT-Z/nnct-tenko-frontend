@@ -9,8 +9,8 @@ import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/s
 const Slide = React.memo(() => {
     const getSlideImageNames = useCallback(() => {
         return [
-            'test1.png',
-            'test2.png'
+            'tenko.png',
+            'tenko_history.png'
         ];
     }, []);
     const [count, dispatch] = useReducer((state, action) => {
