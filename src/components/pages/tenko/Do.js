@@ -181,11 +181,11 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
             });
             socket.on("disconnect", () => {
                 console.log('Kill websocket...');
-                // killSession({
-                //     icon: 'error',
-                //     title: '点呼のセッションが遮断されました',
-                //     text: '予期しないエラー',
-                // });
+                killSession({
+                    icon: 'error',
+                    title: '点呼のセッションが遮断されました',
+                    text: '予期しないエラー',
+                });
             });
             socket.on('disconnectReason', data => {
                 const job = async () => {
@@ -334,7 +334,7 @@ const Tenko = React.memo(() => {
         return status === 'PENDING'
     }, [status]);
 
-    const [session, dispatchSession] = useState((state, action) => {
+    const [session, dispatchSession] = useReducer((state, action) => {
         switch(action) {
             case 'start':
                 return true;
@@ -348,7 +348,6 @@ const Tenko = React.memo(() => {
         Swal.fire(errorBySwalFmt);
         dispatchSession('kill');
     }, []);
-
 
     const [durationMessage, setDurationMessage] = useState(null);
     useEffect(() => {
