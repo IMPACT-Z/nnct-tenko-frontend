@@ -11,7 +11,7 @@ const Header = () => {
 
     return (
         <header 
-            className="fixed z-10 w-screen h-28 top-0 left-0 px-20 bg-white border-b border-gray-200 grid grid-cols-2"
+            className="fixed z-10 w-screen h-28 top-0 left-0 px-20 bg-white border-b-2 border-gray-200 grid grid-cols-2"
         >
             <div className="col-start-1 col-end-2 flex items-center gap-x-4">
                 <img
