@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import Webcam from "react-webcam";
 import Swal from 'sweetalert2';
 
 import { getUserInfo } from '../../../functions/auth';
-import { uploadToCloudStorage, hasFileInCloudStorage } from '../../../functions/cloudStorage';
+import { uploadToCloudStorage } from '../../../functions/cloudStorage';
 
 import { AUTH_TYPE } from "../../Base";
 import PageBase from "../Base";
@@ -15,14 +15,6 @@ const RegisterFace = React.memo(() => {
     }, []);
 
     const [isCompleted, setIsCompleted] = useState(false);
-    useEffect(() => {
-        const job = async () => {
-            setIsCompleted(
-                await hasFileInCloudStorage(getCloudStoragePath())
-            );
-        }
-        job();
-    }, [getCloudStoragePath]);
 
     const getCameraSetting = useCallback(() => {
         return {
