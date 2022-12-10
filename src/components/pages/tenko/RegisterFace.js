@@ -68,7 +68,7 @@ const RegisterFace = React.memo(() => {
             Swal.fire({
                 icon: 'success',
                 title: '登録成功！',
-                text: '顔画像の登録に成功しました'
+                text: '顔画像の登録が成功しました'
             });
         }
         job();
@@ -81,7 +81,7 @@ const RegisterFace = React.memo(() => {
             innerHTML={
                 <div className="pt-8 xl:pt-20 flex flex-col items-center gap-y-8 xl:gap-y-16">
                     <div className="text-3xl text-gray-600">
-                        {isCompleted ? '顔画像の登録はすでに完了しています' : '顔画像を登録して下さい'}</div>
+                        {isCompleted ? '顔画像の登録が完了しました' : '顔画像を登録して下さい'}</div>
                     {!isCompleted &&
                         <div className="flex flex-col xl:flex-row items-center justify-center gap-y-8 xl:gap-x-8">
                             <div className="flex xl:flex-col gap-x-10 xl:gap-y-10 items-center">
