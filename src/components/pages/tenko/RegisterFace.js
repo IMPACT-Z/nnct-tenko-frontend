@@ -55,7 +55,7 @@ const RegisterFace = React.memo(() => {
                     file,
                 );
             }
-            catch(error) {
+            catch (error) {
                 Swal.fire({
                     icon: 'error',
                     title: 'サーバーエラー',
@@ -79,7 +79,7 @@ const RegisterFace = React.memo(() => {
             authType={AUTH_TYPE.AUTH}
             backgroundClassName='bg-white'
             innerHTML={
-                <div className="pt-8 xl:pt-20 flex flex-col items-center gap-y-8 xl:gap-y-16">
+                <div className="pt-4 xl:pt-20 flex flex-col items-center gap-y-4 xl:gap-y-16">
                     <div className="text-3xl text-gray-600">
                         {isCompleted ? '顔画像の登録はすでに完了しています' : '顔画像を登録して下さい'}</div>
                     {!isCompleted &&
@@ -113,7 +113,7 @@ const RegisterFace = React.memo(() => {
                                     />
                                     :
                                     <div
-                                        style={{width: getCameraSetting().width, height: getCameraSetting().height}}
+                                        style={{ width: getCameraSetting().width, height: getCameraSetting().height }}
                                         className="ring-2 ring-gray-500 shadow-lg shadow-gray-400"
                                     >
                                     </div>
