@@ -37,7 +37,7 @@ const Header = () => {
                             />
                             <div className="flex flex-col gap-y-1">
                                 {[
-                                    {name: 'studentId', label: '学籍番号'},
+                                    {name: 'email', label: 'メールアドレス'},
                                     {name: 'name', label: '名前'},
                                 ].map(item => 
                                     <div key={item.name} className="text-lg grid grid-cols-5 gap-x-6">

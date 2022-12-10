@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback, useReducer } from "react";
 import Webcam from "react-webcam";
-import Swal from 'sweetalert2/src/sweetalert2.js';
+import Swal from 'sweetalert2';
 import {io} from "socket.io-client";
 
 import RestApi from '../../../functions/restApi';
@@ -61,7 +61,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
 
     // 顔の画像を送信
     useEffect(() => {
-        if (socket !== null); {
+        if (socket !== null) {
             const interval = setInterval(() => {
                 // 撮影した画像を取得
                 const image = capture();
@@ -211,7 +211,8 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             // reflectStatus();
                             killSession({
                                 icon: 'success',
-                                title: '点呼が完了しました',
+                                title: '点呼完了！',
+                                text: '点呼が完了しました',
                             });
                             break;
                         

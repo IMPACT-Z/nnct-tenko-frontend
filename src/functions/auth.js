@@ -22,13 +22,13 @@ const logout = async () => {
 
 const login = async (provider) => {
     try {
-        const result = await signInWithPopup(auth, provider)
+        await signInWithPopup(auth, provider)
         
         try {
-            const emailDomain = result.user.email.split('@')[1];
+            // const emailDomain = result.user.email.split('@')[1];
             // 長野高専の学生のアカウントかを確認
-            if (emailDomain !== 'g.nagano-nct.ac.jp') 
-                throw new Error('許可されたドメインのメールアドレスではありません');
+            // if (emailDomain !== 'g.nagano-nct.ac.jp') 
+            //     throw new Error('許可されたドメインのメールアドレスではありません');
         }
         catch(error) {
             await logout();
@@ -61,7 +61,7 @@ const getIdTokenExcludingAuth = async () => {
 const getUserInfo = () => {
     const user = auth.currentUser;
     return {
-        studentId: Number(user.email.split('@')[0]),
+        email: user.email,
         name: user.displayName,
         photoURL: user.photoURL,
     }

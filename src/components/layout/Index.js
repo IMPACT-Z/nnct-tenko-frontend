@@ -4,7 +4,7 @@ import Header from './Header'
 import SideNav from './SideNav'
 import BottomNav from './BottomNav'
 
-import { MegaphoneIcon, ClipboardDocumentIcon } from '@heroicons/react/24/solid'
+import { MegaphoneIcon, ClipboardDocumentIcon, FaceSmileIcon } from '@heroicons/react/24/solid'
 import Base, { AUTH_TYPE } from '../Base'
 
 const Layout = ({authType}) => {
@@ -20,6 +20,11 @@ const Layout = ({authType}) => {
             to: '/tenko/history',
             Icon: ClipboardDocumentIcon,
             label: '点呼履歴',
+        },
+        {
+            to: '/tenko/register-face',
+            Icon: FaceSmileIcon,
+            label: '顔画像の登録',
         },
     ];
 

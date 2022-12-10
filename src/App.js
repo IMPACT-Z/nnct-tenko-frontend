@@ -8,6 +8,7 @@ import Login from './components/pages/auth/Login';
 import Tenko from './components/pages/tenko/Do'
 import TenkoHistory from './components/pages/tenko/History'
 import NotFound from './components/pages/NotFound';
+import RegisterFace from './components/pages/tenko/RegisterFace';
 
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
                         <Route path='tenko'>
                             <Route path='do' element={<Tenko />} />
                             <Route path='history' element={<TenkoHistory />} />
+                            <Route path='register-face' element={<RegisterFace />} />
                         </Route>
                         <Route path='' element={<NotFound to='/tenko/do' />} />
                         <Route path='*' element={<NotFound to='/tenko/do' />} />
