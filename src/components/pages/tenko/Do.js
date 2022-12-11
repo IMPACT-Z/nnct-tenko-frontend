@@ -248,22 +248,22 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
     }, [socket, getPhaseLabel, killSession, reflectStatus]);
 
     return (
-        <div className="py-16 px-16 flex flex-col items-center gap-y-12">
-            <div className="flex flex-col items-center gap-y-5">
+        <div className="py-10 md:py-16 px-6 md:px-16 flex flex-col items-center gap-y-3 md:gap-y-12">
+            <div className="flex flex-col items-center gap-y-2 md:gap-y-5">
                 {messageHTML}
-                <div className="text-xl flex">
+                <div className="text-sm md:text-xl flex">
                     {Object.keys(getPhaseLabels()).map((key, index) => {
                         const textColorClassName = (key === phase) ? 'text-white' : 'text-gray-400';
                         const bgColorClassName = (key === phase) ? 'bg-gray-500' : 'bg-gray-100';
                         return (
-                            <div key={key} className={`w-48 ${bgColorClassName} ${textColorClassName} ring-1 ring-gray-300 tracking-wider px-4 py-2 flex gap-x-2`}>
+                            <div key={key} className={`w-36 md:w-48 ${bgColorClassName} ${textColorClassName} ring-1 ring-gray-300 tracking-wider px-4 py-2 flex gap-x-2`}>
                                 <div>{`(${index+1})`}</div>
                                 <div>{getPhaseLabels()[key]}</div>
                             </div>
                         )
                     })}
                 </div>
-                <div className="flex gap-x-4 text-2xl text-gray-600 tracking-wider">
+                <div className="flex flex-col gap-y-1 md:gap-y-4 text-lg md:text-2xl text-gray-600 tracking-wider">
                     <div>
                         {getInstructionMessage()}
                     </div>
@@ -379,12 +379,12 @@ const Tenko = React.memo(() => {
 
     const getMessageHTML = useCallback(() => {
         return (
-            <div className="flex gap-x-8">
+            <div className="flex flex-col md:flex-row gap-y-1 md:gap-y-0 md:gap-x-8">
                 {status !== null &&
-                    <div className="text-3xl text-gray-600 tracking-wider">{getStatusMessage()}</div>
+                    <div className="text-xl md:text-3xl text-gray-600 tracking-wider">{getStatusMessage()}</div>
                 }
                 {durationMessage !== null &&
-                    <div className="text-2xl text-gray-400">{`(実施時間：${durationMessage})`}</div>
+                    <div className="text-lg md:text-2xl text-gray-400">{`(実施時間：${durationMessage})`}</div>
                 }
             </div>
         );
@@ -401,14 +401,14 @@ const Tenko = React.memo(() => {
                     messageHTML={getMessageHTML()}
                 />
                 :
-                <div className="py-16 px-16 flex flex-col items-center gap-y-12">
+                <div className="py-10 md:py-16 px-6 md:px-16 flex flex-col items-center gap-y-3 md:gap-y-12">
                     <div className="flex flex-col items-center gap-y-5">
                         {getMessageHTML()}
                     </div>
                     {checkCanDo() &&
                         <button
                             onClick={() => dispatchSession('start')}
-                            className="text-xl px-4 py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
+                            className="text-md md:text-xl px-3 py-1 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
                         >
                             点呼を実施する
                         </button>

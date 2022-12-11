@@ -8,7 +8,7 @@ import { MegaphoneIcon, ClipboardDocumentIcon, FaceSmileIcon } from '@heroicons/
 import Base, { AUTH_TYPE } from '../Base'
 
 const Layout = ({authType}) => {
-    const centerBaseClassName = authType === AUTH_TYPE.NOT_AUTH ? 'h-screen' : 'h-screen pt-28';
+    const centerBaseClassName = authType === AUTH_TYPE.NOT_AUTH ? 'h-screen' : 'h-screen pt-20 md:pt-28';
 
     const navMenu = [
         {

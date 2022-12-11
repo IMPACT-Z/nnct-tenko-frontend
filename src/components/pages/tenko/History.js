@@ -43,19 +43,23 @@ const DateCell = React.memo(({date, isOks, startTime}) => {
 
     return (
         <td 
-            className={`w-20 h-20 ring-1 ring-gray-300 text-2xl ${valueClassList.join(' ')} flex flex-col justify-center items-center gap-y-1`}
+            className={`w-10 h-10 md:w-20 md:h-20 ring-1 ring-gray-300 text-2xl ${valueClassList.join(' ')} flex flex-col justify-center items-center gap-y-0 md:gap-y-1`}
         >
-            <div>{date.value}</div>
+            <div
+                className="text-sm md:text-xl"
+            >
+                {date.value}
+            </div>
             {isOk !== null ?
                 <div>
                     {isOk ? 
-                        <CheckCircleIcon className={`w-7 h-7 text-lime-300`} />
+                        <CheckCircleIcon className={`w-4 h-4 md:w-7 md:h-7 text-lime-300`} />
                         :
-                        <XCircleIcon className={`w-7 h-7 text-rose-300`} />
+                        <XCircleIcon className={`w-4 h-4 md:w-7 md:h-7 text-rose-300`} />
                     }
                 </div>
                 :
-                <div className="w-8 h-8"></div>
+                <div className="w-4 h-4 md:w-7 md:h-7"></div>
             }
         </td>
     )
@@ -157,25 +161,25 @@ const TenkoHistory = React.memo(() => {
             authType={AUTH_TYPE.AUTH}
             backgroundClassName='bg-white'
             innerHTML={
-                <div className="py-20 flex flex-col items-center gap-y-8">
-                    <div className="flex flex-col items-center gap-y-4">
-                        <div className="flex items-center gap-x-6">
+                <div className="py-12 md:py-20 flex flex-col items-center gap-y-6 md:gap-y-8">
+                    <div className="flex flex-col items-center gap-y-2 md:gap-y-4">
+                        <div className="flex items-center gap-x-2 md:gap-x-6">
                             <button
                                 onClick={() => dispatchCalender('prev')}
                             >
-                                <ArrowLeftIcon className="w-6 h-6 text-gray-500 hover:text-gray-400" />
+                                <ArrowLeftIcon className="w-4 h-4 md:w-6 md:h-6 text-gray-500 hover:text-gray-400" />
                             </button>
-                            <div className="w-36 text-center text-gray-500 text-2xl">
+                            <div className="w-32 md:w-36 text-center text-gray-500 text-lg md:text-2xl">
                                 {calender.year} 年 {calender.month} 月
                             </div>
                             <button
                                 onClick={() => dispatchCalender('next')}
                             >
-                                <ArrowRightIcon className="w-6 h-6 text-gray-500 hover:text-gray-400" />
+                                <ArrowRightIcon className="w-4 h-4 md:w-6 md:h-6 text-gray-500 hover:text-gray-400" />
                             </button>
                         </div>
                         <button
-                            className="text-gray-500 text-lg border-b border-gray-500 hover:border-gray-400 hover:text-gray-400 tracking-widest"
+                            className="text-gray-500 text-sm md:text-lg border-b border-gray-500 hover:border-gray-400 hover:text-gray-400 tracking-widest"
                             onClick={() => dispatchCalender('now')}
                         >
                             今日
@@ -187,7 +191,7 @@ const TenkoHistory = React.memo(() => {
                                 {Calender.weekDays.map(weekDay => 
                                     <th 
                                         key={weekDay} 
-                                        className="w-20 h-10 bg-gray-500 ring-1 ring-gray-300 flex flex-col justify-center items-center"
+                                        className="w-10 h-5 md:w-20 md:h-10 text-xs md:text-lg bg-gray-500 ring-1 ring-gray-300 flex flex-col justify-center items-center"
                                     >
                                         <div className=" text-white">{weekDay}</div>
                                     </th>
