@@ -57,7 +57,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
             }
         }
         job();
-    }, [killSession]);
+    }, [killSession, setSocket]);
 
     // 顔の画像を送信
     useEffect(() => {
@@ -173,11 +173,14 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
     useEffect(() => {
         if (socket !== null) {
             socket.io.on("error", (error) => {
-                killSession({
-                    icon: 'error',
-                    title: '点呼のセッションが遮断されました',
-                    text: '予期しないエラー',
-                });
+                // ※エラーアラートが表示され続けることを防止する緊急対策
+                if (socket.connected) {
+                    killSession({
+                        icon: 'error',
+                        title: '点呼のセッションが遮断されました',
+                        text: '予期しないエラー',
+                    });
+                }
             });
             socket.on("disconnect", () => {
                 console.log('Kill websocket...');
@@ -208,7 +211,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             break;
                         
                         case 'SUCCESS':
-                            // reflectStatus();
+                            reflectStatus();
                             killSession({
                                 icon: 'success',
                                 title: '点呼完了！',
@@ -304,17 +307,18 @@ const Tenko = React.memo(() => {
         };
     }, []);
     const [status, dispatchStatus] = useReducer((state, arg) => {
+        if (arg === 'init') {
+            return null;
+        }
         if (Object.keys(getStatusMessages()).some(key => key === arg)) {
             return arg;
         }
-        else {
-            Swal.fire({
-                icon: 'error',
-                title: 'サーバーエラー',
-                text: '予期しない点呼ステータスが返ってきました'
-            });
-            return state;
-        }
+        Swal.fire({
+            icon: 'error',
+            title: 'サーバーエラー',
+            text: '予期しない点呼ステータスが返ってきました'
+        });
+        return state;
     }, null);
     const getStatusMessage = useCallback(() => {
         return getStatusMessages()[status]
@@ -333,10 +337,12 @@ const Tenko = React.memo(() => {
                 );
                 dispatchStatus(response.data.status);
             }
-            catch(error) {}
+            catch(error) {
+                dispatchStatus('init');
+            }
         }
         job();
-    }, [reflectStatusClk]);
+    }, [reflectStatusClk, dispatchStatus]);
 
     const checkCanDo = useCallback(() => {
         return status === 'PENDING'
@@ -352,12 +358,11 @@ const Tenko = React.memo(() => {
                 return state;
         }
     }, false);
-    const killSession = useCallback((errorBySwalFmt) => {
-        Swal.fire(errorBySwalFmt);
-        dispatchSession('kill');
-    }, []);
 
     const [durationMessage, setDurationMessage] = useState(null);
+    const [reflectDurationMessageClk, reflectDurationMessage] = useReducer((state, _) => {
+        return !state;
+    }, false);
     useEffect(() => {
         const job = async () => {
             try {
@@ -379,11 +384,23 @@ const Tenko = React.memo(() => {
                 }
                 setDurationMessage(`${src.start.hour}:${src.start.minute}〜${src.end.hour}:${src.end.minute}`);
             }
-            catch(error) {}
+            catch(error) {
+                setDurationMessage(null);
+            }
         }
         job();
-    }, []);
+    }, [reflectDurationMessageClk, setDurationMessage]);
 
+    const killSession = useCallback((errorBySwalFmt) => {
+        // FIXME sessionがずっとtrueのまま...
+        if (session) {
+            Swal.fire(errorBySwalFmt)
+            dispatchSession('kill');
+            // FIXME これが反応しない
+            reflectStatus();
+            reflectDurationMessage();
+        }
+    }, [session, dispatchSession, reflectStatus, reflectDurationMessage]);
 
     const getMessageHTML = useCallback(() => {
         return (

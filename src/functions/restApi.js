@@ -30,7 +30,7 @@ class RestApi {
         const uri = (params === {}) ?fullPath : `${fullPath}?${new URLSearchParams(params).toString()}`;
         
         try {
-            return axios.get(uri, headers);
+            return await axios.get(uri, headers);
         }
         catch(error) {
             switch(error.request.status) {
