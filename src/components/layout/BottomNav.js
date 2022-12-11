@@ -21,7 +21,7 @@ const BottomNav = ({navMenu}) => {
                         }
                     }
                 >
-                    <link.Icon className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12" />
+                    <link.Icon className="h-8 w-8 lg:h-10 lg:w-10" />
                     <div className="hidden md:block text-sm">{link.label}</div>
                 </NavLink>
             )}
