@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* custom css */
+/* layout */
+header {
+    height: 12%;
+}
+.bottom-nav {
+    height: 8%;
+}
+
+/*  */

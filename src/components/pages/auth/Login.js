@@ -115,13 +115,13 @@ const Login = React.memo(() => {
             innerHTML={
                 <>
                     <div 
-                        className="hidden 2xl:grid min-h-screen grid-cols-5"
+                        className="hidden 2xl:grid h-screen grid-cols-5"
                     >
                         <Contents />
                     </div>
 
                     <div 
-                        className="grid 2xl:hidden min-h-screen grid-rows-2"
+                        className="grid 2xl:hidden h-screen grid-rows-2"
                     >
                         <Contents />
                     </div>
