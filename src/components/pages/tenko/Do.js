@@ -248,41 +248,49 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
     }, [socket, getPhaseLabel, killSession, reflectStatus]);
 
     return (
-        <div className="py-10 md:py-16 px-6 md:px-16 flex flex-col items-center gap-y-3 md:gap-y-12">
-            <div className="flex flex-col items-center gap-y-2 md:gap-y-5">
-                {messageHTML}
-                <div className="text-sm md:text-xl flex">
-                    {Object.keys(getPhaseLabels()).map((key, index) => {
-                        const textColorClassName = (key === phase) ? 'text-white' : 'text-gray-400';
-                        const bgColorClassName = (key === phase) ? 'bg-gray-500' : 'bg-gray-100';
-                        return (
-                            <div key={key} className={`w-36 md:w-48 ${bgColorClassName} ${textColorClassName} ring-1 ring-gray-300 tracking-wider px-4 py-2 flex gap-x-2`}>
-                                <div>{`(${index+1})`}</div>
-                                <div>{getPhaseLabels()[key]}</div>
+        <>
+            {instruction === null ? 
+                <div className="flex items-center justify-center pt-12">
+                    <div className="text-gray-600 text-2xl">Loading...</div>
+                </div>
+                :
+                <div className="py-10 md:py-16 px-6 md:px-16 flex flex-col items-center gap-y-3 md:gap-y-12">
+                    <div className="flex flex-col items-center gap-y-2 md:gap-y-5">
+                        {messageHTML}
+                        <div className="text-sm md:text-xl flex">
+                            {Object.keys(getPhaseLabels()).map((key, index) => {
+                                const textColorClassName = (key === phase) ? 'text-white' : 'text-gray-400';
+                                const bgColorClassName = (key === phase) ? 'bg-gray-500' : 'bg-gray-100';
+                                return (
+                                    <div key={key} className={`w-36 md:w-48 ${bgColorClassName} ${textColorClassName} ring-1 ring-gray-300 tracking-wider px-4 py-2 flex gap-x-2`}>
+                                        <div>{`(${index+1})`}</div>
+                                        <div>{getPhaseLabels()[key]}</div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                        <div className="flex flex-col gap-y-1 md:gap-y-4 text-lg md:text-2xl text-gray-600 tracking-wider">
+                            <div>
+                                {getInstructionMessage()}
                             </div>
-                        )
-                    })}
-                </div>
-                <div className="flex flex-col gap-y-1 md:gap-y-4 text-lg md:text-2xl text-gray-600 tracking-wider">
-                    <div>
-                        {getInstructionMessage()}
+                            {phase === '3CHALLENGES' &&
+                                <div>{`(${currentStep + 1}/${totalStep})`}</div>
+                            }
+                        </div>
                     </div>
-                    {phase === '3CHALLENGES' &&
-                        <div>{`(${currentStep + 1}/${totalStep})`}</div>
-                    }
+                    <Webcam
+                        audio={false}
+                        width={getCameraSetting().width}
+                        height={getCameraSetting().height}
+                        ref={webcamRef}
+                        screenshotFormat={`image/${getCameraSetting().format}`}
+                        videoConstraints={getVideoConstraints()}
+                        mirrored={true}
+                        className="ring-2 ring-gray-500 shadow-lg shadow-gray-400"
+                    ></Webcam>
                 </div>
-            </div>
-            <Webcam
-                audio={false}
-                width={getCameraSetting().width}
-                height={getCameraSetting().height}
-                ref={webcamRef}
-                screenshotFormat={`image/${getCameraSetting().format}`}
-                videoConstraints={getVideoConstraints()}
-                mirrored={true}
-                className="ring-2 ring-gray-500 shadow-lg shadow-gray-400"
-            ></Webcam>
-        </div>
+            }
+        </>
     );
 });
 
@@ -394,26 +402,34 @@ const Tenko = React.memo(() => {
         <PageBase
             authType={AUTH_TYPE.AUTH}
             backgroundClassName='bg-white'
-            innerHTML={session ? 
-                <TenkoSession
-                    killSession={killSession}
-                    reflectStatus={reflectStatus}
-                    messageHTML={getMessageHTML()}
-                />
-                :
-                <div className="py-10 md:py-16 px-6 md:px-16 flex flex-col items-center gap-y-3 md:gap-y-12">
-                    <div className="flex flex-col items-center gap-y-5">
-                        {getMessageHTML()}
-                    </div>
-                    {checkCanDo() &&
-                        <button
-                            onClick={() => dispatchSession('start')}
-                            className="text-md md:text-xl px-3 py-1 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
-                        >
-                            点呼を実施する
-                        </button>
-                    }
+            innerHTML={(status === null || durationMessage === null) ? 
+                <div className="flex items-center justify-center pt-12">
+                    <div className="text-gray-600 text-2xl">Loading...</div>
                 </div>
+                :
+                <>
+                    {session ? 
+                        <TenkoSession
+                            killSession={killSession}
+                            reflectStatus={reflectStatus}
+                            messageHTML={getMessageHTML()}
+                        />
+                        :
+                        <div className="py-10 md:py-16 px-6 md:px-16 flex flex-col items-center gap-y-3 md:gap-y-12">
+                            <div className="flex flex-col items-center gap-y-5">
+                                {getMessageHTML()}
+                            </div>
+                            {checkCanDo() &&
+                                <button
+                                    onClick={() => dispatchSession('start')}
+                                    className="text-md md:text-xl px-3 py-1 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
+                                >
+                                    点呼を実施する
+                                </button>
+                            }
+                        </div>
+                    }
+                </>
             }
         />
     );
