@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useCallback, useReducer } from "react";
 
 import { AUTH_TYPE } from "../../Base";
 import PageBase from "../Base";
@@ -6,7 +6,48 @@ import { providers, login } from "../../../functions/auth";
 
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/solid'
 
-const Contents = () => {
+const Slide = React.memo(() => {
+    const getSlideImageNames = useCallback(() => {
+        return [
+            'tenko.png',
+            'tenko_history.png'
+        ];
+    }, []);
+    const [count, dispatch] = useReducer((state, action) => {
+        const slideNum = getSlideImageNames().length;
+        switch (action) {
+            case 'increment':
+                return (state + 1) % slideNum;
+            case 'decrement':
+                return (state + (slideNum - 1)) % slideNum;
+            default:
+                return state;
+        }
+    }, 0);
+    const getSlideImageName = useCallback(() => {
+        return getSlideImageNames()[count];
+    }, [count, getSlideImageNames]);
+
+    return (
+        <div className="2xl:col-start-1 2xl:col-end-4 2xl:px-24 2xl:py-12 bg-gray-200 flex items-center justify-center gap-x-2 md:gap-x-3 xl:gap-x-4">
+        <button onClick={() => dispatch('decrement')}>
+            <ArrowLeftCircleIcon className="w-6 h-6 md:w-9 md:h-9 xl:w-12 xl:h-12 text-gray-500 hover:opacity-80 cursor-pointer" />
+        </button>
+            <div className="h-auto 2xl:w-auto 2xl:h-96 flex 2xl:flex-col items-center justify-center">
+                <img 
+                    src={`${process.env.PUBLIC_URL}/fig/slide/${getSlideImageName()}`}
+                    alt="アプリケーションに関する説明"
+                    className="w-72 md:w-auto md:h-80 2xl:h-auto 2xl:w-auto shadow-xl shadow-gray-700"
+                />
+            </div>
+            <button onClick={() => dispatch('increment')}>
+                <ArrowRightCircleIcon className="w-6 h-6 md:w-9 md:h-9 xl:w-12 xl:h-12 text-gray-500 hover:opacity-80 cursor-pointer" />
+            </button>
+        </div>
+    );
+});
+
+const Contents = React.memo(() => {
     const socialServices = [
         {
             name: 'google',
@@ -15,69 +56,35 @@ const Contents = () => {
         }
     ];
 
-    const slideImageNames = [
-        'test1.png',
-        'test2.png'
-    ]
-    const slideNum = slideImageNames.length;
-    const [slideCount, setSlideCount] = useState(0);
-    const incrementSlideCount = () => {
-        setSlideCount((slideCount + 1) % slideNum);
-    }
-    const decrementSlideCount = () => {
-        setSlideCount((slideCount + (slideNum - 1)) % slideNum);
-    }
 
     return (<>
-        <div className="2xl:col-start-1 2xl:col-end-4 px-24 py-12 bg-sky-500 flex gap-y-12 items-center justify-center gap-x-4">
-            <button onClick={() => decrementSlideCount()}>
-                <ArrowLeftCircleIcon className="w-12 h-12 text-white hover:opacity-80 cursor-pointer" />
-            </button>
-            <>
-                <img 
-                    src={`${process.env.PUBLIC_URL}/fig/slide/${slideImageNames[slideCount]}`}
-                    alt="アプリケーションに関する説明"
-                    className="block md:hidden shadow-xl shadow-gray-700"
-                    style={{width: '480px', height: '270px'}}
-                />
-                <img 
-                    src={`${process.env.PUBLIC_URL}/fig/slide/${slideImageNames[slideCount]}`}
-                    alt="アプリケーションに関する説明"
-                    className="hidden md:block lg:hidden shadow-xl shadow-gray-700"
-                    style={{width: '640px', height: '360px'}}
-                />
-                <img 
-                    src={`${process.env.PUBLIC_URL}/fig/slide/${slideImageNames[slideCount]}`}
-                    alt="アプリケーションに関する説明"
-                    className="hidden lg:block 3xl:hidden shadow-xl shadow-gray-700"
-                    style={{width: '720px', height: '405px'}}
-                />
-            </>
-            <button onClick={() => incrementSlideCount()}>
-                <ArrowRightCircleIcon className="w-12 h-12 text-white hover:opacity-80 cursor-pointer" />
-            </button>
-        </div>
+        <Slide />
         <div className="2xl:col-start-4 2xl:col-end-6 py-16 2xl:py-24 bg-white flex flex-col items-center">
-            <div className="w-96 bg-white flex flex-col gap-y-12">
-                <div className="block text-gray-700 text-4xl text-center tracking-widest">NNCT点呼</div>
-                <div className="flex flex-col gap-y-4">
-                    <div className="px-4 text-gray-700 text-lg">外部アカウントでログイン</div>
-                    <div className="flex 2xl:flex-col items-center gap-x-2 2xl:gap-x-0 gap-y-0 2xl:gap-y-4">
+            <div className="bg-white flex flex-col gap-y-8 md:gap-y-12 items-center">
+                <div className="col-start-1 col-end-2 flex items-center gap-x-3 md:gap-x-4">
+                    <img
+                        className="h-11 md:h-16"
+                        src={`${process.env.PUBLIC_URL}/favicon.png`}
+                        alt="アイコン"
+                    />
+                    <img
+                        className="h-8 md:h-12"
+                        src={`${process.env.PUBLIC_URL}/logo.png`}
+                        alt="ロゴ"
+                    />
+                </div>
+                <div className="flex flex-col gap-y-4 items-center">
+                    <div className="px-4 text-gray-600 text-md md:text-lg">外部アカウントでログイン</div>
+                    <div className="flex 2xl:flex-col items-center justify-center gap-x-2 2xl:gap-x-0 gap-y-0 2xl:gap-y-4">
                         {socialServices.map(socialService => 
                             <button 
                                 key={socialService.name}
                                 onClick={() => login(socialService.provider)}
-                                className="2xl:w-96 px-3 2xl:px-4 py-3 ring-1 ring-gray-300 rounded-full flex justify-center items-center 2xl:hover:opacity-60"
+                                className="w-48 md:w-96 px-4 py-2 md:py-3 ring-1 ring-gray-300 rounded-full flex justify-center items-center hover:opacity-60"
                             >
-                                <img 
-                                    src={`${process.env.PUBLIC_URL}/fig/socialServices/${socialService.name}.png`}
-                                    alt={socialService.label}
-                                    className="w-6 h-6 col-start-1 hover:opacity-60 2xl:hover:opacity-100"
-                                />
-                                <div className="hidden 2xl:block 2xl:w-full text-gray-700 text-lg tracking-wide">
+                                <div className="block w-full text-gray-600 text-sm md:text-lg tracking-wide">
                                     {socialService.label}でログイン
                                 </div>
-                                <div className="hidden 2xl:block 2xl:w-6"></div>
                             </button>
                         )}
                     </div>
@@ -85,23 +92,23 @@ const Contents = () => {
             </div>
         </div>
     </>)
-}
+});
 
-const Login = () => {
+const Login = React.memo(() => {
     return (
         <PageBase
             authType={AUTH_TYPE.NOT_AUTH}
             backgroundClassName=''
-            inner={
+            innerHTML={
                 <>
                     <div 
-                        className="hidden 2xl:grid min-h-screen grid-cols-5"
+                        className="hidden 2xl:grid h-screen grid-cols-5"
                     >
                         <Contents />
                     </div>
 
                     <div 
-                        className="grid 2xl:hidden min-h-screen grid-rows-2"
+                        className="grid 2xl:hidden h-screen grid-rows-2"
                     >
                         <Contents />
                     </div>
@@ -109,6 +116,6 @@ const Login = () => {
             }
         />
     );
-}
+});
 
 export default Login;

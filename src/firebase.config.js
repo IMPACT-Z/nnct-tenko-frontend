@@ -1,10 +1,10 @@
 const firebaseConfig = {
-    apiKey: "AIzaSyD4x8lFbfyGhulZUe5lOb28ueOkQpRJXnI",
-    authDomain: "nnct-tenko-54c53.firebaseapp.com",
-    projectId: "nnct-tenko-54c53",
-    storageBucket: "nnct-tenko-54c53.appspot.com",
-    messagingSenderId: "38191778674",
-    appId: "1:38191778674:web:1232712a81102e36d2abeb",
-    measurementId: "G-B9HNDTNXLM"
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_APP_ID,
+    measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 export default firebaseConfig;

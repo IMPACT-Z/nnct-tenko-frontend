@@ -5,9 +5,10 @@ import { AUTH_TYPE } from './components/Base'
 
 import Layout from './components/layout/Index';
 import Login from './components/pages/auth/Login';
-import RollCall from './components/pages/tenko/Do'
-import RollCallHistory from './components/pages/tenko/History'
+import Tenko from './components/pages/tenko/Do'
+import TenkoHistory from './components/pages/tenko/History'
 import NotFound from './components/pages/NotFound';
+import RegisterFace from './components/pages/tenko/RegisterFace';
 
 
 const App = () => {
@@ -24,8 +25,9 @@ const App = () => {
                     </Route>
                     <Route path='' element={<Layout authType={AUTH_TYPE.AUTH} />}>
                         <Route path='tenko'>
-                            <Route path='do' element={<RollCall />} />
-                            <Route path='history' element={<RollCallHistory />} />
+                            <Route path='do' element={<Tenko />} />
+                            <Route path='history' element={<TenkoHistory />} />
+                            <Route path='register-face' element={<RegisterFace />} />
                         </Route>
                         <Route path='' element={<NotFound to='/tenko/do' />} />
                         <Route path='*' element={<NotFound to='/tenko/do' />} />
