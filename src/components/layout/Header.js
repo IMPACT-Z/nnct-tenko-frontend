@@ -11,28 +11,28 @@ const Header = () => {
 
     return (
         <header 
-            className="fixed z-10 w-screen h-28 top-0 left-0 px-20 bg-white border-b-2 border-gray-200 grid grid-cols-2"
+            className="fixed z-10 w-screen top-0 left-0 px-6 md:px-20 bg-white border-b-2 border-gray-200 grid grid-cols-2"
         >
-            <div className="col-start-1 col-end-2 flex items-center gap-x-4">
+            <div className="col-start-1 col-end-2 flex items-center gap-x-3 md:gap-x-4">
                 <img
-                    className="h-16"
+                    className="h-11 md:h-16"
                     src={`${process.env.PUBLIC_URL}/favicon.png`}
                     alt="アイコン"
                 />
                 <img
-                    className="h-12"
+                    className="h-8 md:h-12"
                     src={`${process.env.PUBLIC_URL}/logo.png`}
                     alt="ロゴ"
                 />
             </div>
-            <nav className="col-start-2 col-end-3 flex gap-x-7 justify-end text-sm content-center items-center">
+            <nav className="col-start-2 col-end-3 flex gap-x-4 md:gap-x-7 justify-end text-sm content-center items-center">
                 <div className="relative">
                     <button
-                        className="rounded-full text-white bg-gray-500 text-lg cursor-pointer hover:opacity-70"
+                        className="rounded-full mt-2 md:mt-0 text-white bg-gray-500 text-lg cursor-pointer hover:opacity-70"
                         onClick={() => setIsDisplayUserPopup(!isDisplayUserPopup)}
                     >
                         <UserCircleIcon
-                            className="h-10 w-10 rounded-full"
+                            className="h-8 w-8 md:h-10 md:w-10 rounded-full"
                         />
                     </button>
                     {isDisplayUserPopup &&
@@ -65,7 +65,7 @@ const Header = () => {
                     onClick={() => logout()}
                     className="p-1 rounded-full text-gray-50 bg-gray-500 text-lg cursor-pointer hover:opacity-70"
                 >
-                    <ArrowLeftOnRectangleIcon className="h-8 w-8" />
+                    <ArrowLeftOnRectangleIcon className="h-6 w-6 md:h-8 md:w-8" />
                 </button>
             </nav>
         </header>

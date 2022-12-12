@@ -79,12 +79,12 @@ const RegisterFace = React.memo(() => {
             authType={AUTH_TYPE.AUTH}
             backgroundClassName='bg-white'
             innerHTML={
-                <div className="pt-4 xl:pt-20 flex flex-col items-center gap-y-4 xl:gap-y-16">
-                    <div className="text-3xl text-gray-600">
+                <div className="pt-8 md:pt-12 pb-32 xl:pb-20 xl:pt-20 flex flex-col items-center gap-y-4 md:gap-y-8 xl:gap-y-16">
+                    <div className="text-lg sm:text-xl md:text-2xl xl:text-3xl text-gray-600">
                         {isCompleted ? '顔画像の登録が完了しました' : '顔画像を登録して下さい'}</div>
                     {!isCompleted &&
-                        <div className="flex flex-col xl:flex-row items-center justify-center gap-y-8 xl:gap-x-8">
-                            <div className="flex xl:flex-col gap-x-10 xl:gap-y-10 items-center">
+                        <div className="flex flex-col xl:flex-row items-center justify-center gap-y-4 md:gap-y-8 xl:gap-x-8">
+                            <div className="w-screen md:w-auto flex xl:flex-col gap-x-3 sm:gap-x-8 md:gap-x-10 xl:gap-y-10 items-center justify-center">
                                 <Webcam
                                     audio={false}
                                     width={getCameraSetting().width}
@@ -93,42 +93,42 @@ const RegisterFace = React.memo(() => {
                                     screenshotFormat={`image/${getCameraSetting().format}`}
                                     videoConstraints={getVideoConstraints()}
                                     mirrored={true}
-                                    className="ring-2 ring-gray-500 shadow-lg shadow-gray-400"
+                                    className="ring-2 ring-gray-500 shadow-lg shadow-gray-400 w-4/5 sm:w-3/5 md:w-auto md:h-56 xl:w-auto"
                                 ></Webcam>
                                 <button
                                     onClick={() => setImage(capture())}
-                                    className="w-32 text-xl px-4 py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
+                                    className="w-7 sm:w-9 md:w-24 xl:w-32 text-sm md:text-lg xl:text-xl px-1 py-2 sm:px-2 sm:py-4 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
                                 >
                                     撮影
                                 </button>
                             </div>
-                            <div className="flex xl:flex-col gap-x-10 xl:gap-y-10 items-center">
+                            <div className="w-screen md:w-auto flex xl:flex-col gap-x-3 sm:gap-x-8 md:gap-x-10 xl:gap-y-10 items-center justify-center">
                                 {image !== null ?
-                                    <img
-                                        src={image}
-                                        alt="確認用"
-                                        width={getCameraSetting().width}
-                                        height={getCameraSetting().height}
-                                        className="ring-2 ring-gray-500 shadow-lg shadow-gray-400"
-                                    />
+                                        <img
+                                            src={image}
+                                            alt="確認用"
+                                            width={getCameraSetting().width}
+                                            height={getCameraSetting().height}
+                                            className="ring-2 ring-gray-500 shadow-lg shadow-gray-400 w-4/5 sm:w-3/5 md:w-auto md:h-56 xl:w-auto"
+                                        />
                                     :
                                     <div
-                                        style={{ width: getCameraSetting().width, height: getCameraSetting().height }}
-                                        className="ring-2 ring-gray-500 shadow-lg shadow-gray-400"
+                                        style={{width: getCameraSetting().width, height: getCameraSetting().height}}
+                                        className="hidden xl:block ring-2 ring-gray-500 shadow-lg shadow-gray-400 w-auto"
                                     >
                                     </div>
                                 }
                                 {image !== null ?
                                     <button
                                         onClick={() => sendImage()}
-                                        className="w-32 text-xl px-4 py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
+                                        className="w-7 sm:w-9 md:w-24 xl:w-32 text-sm md:text-lg xl:text-xl px-1 py-2 sm:px-2 sm:py-4 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
                                     >
                                         送信
                                     </button>
                                     :
                                     <button
                                         disabled
-                                        className="w-32 text-xl px-4 py-2 rounded-full bg-gray-200 text-white tracking-wider"
+                                        className="hidden xl:block w-32 text-xl px-4 py-2 rounded-full bg-gray-200 text-white tracking-wider"
                                     >
                                         送信
                                     </button>
