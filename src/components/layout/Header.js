@@ -36,28 +36,52 @@ const Header = () => {
                         />
                     </button>
                     {isDisplayUserPopup &&
-                        <div 
-                            className="absolute top-14 right-0 z-20 py-16 bg-white border border-gray-300 shadow-lg shadow-gray-300 flex flex-col items-center justify-center gap-y-6"
-                            style={{width: '512px', height: '272px'}}
-                        >
-                            <img
-                                src={userInfo.photoURL}
-                                alt='ユーザー画像'
-                                className="h-20 w-20 rounded-full"
-                            />
-                            <div className="flex flex-col gap-y-1">
-                                {[
-                                    {name: 'email', label: 'メールアドレス'},
-                                    {name: 'name', label: '名前'},
-                                ].map(item => 
-                                    <div key={item.name} className="text-xl grid grid-cols-5 gap-x-6">
-                                        <div className="text-gray-400 col-start-1 col-end-3">{item.label}</div>
-                                        <div className="text-gray-600 col-start-3 col-end-6">{userInfo[item.name]}</div>
-                                    </div>
-                                )}
-                                
+                        <>
+                            <div 
+                                className="absolute top-14 right-0 z-20 py-16 bg-white border border-gray-300 shadow-lg shadow-gray-300 hidden md:flex flex-col items-center justify-center gap-y-6"
+                                style={{width: '512px', height: '272px'}}
+                            >
+                                <img
+                                    src={userInfo.photoURL}
+                                    alt='ユーザー画像'
+                                    className="h-20 w-20 rounded-full"
+                                />
+                                <div className="flex flex-col gap-y-1">
+                                    {[
+                                        {name: 'email', label: 'メールアドレス'},
+                                        {name: 'name', label: '名前'},
+                                    ].map(item => 
+                                        <div key={item.name} className="text-xl grid grid-cols-5 gap-x-6">
+                                            <div className="text-gray-400 col-start-1 col-end-3">{item.label}</div>
+                                            <div className="text-gray-600 col-start-3 col-end-6">{userInfo[item.name]}</div>
+                                        </div>
+                                    )}
+                                    
+                                </div>
                             </div>
-                        </div>
+                            <div 
+                                className="absolute top-14 -right-14 z-20 py-6 bg-white border border-gray-300 shadow-lg shadow-gray-300 flex md:hidden flex-col items-center justify-center gap-y-3"
+                                style={{width: '256px', height: '136px'}}
+                            >
+                                <img
+                                    src={userInfo.photoURL}
+                                    alt='ユーザー画像'
+                                    className="h-10 w-10 rounded-full"
+                                />
+                                <div className="flex flex-col gap-y-1">
+                                    {[
+                                        {name: 'email', label: 'メールアドレス'},
+                                        {name: 'name', label: '名前'},
+                                    ].map(item => 
+                                        <div key={item.name} className="text-xs grid grid-cols-5 gap-x-2">
+                                            <div className="text-gray-400 col-start-1 col-end-3">{item.label}</div>
+                                            <div className="text-gray-600 col-start-3 col-end-6">{userInfo[item.name]}</div>
+                                        </div>
+                                    )}
+                                    
+                                </div>
+                            </div>
+                        </>
                     }
                 </div>
 
