@@ -356,9 +356,6 @@ const Tenko = React.memo(() => {
     }, false);
 
     const [durationMessage, setDurationMessage] = useState(null);
-    const [reflectDurationMessageClk, reflectDurationMessage] = useReducer((state, action) => {
-        return !state;
-    }, false);
     useEffect(() => {
         const job = async () => {
             try {
@@ -385,7 +382,7 @@ const Tenko = React.memo(() => {
             }
         }
         job();
-    }, [reflectDurationMessageClk, setDurationMessage]);
+    }, [setDurationMessage]);
 
     const killSession = useCallback((socket, errorBySwalFmt) => {
         if (session) {
@@ -394,10 +391,9 @@ const Tenko = React.memo(() => {
             }
             dispatchSession('kill');
             socket?.disconnect();
-            reflectStatus();
-            reflectDurationMessage();
+            window.location.reload();
         }
-    }, [session, dispatchSession, reflectStatus, reflectDurationMessage]);
+    }, [session, dispatchSession]);
 
     const getMessageHTML = useCallback(() => {
         return (
