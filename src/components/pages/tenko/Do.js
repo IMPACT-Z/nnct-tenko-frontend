@@ -48,7 +48,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                 console.log('Start websocket...');
             } 
             catch(error) {
-                killSession({
+                killSession(null, {
                     icon: 'error',
                     title: 'ログイン失敗',
                     text: error.msg,
@@ -152,7 +152,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                         setTotalStep(data.steps.total);
                         break;
                     default:
-                        killSession({
+                        killSession(socket, {
                             icon: 'error',
                             title: 'サーバーエラー',
                             text: '取得した現在の段階が正しくありません'
@@ -175,7 +175,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
             socket.io.on("error", (error) => {
                 // ※エラーアラートが表示され続けることを防止する緊急対策
                 if (socket.connected) {
-                    killSession({
+                    killSession(socket, {
                         icon: 'error',
                         title: '点呼のセッションが遮断されました',
                         text: '予期しないエラー',
@@ -184,17 +184,13 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
             });
             socket.on("disconnect", () => {
                 console.log('Kill websocket...');
-                killSession({
-                    icon: 'error',
-                    title: '点呼のセッションが遮断されました',
-                    text: '予期しないエラー',
-                });
+                killSession(socket, null);
             });
             socket.on('disconnectReason', data => {
                 const job = async () => {
                     switch(data) {
                         case 'DONE':
-                            killSession({
+                            killSession(socket, {
                                 icon: 'warning',
                                 title: '点呼はできません',
                                 text: '点呼はすでに完了しています',
@@ -203,7 +199,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                         
                         case 'UNAVAILABLE':
                             reflectStatus();
-                            killSession({
+                            killSession(socket, {
                                 icon: 'warning',
                                 title: '点呼はできません',
                                 text: '現在は点呼が実施されていません',
@@ -212,7 +208,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                         
                         case 'SUCCESS':
                             reflectStatus();
-                            killSession({
+                            killSession(socket, {
                                 icon: 'success',
                                 title: '点呼完了！',
                                 text: '点呼が完了しました',
@@ -220,7 +216,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             break;
                         
                         case 'INVALID_TOKEN':
-                            killSession({
+                            killSession(socket, {
                                 icon: 'error',
                                 title: 'サーバーエラー',
                                 text: `無効なトークンです`
@@ -229,7 +225,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             break;
                         
                         case 'INVALID_SESSION':
-                            killSession({
+                            killSession(socket, {
                                 icon: 'error',
                                 title: '点呼の失敗',
                                 text: `${getPhaseLabel()}が失敗しました`
@@ -237,7 +233,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             break;
                         
                         default:
-                            killSession({
+                            killSession(socket, {
                                 icon: 'error',
                                 title: 'サーバーエラー',
                                 text: `取得した接続の遮断理由が正しくありません`
@@ -324,7 +320,7 @@ const Tenko = React.memo(() => {
         return getStatusMessages()[status]
     }, [status, getStatusMessages]);
 
-    const [reflectStatusClk, reflectStatus] = useReducer((state, _) => {
+    const [reflectStatusClk, reflectStatus] = useReducer((state, action) => {
         return !state;
     }, false);
 
@@ -360,7 +356,7 @@ const Tenko = React.memo(() => {
     }, false);
 
     const [durationMessage, setDurationMessage] = useState(null);
-    const [reflectDurationMessageClk, reflectDurationMessage] = useReducer((state, _) => {
+    const [reflectDurationMessageClk, reflectDurationMessage] = useReducer((state, action) => {
         return !state;
     }, false);
     useEffect(() => {
@@ -391,12 +387,13 @@ const Tenko = React.memo(() => {
         job();
     }, [reflectDurationMessageClk, setDurationMessage]);
 
-    const killSession = useCallback((errorBySwalFmt) => {
-        // FIXME sessionがずっとtrueのまま...
+    const killSession = useCallback((socket, errorBySwalFmt) => {
         if (session) {
-            Swal.fire(errorBySwalFmt)
+            if (errorBySwalFmt) {
+                Swal.fire(errorBySwalFmt);
+            }
             dispatchSession('kill');
-            // FIXME これが反応しない
+            socket?.disconnect();
             reflectStatus();
             reflectDurationMessage();
         }
