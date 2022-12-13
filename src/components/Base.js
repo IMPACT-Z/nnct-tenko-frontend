@@ -49,7 +49,7 @@ const Base = React.memo(({authType, innerHTML}) => {
         return () => {
             unsubscribe();
         };
-    }, []);
+    }, [authType, navigate]);
 
     if (isDisplay)
         return innerHTML;

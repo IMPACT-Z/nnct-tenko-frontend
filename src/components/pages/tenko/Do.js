@@ -49,7 +49,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
             } 
             catch(error) {
                 killSession(null, {
-                    icon: 'error',
+                    type: 'error',
                     title: 'ログイン失敗',
                     text: error.msg,
                 });
@@ -58,27 +58,6 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
         }
         job();
     }, [killSession, setSocket]);
-
-    // 顔の画像を送信
-    useEffect(() => {
-        if (socket !== null) {
-            const interval = setInterval(() => {
-                // 撮影した画像を取得
-                const image = capture();
-                // データ形式の変換
-                const blob = atob(image.replace(/^.*,/, ''));
-                const buffer = new Uint8Array(blob.length);
-                for (let i = 0; i < blob.length; i++) {
-                    buffer[i] = blob.charCodeAt(i);
-                }
-                console.log('顔画像の送信');
-                // 送信
-                socket.emit('faceImage', buffer);
-            }
-            , getCameraSetting().interval);
-            return () => clearInterval(interval);
-        }
-    }, [socket, capture, getCameraSetting]);
 
 
     const getPhaseLabels = useCallback(() => {
@@ -93,7 +72,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
         }
         else {
             Swal.fire({
-                icon: 'error',
+                type: 'error',
                 title: 'サーバーエラー',
                 text: '予期しない段階が返ってきました'
             });
@@ -121,7 +100,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
         }
         else {
             Swal.fire({
-                icon: 'error',
+                type: 'error',
                 title: 'サーバーエラー',
                 text: '予期しない指示が返ってきました'
             });
@@ -153,7 +132,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                         break;
                     default:
                         killSession(socket, {
-                            icon: 'error',
+                            type: 'error',
                             title: 'サーバーエラー',
                             text: '取得した現在の段階が正しくありません'
                         });
@@ -170,17 +149,35 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
         }
     }, [instruction]);
 
+    // 顔の画像を送信
+    useEffect(() => {
+        if (socket !== null && instruction !== null) {
+            const interval = setInterval(() => {
+                // 撮影した画像を取得
+                const image = capture();
+                // データ形式の変換
+                const blob = atob(image.replace(/^.*,/, ''));
+                const buffer = new Uint8Array(blob.length);
+                for (let i = 0; i < blob.length; i++) {
+                    buffer[i] = blob.charCodeAt(i);
+                }
+                console.log('顔画像の送信');
+                // 送信
+                socket.emit('faceImage', buffer);
+            }
+            , getCameraSetting().interval);
+            return () => clearInterval(interval);
+        }
+    }, [socket, instruction, capture, getCameraSetting]);
+
     useEffect(() => {
         if (socket !== null) {
             socket.io.on("error", (error) => {
-                // ※エラーアラートが表示され続けることを防止する緊急対策
-                if (socket.connected) {
-                    killSession(socket, {
-                        icon: 'error',
-                        title: '点呼のセッションが遮断されました',
-                        text: '予期しないエラー',
-                    });
-                }
+                killSession(socket, {
+                    type: 'error',
+                    title: '点呼のセッションが遮断されました',
+                    text: '予期しないエラー',
+                });
             });
             socket.on("disconnect", () => {
                 console.log('Kill websocket...');
@@ -191,7 +188,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                     switch(data) {
                         case 'DONE':
                             killSession(socket, {
-                                icon: 'warning',
+                                type: 'warning',
                                 title: '点呼はできません',
                                 text: '点呼はすでに完了しています',
                             });
@@ -200,7 +197,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                         case 'UNAVAILABLE':
                             reflectStatus();
                             killSession(socket, {
-                                icon: 'warning',
+                                type: 'warning',
                                 title: '点呼はできません',
                                 text: '現在は点呼が実施されていません',
                             });
@@ -209,7 +206,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                         case 'SUCCESS':
                             reflectStatus();
                             killSession(socket, {
-                                icon: 'success',
+                                type: 'success',
                                 title: '点呼完了！',
                                 text: '点呼が完了しました',
                             });
@@ -217,7 +214,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                         
                         case 'INVALID_TOKEN':
                             killSession(socket, {
-                                icon: 'error',
+                                type: 'error',
                                 title: 'サーバーエラー',
                                 text: `無効なトークンです`
                             });
@@ -226,7 +223,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                         
                         case 'INVALID_SESSION':
                             killSession(socket, {
-                                icon: 'error',
+                                type: 'error',
                                 title: '点呼の失敗',
                                 text: `${getPhaseLabel()}が失敗しました`
                             });
@@ -234,7 +231,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                         
                         default:
                             killSession(socket, {
-                                icon: 'error',
+                                type: 'error',
                                 title: 'サーバーエラー',
                                 text: `取得した接続の遮断理由が正しくありません`
                             });
@@ -294,6 +291,35 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
 });
 
 const Tenko = React.memo(() => {
+    const [canStart, setCanStart] = useState(false);
+    const [params, setParams] = useState(null);
+    useEffect(() => {
+        const url = new URL(window.location.href);
+        let paramsTmp = null;
+        const title = url.searchParams.get('title');
+        if (title !== null) {
+            if (paramsTmp === null) {
+                paramsTmp = {};
+            }
+            paramsTmp.title = title;
+        }
+        const text = url.searchParams.get('text');
+        if (text !== null) {
+            if (paramsTmp === null) {
+                paramsTmp = {};
+            }
+            paramsTmp.text = text;
+        }
+        console.log(paramsTmp);
+        if (paramsTmp === null) {
+            setCanStart(true);
+        }
+        else {
+            console.log(paramsTmp);
+            setParams(paramsTmp);
+        }
+    }, [setCanStart, setParams]);
+
     // 点呼ステータスの処理
     const getStatusMessages = useCallback(() => {
         return {
@@ -310,7 +336,7 @@ const Tenko = React.memo(() => {
             return arg;
         }
         Swal.fire({
-            icon: 'error',
+            type: 'error',
             title: 'サーバーエラー',
             text: '予期しない点呼ステータスが返ってきました'
         });
@@ -385,13 +411,15 @@ const Tenko = React.memo(() => {
     }, [setDurationMessage]);
 
     const killSession = useCallback((socket, errorBySwalFmt) => {
-        if (session) {
-            if (errorBySwalFmt) {
-                Swal.fire(errorBySwalFmt);
-            }
+        if (session && errorBySwalFmt) {
             dispatchSession('kill');
             socket?.disconnect();
-            window.location.reload();
+
+            const url = new URL(window.location.href);
+            url.searchParams.set('type', errorBySwalFmt?.type);
+            url.searchParams.set('title', errorBySwalFmt?.title);
+            url.searchParams.set('text', errorBySwalFmt?.text);
+            window.location.href = url.toString();
         }
     }, [session, dispatchSession]);
 
@@ -412,32 +440,51 @@ const Tenko = React.memo(() => {
         <PageBase
             authType={AUTH_TYPE.AUTH}
             backgroundClassName='bg-white'
-            innerHTML={(status === null || durationMessage === null) ? 
-                <div className="flex items-center justify-center pt-12">
-                    <div className="text-gray-600 text-2xl">Loading...</div>
+            innerHTML={!canStart ?
+                <div className="py-6 flex flex-col gap-y-2 md:gap-y-6 items-center">
+                    {params?.title &&
+                        <div className="text-lg md:text-3xl text-gray-600 tracking-wider">{params.title}</div>
+                    }
+                    {params?.text &&
+                        <div className="text-md md:text-2xl text-gray-600">{params.text}</div>
+                    }
+                    <button
+                        onClick={() => {setParams(null);setCanStart(true);}}
+                        className="text-md md:text-xl px-3 py-1 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
+                    >
+                        再読込する
+                    </button>
                 </div>
                 :
                 <>
-                    {session ? 
-                        <TenkoSession
-                            killSession={killSession}
-                            reflectStatus={reflectStatus}
-                            messageHTML={getMessageHTML()}
-                        />
-                        :
-                        <div className="py-10 md:py-16 px-6 md:px-16 flex flex-col items-center gap-y-3 md:gap-y-12">
-                            <div className="flex flex-col items-center gap-y-5">
-                                {getMessageHTML()}
-                            </div>
-                            {checkCanDo() &&
-                                <button
-                                    onClick={() => dispatchSession('start')}
-                                    className="text-md md:text-xl px-3 py-1 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
-                                >
-                                    点呼を実施する
-                                </button>
-                            }
+                    {(status === null || durationMessage === null) ? 
+                        <div className="flex items-center justify-center pt-12">
+                            <div className="text-gray-600 text-2xl">Loading...</div>
                         </div>
+                        :
+                        <>
+                            {session ? 
+                                <TenkoSession
+                                    killSession={killSession}
+                                    reflectStatus={reflectStatus}
+                                    messageHTML={getMessageHTML()}
+                                />
+                                :
+                                <div className="py-10 md:py-16 px-6 md:px-16 flex flex-col items-center gap-y-3 md:gap-y-12">
+                                    <div className="flex flex-col items-center gap-y-5">
+                                        {getMessageHTML()}
+                                    </div>
+                                    {checkCanDo() &&
+                                        <button
+                                            onClick={() => dispatchSession('start')}
+                                            className="text-md md:text-xl px-3 py-1 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
+                                        >
+                                            点呼を実施する
+                                        </button>
+                                    }
+                                </div>
+                            }
+                        </>
                     }
                 </>
             }

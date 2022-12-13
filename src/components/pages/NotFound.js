@@ -5,7 +5,7 @@ const NotFound = React.memo(({to}) => {
     const navigate = useNavigate();
     useEffect(() => {
         navigate(to);
-    }, []);
+    }, [navigate, to]);
 });
 
 export default NotFound;
