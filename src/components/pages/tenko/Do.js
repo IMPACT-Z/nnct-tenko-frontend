@@ -301,7 +301,7 @@ const Tenko = React.memo(() => {
             const tmpValue = url.searchParams.get(key);
             if (tmpValue === null) continue;
             if (tmpParams === null) tmpParams = {};
-            tmpParams.title = tmpValue;
+            tmpParams[key] = tmpValue;
         }
 
         if (tmpParams === null) {
