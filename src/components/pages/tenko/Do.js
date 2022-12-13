@@ -146,6 +146,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
             new Audio(
                 `${process.env.PUBLIC_URL}/audio/instruction/${instruction}.wav`
             ).play();
+            window.navigator.vibrate([200]);
         }
     }, [instruction]);
 
