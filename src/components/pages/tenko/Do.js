@@ -265,7 +265,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                                 )
                             })}
                         </div>
-                        <div className="flex flex-col gap-y-1 md:gap-y-4 text-lg md:text-2xl text-gray-600 tracking-wider">
+                        <div className="flex gap-x-1 md:gap-x-4 text-lg md:text-2xl text-gray-600 tracking-wider">
                             <div>
                                 {getInstructionMessage()}
                             </div>
