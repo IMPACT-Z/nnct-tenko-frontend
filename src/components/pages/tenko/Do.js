@@ -231,6 +231,14 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             });
                             break;
                         
+                        case 'FACE_MODEL_NOT_REGISTERED':
+                            killSession(socket, {
+                                type: 'error',
+                                title: '点呼の失敗',
+                                text: '顔が登録されていません'
+                            });
+                            break;
+                        
                         default:
                             killSession(socket, {
                                 type: 'error',
