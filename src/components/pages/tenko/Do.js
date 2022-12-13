@@ -145,6 +145,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
             new Audio(
                 `${process.env.PUBLIC_URL}/audio/instruction/${instruction}.wav`
             ).play();
+            window.navigator.vibrate([200]);
         }
     }, [instruction]);
 
@@ -294,28 +295,20 @@ const Tenko = React.memo(() => {
     const [params, setParams] = useState(null);
     useEffect(() => {
         const url = new URL(window.location.href);
-        let paramsTmp = null;
-        const title = url.searchParams.get('title');
-        if (title !== null) {
-            if (paramsTmp === null) {
-                paramsTmp = {};
-            }
-            paramsTmp.title = title;
+        let tmpParams = null;
+
+        for (let key of ['type', 'title', 'text']) {
+            const tmpValue = url.searchParams.get(key);
+            if (tmpValue === null) continue;
+            if (tmpParams === null) tmpParams = {};
+            tmpParams.title = tmpValue;
         }
-        const text = url.searchParams.get('text');
-        if (text !== null) {
-            if (paramsTmp === null) {
-                paramsTmp = {};
-            }
-            paramsTmp.text = text;
-        }
-        console.log(paramsTmp);
-        if (paramsTmp === null) {
+
+        if (tmpParams === null) {
             setCanStart(true);
         }
         else {
-            console.log(paramsTmp);
-            setParams(paramsTmp);
+            setParams(tmpParams);
         }
     }, [setCanStart, setParams]);
 
@@ -440,7 +433,7 @@ const Tenko = React.memo(() => {
             authType={AUTH_TYPE.AUTH}
             backgroundClassName='bg-white'
             innerHTML={!canStart ?
-                <div className="py-6 flex flex-col gap-y-2 md:gap-y-6 items-center">
+                <div className="pt-12 flex flex-col gap-y-2 md:gap-y-6 items-center">
                     {params?.title &&
                         <div className="text-lg md:text-3xl text-gray-600 tracking-wider">{params.title}</div>
                     }
@@ -451,7 +444,7 @@ const Tenko = React.memo(() => {
                         onClick={() => {setParams(null);setCanStart(true);}}
                         className="text-md md:text-xl px-3 py-1 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
                     >
-                        再読込する
+                        {params?.type === 'success' ? '再点呼' :'再読み込み'}
                     </button>
                 </div>
                 :

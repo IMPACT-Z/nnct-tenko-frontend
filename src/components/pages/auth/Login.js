@@ -89,6 +89,19 @@ const Contents = React.memo(() => {
                         )}
                     </div>
                 </div>
+                <div className="px-4 md:pt-8 text-gray-600 text-sm md:text-lg flex flex-col gap-y-2">
+                    <div className="px-2">※使用した音源</div>
+                    <div className="flex gap-x-6">
+                        <div>VOICEVOX:ずんだもん</div>
+                        <a
+                            className="underline hover:text-gray-400"
+                            href="https://zunko.jp/"
+                        >
+                            https://zunko.jp/
+                        </a>
+                    </div>
+                </div>
+                
             </div>
         </div>
     </>)
