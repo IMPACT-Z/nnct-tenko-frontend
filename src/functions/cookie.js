@@ -16,7 +16,6 @@ class Cookie {
         return decodeURIComponent(rawValue);
     }
     push(key, value) {
-        alert(`after: ${encodeURIComponent(value)}`);
         this.document.cookie = `${encodeURIComponent(key)}=${encodeURIComponent(value)};`;
     }
 }
