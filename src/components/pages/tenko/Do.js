@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import {io} from "socket.io-client";
 
 import RestApi from '../../../functions/restApi';
+import Cookie from '../../../functions/cookie';
 
 import { AUTH_TYPE } from "../../Base";
 import PageBase from "../Base";
@@ -295,13 +296,15 @@ const Tenko = React.memo(() => {
     const [canStart, setCanStart] = useState(false);
     const [params, setParams] = useState(null);
     useEffect(() => {
-        const url = new URL(window.location.href);
-        let tmpParams = null;
+        const cookie = new Cookie(document);
 
+        let tmpParams = {};
         for (let key of ['type', 'title', 'text']) {
-            const tmpValue = url.searchParams.get(key);
-            if (tmpValue === null) continue;
-            if (tmpParams === null) tmpParams = {};
+            const tmpValue = cookie.pop(key);
+            if (tmpValue === null) {
+                tmpParams = null;
+                break;
+            }
             tmpParams[key] = tmpValue;
         }
 
@@ -408,11 +411,11 @@ const Tenko = React.memo(() => {
             dispatchSession('kill');
             socket?.disconnect();
 
-            const url = new URL(window.location.href);
-            url.searchParams.set('type', errorBySwalFmt?.type);
-            url.searchParams.set('title', errorBySwalFmt?.title);
-            url.searchParams.set('text', errorBySwalFmt?.text);
-            window.location.href = url.toString();
+            const cookie = new Cookie(document);
+            for (let key of ['type', 'title', 'text']) 
+                cookie.push(key, errorBySwalFmt[key]);
+
+            window.location.reload();
         }
     }, [session, dispatchSession]);
 
