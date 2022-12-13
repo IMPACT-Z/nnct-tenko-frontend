@@ -144,7 +144,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
     useEffect(() => {
         if (instruction !== null) {
             new Audio(
-                `${process.env.PUBLIC_URL}/audio/instruction/${instruction}.mp3`
+                `${process.env.PUBLIC_URL}/audio/instruction/${instruction}.wav`
             ).play();
         }
     }, [instruction]);
