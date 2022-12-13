@@ -441,7 +441,7 @@ const Tenko = React.memo(() => {
             authType={AUTH_TYPE.AUTH}
             backgroundClassName='bg-white'
             innerHTML={!canStart ?
-                <div className="py-6 flex flex-col gap-y-2 md:gap-y-6 items-center">
+                <div className="pt-12 flex flex-col gap-y-2 md:gap-y-6 items-center">
                     {params?.title &&
                         <div className="text-lg md:text-3xl text-gray-600 tracking-wider">{params.title}</div>
                     }
@@ -452,7 +452,7 @@ const Tenko = React.memo(() => {
                         onClick={() => {setParams(null);setCanStart(true);}}
                         className="text-md md:text-xl px-3 py-1 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
                     >
-                        再読込する
+                        再読み込み
                     </button>
                 </div>
                 :
