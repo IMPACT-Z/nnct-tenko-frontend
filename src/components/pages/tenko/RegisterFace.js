@@ -103,32 +103,19 @@ const RegisterFace = React.memo(() => {
                                 </button>
                             </div>
                             <div className="w-screen md:w-auto flex xl:flex-col gap-x-3 sm:gap-x-8 md:gap-x-10 xl:gap-y-10 items-center justify-center">
-                                {image !== null ?
-                                        <img
-                                            src={image}
-                                            alt="確認用"
-                                            width={getCameraSetting().width}
-                                            height={getCameraSetting().height}
-                                            className="ring-2 ring-gray-500 shadow-lg shadow-gray-400 w-4/5 sm:w-3/5 md:w-auto md:h-56 xl:w-auto"
-                                        />
-                                    :
-                                    <div
-                                        style={{width: getCameraSetting().width, height: getCameraSetting().height}}
-                                        className="hidden xl:block ring-2 ring-gray-500 shadow-lg shadow-gray-400 w-auto"
-                                    >
-                                    </div>
+                                {image !== null &&
+                                    <img
+                                        src={image}
+                                        alt="確認用"
+                                        width={getCameraSetting().width}
+                                        height={getCameraSetting().height}
+                                        className="ring-2 ring-gray-500 shadow-lg shadow-gray-400 w-4/5 sm:w-3/5 md:w-auto md:h-56 xl:w-auto"
+                                    />
                                 }
-                                {image !== null ?
+                                {image !== null &&
                                     <button
                                         onClick={() => sendImage()}
                                         className="w-7 sm:w-9 md:w-24 xl:w-32 text-sm md:text-lg xl:text-xl px-1 py-2 sm:px-2 sm:py-4 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
-                                    >
-                                        送信
-                                    </button>
-                                    :
-                                    <button
-                                        disabled
-                                        className="hidden xl:block w-32 text-xl px-4 py-2 rounded-full bg-gray-200 text-white tracking-wider"
                                     >
                                         送信
                                     </button>
