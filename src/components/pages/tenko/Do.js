@@ -191,7 +191,6 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
             });
             socket.on('disconnectReason', data => {
                 const job = async (data) => {
-                    alert(data);
                     switch(data) {
                         case 'DONE':
                             killSession(socket, {
@@ -211,11 +210,9 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             break;
                         
                         case 'SUCCESS':
-                            alert('点呼完了音声が流れます');
                             new Audio(
                                 `${process.env.PUBLIC_URL}/audio/instruction/SUCCESS.wav`
-                                ).play();
-                            alert('点呼完了音声が流れてますか？');
+                            ).play();
                             reflectStatus();
                             killSession(socket, {
                                 type: 'success',
