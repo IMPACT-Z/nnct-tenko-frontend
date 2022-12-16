@@ -426,6 +426,7 @@ const Tenko = React.memo(() => {
         if (session && errorBySwalFmt) {
             dispatchSession('kill');
             socket?.disconnect();
+            setCanStart(false);
 
             const cookie = new Cookie(document);
             for (let key of ['type', 'title', 'text'])
