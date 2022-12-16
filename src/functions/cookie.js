@@ -9,7 +9,6 @@ class Cookie {
                 result[key] = value;
                 return result;
             }, {});
-        console.log('this.data', this.data);
     }
     get(key) {
         const rawValue = this.data[encodeURIComponent(key)];
@@ -17,11 +16,7 @@ class Cookie {
         return decodeURIComponent(rawValue);
     }
     set(key, value) {
-        console.log(key, value);
-        console.log(`${encodeURIComponent(key)}=${encodeURIComponent(value)};`);
-        alert('set');
         this.document.cookie = `${encodeURIComponent(key)}=${encodeURIComponent(value)};`;
-        // this.document.cookie = `expires=${(new Date(new Date().getTime()+2000)).toUTCString()}`
     }
     clear(key) {
         this.document.cookie = `${encodeURIComponent(key)};`;

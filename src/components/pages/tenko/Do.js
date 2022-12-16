@@ -307,7 +307,6 @@ const Tenko = React.memo(() => {
     useEffect(() => {
         const cookie = new Cookie(document);
 
-        // let tmpParams = cookie.get('error') ?? null;
         let tmpParams = {};
         for (let key of ['type', 'title', 'text']) {
             const tmpValue = cookie.get(key);
@@ -317,7 +316,6 @@ const Tenko = React.memo(() => {
             }
             tmpParams[key] = tmpValue;
         }
-        console.log('tmpParams', tmpParams)
 
         if (tmpParams === null) {
             setCanStart(true);
@@ -423,10 +421,8 @@ const Tenko = React.memo(() => {
             socket?.disconnect();
 
             const cookie = new Cookie(document);
-            // cookie.set('error', JSON.stringify(errorBySwalFmt));
             for (let key of ['type', 'title', 'text'])
                 cookie.set(key, errorBySwalFmt[key]);
-            console.log('killSession', document.cookie);
 
             window.location.reload();
         }
@@ -462,7 +458,6 @@ const Tenko = React.memo(() => {
                             setParams(null);
                             setCanStart(true);
                             const cookie = new Cookie(document);
-                            // cookie.clear('error');
                             for (let key of ['type', 'title', 'text']) 
                                 cookie.clear(key);
                         }}
