@@ -307,16 +307,16 @@ const Tenko = React.memo(() => {
     useEffect(() => {
         const cookie = new Cookie(document);
 
-        let tmpParams = cookie.get('error') ?? null;
-        // let tmpParams = {};
-        // for (let key of ['type', 'title', 'text']) {
-        //     const tmpValue = cookie.get(key);
-        //     if (tmpValue === null) {
-        //         tmpParams = null;
-        //         break;
-        //     }
-        //     tmpParams[key] = tmpValue;
-        // }
+        // let tmpParams = cookie.get('error') ?? null;
+        let tmpParams = {};
+        for (let key of ['type', 'title', 'text']) {
+            const tmpValue = cookie.get(key);
+            if (tmpValue === null) {
+                tmpParams = null;
+                break;
+            }
+            tmpParams[key] = tmpValue;
+        }
         console.log('tmpParams', tmpParams)
 
         if (tmpParams === null) {
@@ -423,9 +423,9 @@ const Tenko = React.memo(() => {
             socket?.disconnect();
 
             const cookie = new Cookie(document);
-            cookie.set('error', JSON.stringify(errorBySwalFmt));
-            // for (let key of ['type', 'title', 'text'])
-            //     cookie.set(key, errorBySwalFmt[key]);
+            // cookie.set('error', JSON.stringify(errorBySwalFmt));
+            for (let key of ['type', 'title', 'text'])
+                cookie.set(key, errorBySwalFmt[key]);
             console.log('killSession', document.cookie);
 
             window.location.reload();
@@ -462,9 +462,9 @@ const Tenko = React.memo(() => {
                             setParams(null);
                             setCanStart(true);
                             const cookie = new Cookie(document);
-                            cookie.clear('error');
-                            // for (let key of ['type', 'title', 'text']) 
-                            //     cookie.clear(key);
+                            // cookie.clear('error');
+                            for (let key of ['type', 'title', 'text']) 
+                                cookie.clear(key);
                         }}
                         className="text-md md:text-xl px-3 py-1 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
                     >

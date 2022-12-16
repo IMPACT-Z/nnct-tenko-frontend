@@ -4,7 +4,7 @@ class Cookie {
         if (this.document.cookie === '')
             this.data = {};
         else
-            this.data = this.document.cookie.split(';').slice(0, -1).reduce((result, item) => {
+            this.data = this.document.cookie.split(';').reduce((result, item) => {
                 const [key, value] = item.split('=').map(item2 => item2.trim());
                 result[key] = value;
                 return result;
