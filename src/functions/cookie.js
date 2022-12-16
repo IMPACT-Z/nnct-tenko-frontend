@@ -9,6 +9,7 @@ class Cookie {
                 result[key] = value;
                 return result;
             }, {});
+        console.log('this.data', this.data);
     }
     pop(key) {
         const rawValue = this.data[encodeURIComponent(key)];
