@@ -20,7 +20,7 @@ class Cookie {
     push(key, value) {
         this.document.cookie = `${encodeURIComponent(key)}=${encodeURIComponent(value)};`;
         // this.document.cookie = `expires=${(new Date(new Date().getTime()+2000)).toUTCString()}`
-        console.log('push', this.document.cookie);
+        alert('push', key, value);
     }
 }
 
