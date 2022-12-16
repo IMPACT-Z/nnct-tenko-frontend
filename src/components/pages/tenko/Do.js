@@ -308,6 +308,7 @@ const Tenko = React.memo(() => {
         const cookie = new Cookie(document);
 
         let tmpParams = cookie.get('error') ?? null;
+        // let tmpParams = {};
         // for (let key of ['type', 'title', 'text']) {
         //     const tmpValue = cookie.get(key);
         //     if (tmpValue === null) {
@@ -422,7 +423,7 @@ const Tenko = React.memo(() => {
             socket?.disconnect();
 
             const cookie = new Cookie(document);
-            cookie.set(JSON.stringify(errorBySwalFmt));
+            cookie.set('error', JSON.stringify(errorBySwalFmt));
             // for (let key of ['type', 'title', 'text'])
             //     cookie.set(key, errorBySwalFmt[key]);
             console.log('killSession', document.cookie);
