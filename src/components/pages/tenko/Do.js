@@ -4,7 +4,6 @@ import Swal from 'sweetalert2';
 import {io} from "socket.io-client";
 
 import RestApi from '../../../functions/restApi';
-import Cookie from '../../../functions/searchQuery';
 
 import { AUTH_TYPE } from "../../Base";
 import PageBase from "../Base";
