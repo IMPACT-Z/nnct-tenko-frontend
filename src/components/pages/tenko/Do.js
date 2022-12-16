@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import {io} from "socket.io-client";
 
 import RestApi from '../../../functions/restApi';
-import Cookie from '../../../functions/cookie';
+import Cookie from '../../../functions/searchQuery';
 
 import { AUTH_TYPE } from "../../Base";
 import PageBase from "../Base";
@@ -312,16 +312,17 @@ const Tenko = React.memo(() => {
     const [canStart, setCanStart] = useState(false);
     const [params, setParams] = useState(null);
     useEffect(() => {
-        const cookie = new Cookie(document);
+        const sParams = {};
+        (new URLSearchParams(window.location.search)).forEach((v, k) => {
+            sParams[k] = v;
+        });
 
         let tmpParams = {};
         for (let key of ['type', 'title', 'text']) {
-            const tmpValue = cookie.get(key);
-            if (tmpValue === null) {
-                tmpParams = null;
-                break;
+            if (!Object.keys(sParams).some(k => k === key)) {
+                tmpParams = null
             }
-            tmpParams[key] = tmpValue;
+            tmpParams[key] = sParams[key];
         }
 
         if (tmpParams === null) {
@@ -427,12 +428,10 @@ const Tenko = React.memo(() => {
             dispatchSession('kill');
             socket?.disconnect();
             setCanStart(false);
-
-            const cookie = new Cookie(document);
-            for (let key of ['type', 'title', 'text'])
-                cookie.set(key, errorBySwalFmt[key]);
-
-            window.location.reload();
+            
+            const url = new URL(`${window.location.origin}${window.location.pathname}`);
+            url.search = new URLSearchParams(errorBySwalFmt).toString();
+            window.location.href = url.href;
         }
     }, [session, dispatchSession]);
 
@@ -471,9 +470,9 @@ const Tenko = React.memo(() => {
                                 onClick={() => {
                                     setParams(null);
                                     setCanStart(true);
-                                    const cookie = new Cookie(document);
-                                    for (let key of ['type', 'title', 'text']) 
-                                        cookie.clear(key);
+                                    const url = new URL(`${window.location.origin}${window.location.pathname}`);
+                                    url.search = {};
+                                    window.location.href = url.href;
                                 }}
                                 className="text-md md:text-xl px-3 py-1 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
                             >
