@@ -211,6 +211,9 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             break;
                         
                         case 'SUCCESS':
+                            // new Audio(
+                            //     `${process.env.PUBLIC_URL}/audio/instruction/SUCCESS.wav`
+                            // ).play();
                             reflectStatus();
                             killSession(socket, {
                                 type: 'success',
