@@ -422,8 +422,9 @@ const Tenko = React.memo(() => {
             socket?.disconnect();
 
             const cookie = new Cookie(document);
-            for (let key of ['type', 'title', 'text']) 
+            for (let key of ['type', 'title', 'text'])
                 cookie.set(key, errorBySwalFmt[key]);
+            console.log('killSession', document.cookie);
 
             window.location.reload();
         }
