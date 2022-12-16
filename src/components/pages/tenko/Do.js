@@ -320,6 +320,7 @@ const Tenko = React.memo(() => {
         for (let key of ['type', 'title', 'text']) {
             if (!Object.keys(sParams).some(k => k === key)) {
                 tmpParams = null
+                break;
             }
             tmpParams[key] = sParams[key];
         }
