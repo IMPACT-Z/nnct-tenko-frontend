@@ -184,7 +184,11 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
             });
             socket.on("disconnect", () => {
                 console.log('Kill websocket...');
-                killSession(socket, null);
+                killSession(socket, {
+                    type: 'error',
+                    title: '点呼のセッションが遮断されました',
+                    text: '予期しないエラー',
+                });
             });
             socket.on('disconnectReason', data => {
                 const job = async () => {
