@@ -14,11 +14,12 @@ class Cookie {
     pop(key) {
         const rawValue = this.data[encodeURIComponent(key)];
         if (!rawValue) return null;
+        this.document.cookie = `${encodeURIComponent(key)};`;
         return decodeURIComponent(rawValue);
     }
     push(key, value) {
         this.document.cookie = `${encodeURIComponent(key)}=${encodeURIComponent(value)};`;
-        this.document.cookie = `expires=${(new Date(new Date().getTime()+2000)).toUTCString()}`
+        // this.document.cookie = `expires=${(new Date(new Date().getTime()+2000)).toUTCString()}`
         console.log('push', this.document.cookie);
     }
 }
