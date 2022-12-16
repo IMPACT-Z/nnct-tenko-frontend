@@ -210,9 +210,11 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             break;
                         
                         case 'SUCCESS':
+                            alert('点呼完了音声が流れます');
                             new Audio(
                                 `${process.env.PUBLIC_URL}/audio/instruction/SUCCESS.wav`
-                            ).play();
+                                ).play();
+                            alert('点呼完了音声が流れてますか？');
                             reflectStatus();
                             killSession(socket, {
                                 type: 'success',
