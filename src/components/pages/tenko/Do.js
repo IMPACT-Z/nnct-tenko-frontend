@@ -456,7 +456,9 @@ const Tenko = React.memo(() => {
             innerHTML={!canStart ?
                 <>
                     {params === null ?
-                        <div>Loading...</div>
+                        <div className="flex items-center justify-center pt-12">
+                            <div className="text-gray-600 text-2xl">Loading...</div>
+                        </div>
                         :
                         <div className="pt-12 flex flex-col gap-y-2 md:gap-y-6 items-center">
                             {params?.title &&
