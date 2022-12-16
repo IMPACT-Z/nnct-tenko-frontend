@@ -14,7 +14,7 @@ class RestApi {
             Swal.fire({
                 icon: 'error',
                 title: 'ログイン失敗',
-                text_: error.msg,
+                text: error.msg,
             });
             throw error;
         }
@@ -39,7 +39,7 @@ class RestApi {
                     Swal.fire({
                         icon: 'error',
                         title: 'ログイン失敗',
-                        text_: error.msg,
+                        text: error.msg,
                     });
                     break;
                 
@@ -47,7 +47,7 @@ class RestApi {
                     Swal.fire({
                         icon: 'error',
                         title: 'サーバーエラー',
-                        text_: errorMessage,
+                        text: errorMessage,
                     });
                     break;
             }
