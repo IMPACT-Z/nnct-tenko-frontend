@@ -127,8 +127,10 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                         setTotalStep(null);
                         break;
                     case '3CHALLENGES':
-                        setCurrentStep(data.steps.current);
-                        setTotalStep(data.steps.total);
+                        if (data.steps !== null && data.steps !== undefined) {
+                            setCurrentStep(data.steps.current);
+                            setTotalStep(data.steps.total);
+                        }
                         break;
                     default:
                         killSession(socket, {
