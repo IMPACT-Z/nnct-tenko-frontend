@@ -52,7 +52,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                 killSession(null, {
                     type: 'error',
                     title: 'ログイン失敗',
-                    text: error.msg,
+                    text_: error.msg,
                 });
                 await logout();
             }
@@ -74,7 +74,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
             Swal.fire({
                 type: 'error',
                 title: 'サーバーエラー',
-                text: '予期しない段階が返ってきました'
+                text_: '予期しない段階が返ってきました'
             });
             return state;
         }
@@ -102,7 +102,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
             Swal.fire({
                 type: 'error',
                 title: 'サーバーエラー',
-                text: '予期しない指示が返ってきました'
+                text_: '予期しない指示が返ってきました'
             });
             return state;
         }
@@ -136,7 +136,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                         killSession(socket, {
                             type: 'error',
                             title: 'サーバーエラー',
-                            text: '取得した現在の段階が正しくありません'
+                            text_: '取得した現在の段階が正しくありません'
                         });
                         break;
                 }
@@ -179,7 +179,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                 killSession(socket, {
                     type: 'error',
                     title: '点呼のセッションが遮断されました',
-                    text: '予期しないエラー',
+                    text_: '予期しないエラー',
                 });
             });
             socket.on("disconnect", () => {
@@ -193,7 +193,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             killSession(socket, {
                                 type: 'warning',
                                 title: '点呼はできません',
-                                text: '点呼はすでに完了しています',
+                                text_: '点呼はすでに完了しています',
                             });
                             break;
                         
@@ -202,7 +202,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             killSession(socket, {
                                 type: 'warning',
                                 title: '点呼はできません',
-                                text: '現在は点呼が実施されていません',
+                                text_: '現在は点呼が実施されていません',
                             });
                             break;
                         
@@ -211,7 +211,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             killSession(socket, {
                                 type: 'success',
                                 title: '点呼完了！',
-                                text: '点呼が完了しました',
+                                text_: '点呼が完了しました',
                             });
                             break;
                         
@@ -219,7 +219,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             killSession(socket, {
                                 type: 'error',
                                 title: 'サーバーエラー',
-                                text: `無効なトークンです`
+                                text_: `無効なトークンです`
                             });
                             await logout();
                             break;
@@ -228,7 +228,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             killSession(socket, {
                                 type: 'error',
                                 title: '点呼の失敗',
-                                text: `${getPhaseLabel()}が失敗しました`
+                                text_: `${getPhaseLabel()}が失敗しました`
                             });
                             break;
                         
@@ -236,7 +236,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             killSession(socket, {
                                 type: 'error',
                                 title: '点呼の失敗',
-                                text: '顔が登録されていません'
+                                text_: '顔が登録されていません'
                             });
                             break;
                         
@@ -244,7 +244,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             killSession(socket, {
                                 type: 'error',
                                 title: 'サーバーエラー',
-                                text: `取得した接続の遮断理由が正しくありません`
+                                text_: `取得した接続の遮断理由が正しくありません`
                             });
                             break;
                     }
@@ -308,7 +308,7 @@ const Tenko = React.memo(() => {
         const cookie = new Cookie(document);
 
         let tmpParams = {};
-        for (let key of ['type', 'title', 'text']) {
+        for (let key of ['type', 'title', 'text_']) {
             const tmpValue = cookie.get(key);
             if (tmpValue === null) {
                 tmpParams = null;
@@ -344,7 +344,7 @@ const Tenko = React.memo(() => {
         Swal.fire({
             type: 'error',
             title: 'サーバーエラー',
-            text: '予期しない点呼ステータスが返ってきました'
+            text_: '予期しない点呼ステータスが返ってきました'
         });
         return state;
     }, null);
@@ -422,7 +422,7 @@ const Tenko = React.memo(() => {
             socket?.disconnect();
 
             const cookie = new Cookie(document);
-            for (let key of ['type', 'title', 'text'])
+            for (let key of ['type', 'title', 'text_'])
                 cookie.set(key, errorBySwalFmt[key]);
             console.log('killSession', document.cookie);
 
@@ -460,7 +460,7 @@ const Tenko = React.memo(() => {
                             setParams(null);
                             setCanStart(true);
                             const cookie = new Cookie(document);
-                            for (let key of ['type', 'title', 'text']) 
+                            for (let key of ['type', 'title', 'text_']) 
                                 cookie.clear(key);
                         }}
                         className="text-md md:text-xl px-3 py-1 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"

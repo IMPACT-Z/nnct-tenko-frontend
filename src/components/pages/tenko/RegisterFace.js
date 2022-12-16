@@ -59,7 +59,7 @@ const RegisterFace = React.memo(() => {
                 Swal.fire({
                     icon: 'error',
                     title: 'サーバーエラー',
-                    text: '顔画像の送信に失敗しました',
+                    text_: '顔画像の送信に失敗しました',
                 });
                 return;
             }
@@ -68,7 +68,7 @@ const RegisterFace = React.memo(() => {
             Swal.fire({
                 icon: 'success',
                 title: '登録成功！',
-                text: '顔画像の登録が成功しました'
+                text_: '顔画像の登録が成功しました'
             });
         }
         job();

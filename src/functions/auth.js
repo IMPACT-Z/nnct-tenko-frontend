@@ -15,7 +15,7 @@ const logout = async () => {
         Swal.fire({
             icon: 'error',
             title: 'ログアウト失敗',
-            text: error.message,
+            text_: error.message,
         });
     });
 }
@@ -39,7 +39,7 @@ const login = async (provider) => {
         Swal.fire({
             icon: 'error',
             title: 'ログイン失敗',
-            text: error.message,
+            text_: error.message,
         });
     }
 }
@@ -52,7 +52,7 @@ const getIdTokenExcludingAuth = async () => {
         Swal.fire({
             icon: 'error',
             title: '認証エラー',
-            text: error.message,
+            text_: error.message,
         });
         throw error;
     }
