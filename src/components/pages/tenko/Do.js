@@ -454,26 +454,32 @@ const Tenko = React.memo(() => {
             authType={AUTH_TYPE.AUTH}
             backgroundClassName='bg-white'
             innerHTML={!canStart ?
-                <div className="pt-12 flex flex-col gap-y-2 md:gap-y-6 items-center">
-                    {params?.title &&
-                        <div className="text-lg md:text-3xl text-gray-600 tracking-wider">{params.title}</div>
+                <>
+                    {params === null ?
+                        <div>Loading...</div>
+                        :
+                        <div className="pt-12 flex flex-col gap-y-2 md:gap-y-6 items-center">
+                            {params?.title &&
+                                <div className="text-lg md:text-3xl text-gray-600 tracking-wider">{params.title}</div>
+                            }
+                            {params?.text &&
+                                <div className="text-md md:text-2xl text-gray-600">{params.text}</div>
+                            }
+                            <button
+                                onClick={() => {
+                                    setParams(null);
+                                    setCanStart(true);
+                                    const cookie = new Cookie(document);
+                                    for (let key of ['type', 'title', 'text']) 
+                                        cookie.clear(key);
+                                }}
+                                className="text-md md:text-xl px-3 py-1 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
+                            >
+                                {params?.type === 'success' ? '再点呼' :'再読み込み'}
+                            </button>
+                        </div>
                     }
-                    {params?.text &&
-                        <div className="text-md md:text-2xl text-gray-600">{params.text}</div>
-                    }
-                    <button
-                        onClick={() => {
-                            setParams(null);
-                            setCanStart(true);
-                            const cookie = new Cookie(document);
-                            for (let key of ['type', 'title', 'text']) 
-                                cookie.clear(key);
-                        }}
-                        className="text-md md:text-xl px-3 py-1 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
-                    >
-                        {params?.type === 'success' ? '再点呼' :'再読み込み'}
-                    </button>
-                </div>
+                </>
                 :
                 <>
                     {(status === null || durationMessage === null) ? 
