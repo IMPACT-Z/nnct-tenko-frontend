@@ -308,6 +308,9 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
 });
 
 const Tenko = React.memo(() => {
+    new Audio(
+        `${process.env.PUBLIC_URL}/audio/instruction/SUCCESS.wav`
+    ).play();
     const [canStart, setCanStart] = useState(false);
     const [params, setParams] = useState(null);
     useEffect(() => {
