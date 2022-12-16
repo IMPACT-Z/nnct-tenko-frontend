@@ -190,7 +190,8 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                 });
             });
             socket.on('disconnectReason', data => {
-                const job = async () => {
+                const job = async (data) => {
+                    alert(data);
                     switch(data) {
                         case 'DONE':
                             killSession(socket, {
@@ -257,7 +258,7 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             break;
                     }
                 }
-                job();
+                job(data);
             });
         }
     }, [socket, getPhaseLabel, killSession, reflectStatus]);
