@@ -470,9 +470,7 @@ const Tenko = React.memo(() => {
                                 onClick={() => {
                                     setParams(null);
                                     setCanStart(true);
-                                    const url = new URL(`${window.location.origin}${window.location.pathname}`);
-                                    url.search = (new URLSearchParams({})).toString();
-                                    window.location.href = url.href;
+                                    window.location.href = `${window.location.origin}${window.location.pathname}`;
                                 }}
                                 className="text-md md:text-xl px-3 py-1 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
                             >
