@@ -314,6 +314,7 @@ const Tenko = React.memo(() => {
             }
             tmpParams[key] = tmpValue;
         }
+        console.log('tmpParams', tmpParams)
 
         if (tmpParams === null) {
             setCanStart(true);
