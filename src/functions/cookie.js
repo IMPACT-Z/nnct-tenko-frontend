@@ -11,16 +11,19 @@ class Cookie {
             }, {});
         console.log('this.data', this.data);
     }
-    pop(key) {
+    get(key) {
         const rawValue = this.data[encodeURIComponent(key)];
         if (!rawValue) return null;
-        this.document.cookie = `${encodeURIComponent(key)};`;
         return decodeURIComponent(rawValue);
     }
-    push(key, value) {
+    set(key, value) {
+        console.log(key, value);
+        alert('set');
         this.document.cookie = `${encodeURIComponent(key)}=${encodeURIComponent(value)};`;
         // this.document.cookie = `expires=${(new Date(new Date().getTime()+2000)).toUTCString()}`
-        alert('push', key, value);
+    }
+    clear(key) {
+        this.document.cookie = `${encodeURIComponent(key)};`;
     }
 }
 

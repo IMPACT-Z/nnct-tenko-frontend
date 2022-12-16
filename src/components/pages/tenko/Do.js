@@ -309,7 +309,7 @@ const Tenko = React.memo(() => {
 
         let tmpParams = {};
         for (let key of ['type', 'title', 'text']) {
-            const tmpValue = cookie.pop(key);
+            const tmpValue = cookie.get(key);
             if (tmpValue === null) {
                 tmpParams = null;
                 break;
@@ -423,7 +423,7 @@ const Tenko = React.memo(() => {
 
             const cookie = new Cookie(document);
             for (let key of ['type', 'title', 'text']) 
-                cookie.push(key, errorBySwalFmt[key]);
+                cookie.set(key, errorBySwalFmt[key]);
 
             window.location.reload();
         }
@@ -455,7 +455,13 @@ const Tenko = React.memo(() => {
                         <div className="text-md md:text-2xl text-gray-600">{params.text}</div>
                     }
                     <button
-                        onClick={() => {setParams(null);setCanStart(true);}}
+                        onClick={() => {
+                            setParams(null);
+                            setCanStart(true);
+                            const cookie = new Cookie(document);
+                            for (let key of ['type', 'title', 'text']) 
+                                cookie.clear(key);
+                        }}
                         className="text-md md:text-xl px-3 py-1 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
                     >
                         {params?.type === 'success' ? '再点呼' :'再読み込み'}
