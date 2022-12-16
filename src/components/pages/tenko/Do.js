@@ -210,9 +210,9 @@ const TenkoSession = React.memo(({reflectStatus, killSession, messageHTML}) => {
                             break;
                         
                         case 'SUCCESS':
-                            // new Audio(
-                            //     `${process.env.PUBLIC_URL}/audio/instruction/SUCCESS.wav`
-                            // ).play();
+                            new Audio(
+                                `${process.env.PUBLIC_URL}/audio/instruction/SUCCESS.wav`
+                            ).play();
                             reflectStatus();
                             killSession(socket, {
                                 type: 'success',
@@ -471,7 +471,7 @@ const Tenko = React.memo(() => {
                                     setParams(null);
                                     setCanStart(true);
                                     const url = new URL(`${window.location.origin}${window.location.pathname}`);
-                                    url.search = '';
+                                    url.search = (new URLSearchParams({})).toString();
                                     window.location.href = url.href;
                                 }}
                                 className="text-md md:text-xl px-3 py-1 md:px-4 md:py-2 rounded-full bg-gray-500 text-white tracking-wider hover:opacity-70"
