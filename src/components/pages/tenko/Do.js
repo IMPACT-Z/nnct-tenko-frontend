@@ -323,7 +323,7 @@ const Tenko = React.memo(() => {
             setCanStart(true);
         }
         else {
-            setParams(JSON.parse(tmpParams));
+            setParams(tmpParams);
         }
     }, [setCanStart, setParams]);
 
